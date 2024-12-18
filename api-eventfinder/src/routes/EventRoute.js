@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const eventController = require('../controllers/EventController');
+const verifyToken = require('../middlewares/AuthMiddleware'); // Assuming verifyToken middleware
 
-// Rute untuk membuat event
-router.post('/events', eventController.createEvent);
+// Create event
+router.post('/events', verifyToken, eventController.createEvent);
 
-// Rute untuk mendapatkan semua event
+// Get all events
 router.get('/events', eventController.getAllEvents);
 
-// Rute untuk mendapatkan event berdasarkan ID
+// Get event by ID
 router.get('/events/:eventId', eventController.getEventById);
 
-// Rute untuk mengupdate event
-router.put('/events/:eventId', eventController.updateEvent);
+// Update event
+router.put('/events/:eventId', verifyToken, eventController.updateEvent);
 
-// Rute untuk menghapus event
-router.delete('/events/:eventId', eventController.deleteEvent);
+// Delete event
+router.delete('/events/:eventId', verifyToken, eventController.deleteEvent);
 
 module.exports = router;
