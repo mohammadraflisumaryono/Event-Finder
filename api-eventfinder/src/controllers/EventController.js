@@ -13,7 +13,11 @@ exports.createEvent = async (req, res) => {
         console.log('User ID:', userId);
 
         if (!userId) {
-            return res.status(400).json({ message: 'User not authenticated' });
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'User not authenticated'
+            });
         }
 
         // Menyiapkan data event dengan userId
@@ -32,22 +36,37 @@ exports.createEvent = async (req, res) => {
 
         // Membuat event dengan data yang sudah diproses
         const newEvent = await EventService.createEvent(eventData, userId);
-        res.status(201).json({ message: 'Event created successfully', event: newEvent });
+        res.status(201).json({
+            status: 'success',
+            data: newEvent,
+            message: 'Event created successfully'
+        });
     } catch (error) {
         console.error('Error creating event:', error);
-        res.status(500).json({ message: 'Failed to create event', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Failed to create event: ${error.message}`
+        });
     }
 };
-
 
 // Fungsi untuk mendapatkan semua Event
 exports.getAllEvents = async (req, res) => {
     try {
         const events = await EventService.getAllEvents();
-        res.status(200).json(events);
+        res.status(200).json({
+            status: 'success',
+            data: events,
+            message: 'Events fetched successfully'
+        });
     } catch (error) {
         console.error('Error fetching events:', error);
-        res.status(500).json({ message: 'Error fetching events', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching events: ${error.message}`
+        });
     }
 };
 
@@ -56,10 +75,18 @@ exports.getEventById = async (req, res) => {
     try {
         const eventId = req.params.eventId;
         const event = await EventService.getEventById(eventId);
-        res.status(200).json(event);
+        res.status(200).json({
+            status: 'success',
+            data: event,
+            message: 'Event fetched successfully'
+        });
     } catch (error) {
         console.error('Error fetching event:', error);
-        res.status(500).json({ message: 'Error fetching event', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching event: ${error.message}`
+        });
     }
 };
 
@@ -71,10 +98,18 @@ exports.updateEvent = async (req, res) => {
         const userId = req.user._id;  // Mengambil userId dari req.user
 
         const updatedEvent = await EventService.updateEvent(eventId, data, userId);
-        res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
+        res.status(200).json({
+            status: 'success',
+            data: updatedEvent,
+            message: 'Event updated successfully'
+        });
     } catch (error) {
         console.error('Error updating event:', error);
-        res.status(500).json({ message: 'Failed to update event', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Failed to update event: ${error.message}`
+        });
     }
 };
 
@@ -85,9 +120,17 @@ exports.deleteEvent = async (req, res) => {
         const userId = req.user._id;  // Mengambil userId dari req.user
 
         const response = await EventService.deleteEvent(eventId, userId);
-        res.status(200).json(response);
+        res.status(200).json({
+            status: 'success',
+            data: response,
+            message: 'Event deleted successfully'
+        });
     } catch (error) {
         console.error('Error deleting event:', error);
-        res.status(500).json({ message: 'Failed to delete event', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Failed to delete event: ${error.message}`
+        });
     }
 };

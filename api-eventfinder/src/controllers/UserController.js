@@ -1,4 +1,3 @@
-// controllers/UserController.js
 const UserServices = require('../services/UserService');
 
 exports.registerUser = async (req, res, next) => {
@@ -8,6 +7,8 @@ exports.registerUser = async (req, res, next) => {
         // Periksa apakah data yang diperlukan ada
         if (!name || !email || !password) {
             return res.status(400).json({
+                status: 'error',
+                data: null,
                 message: 'Name, email, and password are required'
             });
         }
@@ -17,15 +18,19 @@ exports.registerUser = async (req, res, next) => {
 
         // Kirim response sukses
         res.status(201).json({
-            message: 'User registered successfully',
-            user: user
+            status: 'success',
+            data: user,
+            message: 'User registered successfully'
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal Server Error', error: error.message });
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Internal Server Error: ${error.message}`
+        });
     }
 };
-
 
 exports.loginUser = async (req, res, next) => {
     try {
@@ -34,6 +39,8 @@ exports.loginUser = async (req, res, next) => {
         // Periksa apakah data yang diperlukan ada
         if (!email || !password) {
             return res.status(400).json({
+                status: 'error',
+                data: null,
                 message: 'Email and password are required'
             });
         }
@@ -44,6 +51,8 @@ exports.loginUser = async (req, res, next) => {
         // Periksa apakah user ditemukan
         if (!user) {
             return res.status(404).json({
+                status: 'error',
+                data: null,
                 message: 'User not found'
             });
         }
@@ -52,26 +61,33 @@ exports.loginUser = async (req, res, next) => {
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return res.status(400).json({
+                status: 'error',
+                data: null,
                 message: 'Invalid password'
             });
         }
 
-        //token
+        // Token
         let tokenData = {
             _id: user._id,
             name: user.name,
             email: user.email
-        }
+        };
 
         const token = await UserServices.generateToken(tokenData, process.env.JWT_SECRET, '1h');
 
         // Kirim response sukses
         res.status(200).json({
-            message: 'Login success',
-            token: token
+            status: 'success',
+            data: { token },
+            message: 'Login success'
         });
-
-
     } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Internal Server Error: ${error.message}`
+        });
     }
 };
