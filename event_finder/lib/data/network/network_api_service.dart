@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:event_finder/data/app_exceptions.dart';
-import 'package:event_finder/data/network/BaseApiServices.dart';
+import 'package:event_finder/data/network/base_api_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
