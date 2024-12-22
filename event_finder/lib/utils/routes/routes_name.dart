@@ -9,4 +9,8 @@
 
   // register route name
   static const String register = 'register_screen';
+
+  // main route name
+  static const String main = 'main_page';
+  
  }
