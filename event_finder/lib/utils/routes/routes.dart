@@ -11,7 +11,7 @@ class Routes {
     switch (settings.name) {
       case RoutesName.login:
         return MaterialPageRoute(builder: (context) => const LoginPageWidget());
-      case RoutesName.createAccount:
+      case RoutesName.register:
         return MaterialPageRoute(builder: (context) => const CreateAccountPageWidget());
       case RoutesName.home:
         return MaterialPageRoute(builder: (context) => const HomePageWidget());

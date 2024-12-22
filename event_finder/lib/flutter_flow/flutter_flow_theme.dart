@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 
 class FlutterFlowTheme {
@@ -14,6 +16,18 @@ class FlutterFlowTheme {
     fontSize: 16,
     color: Colors.grey,
   );
+
+  static TextStyle bodyMedium = const TextStyle(
+  fontSize: 16,
+  color: Colors.grey,
+  );
+
+  static TextStyle bodySmall = const TextStyle(
+  fontSize: 16,
+  color: Colors.grey,
+  );
+
+  static var displaySmall;
 
   static of(BuildContext context) {}
 }

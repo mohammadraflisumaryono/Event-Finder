@@ -6,8 +6,6 @@ import 'package:event_finder/view/home_page_widget.dart';
 import 'package:event_finder/view/search_result_page_widget.dart';
 import 'package:event_finder/view_model/home_page_model.dart';
 import 'package:go_router/go_router.dart';
-
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -114,14 +112,12 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                 7, 0, 0, 0),
                             child: Text(
                               'Search',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Inter',
-                                    fontSize: 16,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: FlutterFlowTheme.bodySmall.copyWith(
+                                fontFamily: 'Inter',
+                                fontSize: 16,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -190,17 +186,15 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                           decoration: InputDecoration(
                                             labelText:
                                                 'Search artist, maker, department...',
-                                            labelStyle: FlutterFlowTheme.of(
-                                                    context)
+                                            labelStyle: FlutterFlowTheme
                                                 .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Inter',
-                                                  color:
-                                                      const Color(0xFF95A1AC),
-                                                  fontSize: 14,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                .copyWith(
+                                              fontFamily: 'Inter',
+                                              color: const Color(0xFF95A1AC),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                             enabledBorder:
                                                 const UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -246,15 +240,14 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                               ),
                                             ),
                                           ),
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Inter',
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                          style: FlutterFlowTheme.bodyMedium
+                                              .copyWith(
+                                            fontFamily: 'Inter',
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
@@ -392,15 +385,14 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                         r'''$.title''',
                                                       ).toString(),
                                                       style: FlutterFlowTheme
-                                                              .of(context)
                                                           .bodySmall
-                                                          .override(
-                                                            fontFamily: 'Inter',
-                                                            fontSize: 16,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
+                                                          .copyWith(
+                                                        fontFamily: 'Inter',
+                                                        fontSize: 16,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
                                                     Padding(
                                                       padding:
@@ -422,23 +414,22 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                                     .jsonBody,
                                                                 r'''$.objectEndDate''',
                                                               ).toString(),
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodySmall
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Inter',
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .tertiary,
-                                                                    fontSize:
-                                                                        14,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
+                                                              style:
+                                                                  FlutterFlowTheme
+                                                                      .bodySmall
+                                                                      .copyWith(
+                                                                fontFamily:
+                                                                    'Inter',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .tertiary,
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -448,23 +439,22 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                                     .jsonBody,
                                                                 r'''$.artistDisplayName''',
                                                               ).toString(),
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodySmall
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Inter',
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .tertiary,
-                                                                    fontSize:
-                                                                        14,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
+                                                              style:
+                                                                  FlutterFlowTheme
+                                                                      .bodySmall
+                                                                      .copyWith(
+                                                                fontFamily:
+                                                                    'Inter',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .tertiary,
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                              ),
                                                             ),
                                                           ),
                                                         ],
@@ -477,18 +467,18 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                         r'''$.classification''',
                                                       ).toString(),
                                                       style: FlutterFlowTheme
-                                                              .of(context)
                                                           .bodySmall
-                                                          .override(
-                                                            fontFamily: 'Inter',
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
+                                                          .copyWith(
+                                                        fontFamily: 'Inter',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
                                                                 .primary,
-                                                            fontSize: 14,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
+                                                        fontSize: 14,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -540,7 +530,7 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
 class GetArtPieceCall {
   static call({required String objectID}) {
     // Implementation here.
-    return ApiCallResponse(jsonBody: {});
+    // return ApiCallResponse(jsonBody: {});
   }
 }
 
@@ -552,7 +542,7 @@ extension WithoutNullsExtension on Map<String, dynamic> {
 class SearchArtCall {
   static call({String? q}) {
     // Implementation here.
-    return ApiCallResponse(jsonBody: {});
+    // return ApiCallResponse(jsonBody: {});
   }
 }
 

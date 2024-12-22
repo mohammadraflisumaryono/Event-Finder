@@ -1,5 +1,8 @@
-import 'package:google_fonts/google_fonts.dart';
+// ignore_for_file: prefer_const_constructors
+
+import 'package:event_finder/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'utils/routes/routes.dart';
 import 'utils/routes/routes_name.dart';
 
@@ -12,15 +15,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Event Finder',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthViewModel())],
+      child: MaterialApp(
+        title: 'Event Finder',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: RoutesName.login, // Mulai dari halaman HomePage
+        onGenerateRoute: Routes.generateRoute,
       ),
-      initialRoute:
-          RoutesName.createAccount, // Mulai dari halaman Create Account
-      onGenerateRoute: Routes.generateRoute, // Gunakan routing dinamis
     );
   }
 }

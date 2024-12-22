@@ -1,8 +1,6 @@
 // ignore_for_file: unused_import, unnecessary_import, prefer_typing_uninitialized_variables, constant_identifier_names
 
 import 'dart:core';
-
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -79,9 +77,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         ),
                         Text(
                           'Your place for searching ART.',
-                          style: FlutterFlowTheme.of(context)
+                          style: FlutterFlowTheme
                               .bodyMedium
-                              .override(
+                              .copyWith(
                                 fontFamily: 'Inter',
                                 color: FlutterFlowTheme.of(context).secondary,
                                 fontSize: 16,
@@ -195,9 +193,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             ),
                                           ),
                                         ),
-                                        style: FlutterFlowTheme.of(context)
+                                        style: FlutterFlowTheme
                                             .bodyMedium
-                                            .override(
+                                            .copyWith(
                                               fontFamily: 'Inter',
                                               fontSize: 16,
                                               letterSpacing: 0.0,
@@ -222,7 +220,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             padding: const EdgeInsetsDirectional.fromSTEB(10, 15, 0, 20),
                             child: Text(
                               'Museum Departments',
-                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              style: FlutterFlowTheme.bodyMedium.copyWith(
                                 fontFamily: 'Inter',
                                 fontSize: 12,
                                 letterSpacing: 0.0,
@@ -322,9 +320,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                               ).toString(),
                                               textAlign: TextAlign.center,
                                               style:
-                                                  FlutterFlowTheme.of(context)
+                                                  FlutterFlowTheme
                                                       .displaySmall
-                                                      .override(
+                                                      .copyWith(
                                                         fontFamily:
                                                             'Readex Pro',
                                                         letterSpacing: 0.0,

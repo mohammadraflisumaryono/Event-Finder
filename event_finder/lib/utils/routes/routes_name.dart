@@ -4,11 +4,9 @@
   // login route name
   static const String login = 'login_screen';
 
-  // register route name
-  static const String register = 'register_screen';
-
   // homescreen route name
   static const String home = 'home_screen';
 
-  static const String createAccount = 'create_account_screen';
+  // register route name
+  static const String register = 'register_screen';
  }
