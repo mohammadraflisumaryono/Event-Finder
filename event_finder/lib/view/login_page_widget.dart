@@ -42,7 +42,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   
-  bool get isAndroid => Platform.isAndroid; 
+  // bool get isAndroid => Platform.isAndroid; 
 
   @override
   Widget build(BuildContext context) {
@@ -342,9 +342,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     },
                                     child: Text(
                                       'Dont Have An Accout?',
-                                      style: FlutterFlowTheme.of(context)
+                                      style: FlutterFlowTheme
                                           .bodyMedium
-                                          .override(
+                                          .copyWith(
                                             fontFamily: 'Inter',
                                             color: const Color(0xFF1F1F1F),
                                             letterSpacing: 0.0,
@@ -395,43 +395,43 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                 ),
                               ),
                             ),
-                            isAndroid
-                                ? Container()
-                                : Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 0, 15),
-                                    // asalnya ada button
-                                  ),
-                            Align(
-                              alignment: const AlignmentDirectional(0, 0),
-                              child: SizedBox(
-                                width: 200,
-                                height: 44,
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: const AlignmentDirectional(0, 0),
-                                      // asalnya ada button
-                                    ),
-                                    Align(
-                                      alignment: const AlignmentDirectional(-0.83, 0),
-                                      child: Container(
-                                        width: 22,
-                                        height: 22,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Image.network(
-                                          'https://facebookbrand.com/wp-content/uploads/2019/04/f_logo_RGB-Hex-Blue_512.png?w=512&h=512',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // isAndroid
+                            //     ? Container()
+                            //     : Padding(
+                            //         padding: const EdgeInsetsDirectional.fromSTEB(
+                            //             0, 0, 0, 15),
+                            //         // asalnya ada button
+                            //       ),
+                            // Align(
+                            //   alignment: const AlignmentDirectional(0, 0),
+                            //   child: SizedBox(
+                            //     width: 200,
+                            //     height: 44,
+                            //     child: Stack(
+                            //       children: [
+                            //         Align(
+                            //           alignment: const AlignmentDirectional(0, 0),
+                            //           // asalnya ada button
+                            //         ),
+                            //         Align(
+                            //           alignment: const AlignmentDirectional(-0.83, 0),
+                            //           child: Container(
+                            //             width: 22,
+                            //             height: 22,
+                            //             clipBehavior: Clip.antiAlias,
+                            //             decoration: const BoxDecoration(
+                            //               shape: BoxShape.circle,
+                            //             ),
+                            //             child: Image.network(
+                            //               'https://facebookbrand.com/wp-content/uploads/2019/04/f_logo_RGB-Hex-Blue_512.png?w=512&h=512',
+                            //               fit: BoxFit.contain,
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:event_finder/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

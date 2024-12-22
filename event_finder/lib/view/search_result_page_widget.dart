@@ -111,9 +111,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                             padding: const EdgeInsetsDirectional.fromSTEB(7, 0, 0, 0),
                             child: Text(
                               'Search',
-                              style: FlutterFlowTheme.of(context)
+                              style: FlutterFlowTheme
                                   .bodySmall
-                                  .override(
+                                  .copyWith(
                                     fontFamily: 'Inter',
                                     fontSize: 16,
                                     letterSpacing: 0.0,
@@ -186,9 +186,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                             labelText:
                                                 'Search artist, maker, department...',
                                             labelStyle:
-                                                FlutterFlowTheme.of(context)
+                                                FlutterFlowTheme
                                                     .bodyMedium
-                                                    .override(
+                                                    .copyWith(
                                                       fontFamily: 'Inter',
                                                       color: const Color(0xFF95A1AC),
                                                       fontSize: 14,
@@ -242,9 +242,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                               ),
                                             ),
                                           ),
-                                          style: FlutterFlowTheme.of(context)
+                                          style: FlutterFlowTheme
                                               .bodyMedium
-                                              .override(
+                                              .copyWith(
                                                 fontFamily: 'Inter',
                                                 color: Colors.black,
                                                 fontSize: 16,
@@ -386,10 +386,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                         r'''$.title''',
                                                       ).toString(),
                                                       style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                          FlutterFlowTheme
                                                               .bodySmall
-                                                              .override(
+                                                              .copyWith(
                                                                 fontFamily:
                                                                     'Inter',
                                                                 fontSize: 16,
@@ -423,10 +422,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                                     .jsonBody,
                                                                 r'''$.objectEndDate''',
                                                               ).toString(),
-                                                              style: FlutterFlowTheme.of(
-                                                                      context)
+                                                              style: FlutterFlowTheme
                                                                   .bodySmall
-                                                                  .override(
+                                                                  .copyWith(
                                                                     fontFamily:
                                                                         'Inter',
                                                                     color: FlutterFlowTheme.of(
@@ -450,10 +448,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                                     .jsonBody,
                                                                 r'''$.artistDisplayName''',
                                                               ).toString(),
-                                                              style: FlutterFlowTheme.of(
-                                                                      context)
+                                                              style: FlutterFlowTheme
                                                                   .bodySmall
-                                                                  .override(
+                                                                  .copyWith(
                                                                     fontFamily:
                                                                         'Inter',
                                                                     color: FlutterFlowTheme.of(
@@ -479,10 +476,9 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
                                                         r'''$.classification''',
                                                       ).toString(),
                                                       style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                          FlutterFlowTheme
                                                               .bodySmall
-                                                              .override(
+                                                              .copyWith(
                                                                 fontFamily:
                                                                     'Inter',
                                                                 color: FlutterFlowTheme.of(
