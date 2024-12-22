@@ -1,4 +1,6 @@
+import 'package:event_finder/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './utils/routes/routes.dart'; // Routes logic
 import './utils/routes/routes_name.dart'; // Routes names
 
