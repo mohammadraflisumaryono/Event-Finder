@@ -1,8 +1,9 @@
-// ignore_for_file: unused_import, unnecessary_import, use_build_context_synchronously, non_constant_identifier_names
+// ignore_for_file: unused_import, unnecessary_import, use_build_context_synchronously, non_constant_identifier_names, prefer_const_constructors, unused_local_variable
 
+import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/utils/utils.dart';
+import 'package:event_finder/view_model/auth_view_model.dart';
 import 'package:go_router/go_router.dart';
-
-import '/auth/custom_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -10,9 +11,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import '../view_model/create_account_page_model.dart';
-export '../view_model/create_account_page_model.dart';
 
 class CreateAccountPageWidget extends StatefulWidget {
   const CreateAccountPageWidget({super.key});
@@ -23,26 +21,35 @@ class CreateAccountPageWidget extends StatefulWidget {
 }
 
 class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
-  late CreateAccountPageModel _model;
+  // Controllers and FocusNodes
+  final nameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final textFieldFocusNode1 = FocusNode();
+  final textFieldFocusNode2 = FocusNode();
+  final textFieldFocusNode3 = FocusNode();
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  
-  get authManager => null;
-
-  @override
-  void initState() {
-    super.initState();
-    _model = CreateAccountPageModel(); // Perbaikan inisialisasi model
-  }
+  // Password visibility state
+  bool passwordVisibility = false;
 
   @override
   void dispose() {
-    _model.dispose();
+    // Dispose controllers and focus nodes
+    nameTextController.dispose();
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    textFieldFocusNode1.dispose();
+    textFieldFocusNode2.dispose();
+    textFieldFocusNode3.dispose();
     super.dispose();
   }
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+    
     return Scaffold(
       key: scaffoldKey,
       body: Stack(
@@ -103,8 +110,8 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           20, 0, 20, 0),
                                       child: TextFormField(
-                                        controller: _model.emailTextController,
-                                        focusNode: _model.textFieldFocusNode1,
+                                        controller: emailTextController,
+                                        focusNode: textFieldFocusNode1,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           hintText: 'Email',
@@ -188,10 +195,9 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           20, 0, 20, 0),
                                       child: TextFormField(
-                                        controller:
-                                            _model.passwordTextController,
-                                        focusNode: _model.textFieldFocusNode2,
-                                        obscureText: !_model.passwordVisibility,
+                                        controller: passwordTextController,
+                                        focusNode: textFieldFocusNode2,
+                                        obscureText: !passwordVisibility,
                                         decoration: InputDecoration(
                                           hintText: 'Password',
                                           hintStyle: GoogleFonts.getFont(
@@ -246,13 +252,13 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                                           ),
                                           suffixIcon: InkWell(
                                             onTap: () => setState(
-                                              () => _model.passwordVisibility =
-                                                  !_model.passwordVisibility,
+                                              () => passwordVisibility =
+                                                  !passwordVisibility,
                                             ),
                                             focusNode:
                                                 FocusNode(skipTraversal: true),
                                             child: Icon(
-                                              _model.passwordVisibility
+                                                  passwordVisibility
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
@@ -280,14 +286,31 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                                       0, 0, 0, 20),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      await authManager.signIn();
+                                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
 
-                                      if (context.mounted) {
-                                        context.goNamed('HomePage');
+                                      // Fungsi login dari AuthViewModel.
+                                      if (nameTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Name');
+                                      } else if (emailTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Email');
+                                      } else if (passwordTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Password');
+                                      } else if (passwordTextController.text.length < 6) {
+                                        Utils.toastMessage('Please Enter 6 Digit Password');
+                                      } else {
+                                        Map data = {
+                                          'name' : nameTextController.text.toString(),
+                                          'email' : emailTextController.text.toString(),
+                                          'password' : passwordTextController.text.toString(),
+                                        };
+
+                                        authViewModel.registerApi(data, context);
+                                        print('api hit');
                                       }
                                     },
-                                    text: 'Create Account',
+                                    text: context.watch<AuthViewModel>().loading 
+                                    ? 'Loading...' 
+                                    : 'Create Account',
                                     options: FFButtonOptions(
                                       width: 300,
                                       height: 50,
@@ -317,8 +340,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () {
-                                  debugPrint('Navigating to LoginPage');
-                                  context.goNamed('LoginPage');
+                                  Navigator.pushNamed(context, RoutesName.login);
                                 },
                                 child: Text(
                                   'Already have an account?',
@@ -344,28 +366,6 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
         ],
       ),
     );
-  }
-}
-
-class CreateAccountPageModel {
-  TextEditingController? emailTextController;
-  TextEditingController? passwordTextController;
-  FocusNode? textFieldFocusNode1;
-  FocusNode? textFieldFocusNode2;
-  bool passwordVisibility = false;
-
-  CreateAccountPageModel() {
-    emailTextController = TextEditingController();
-    passwordTextController = TextEditingController();
-    textFieldFocusNode1 = FocusNode();
-    textFieldFocusNode2 = FocusNode();
-  }
-
-  void dispose() {
-    emailTextController?.dispose();
-    passwordTextController?.dispose();
-    textFieldFocusNode1?.dispose();
-    textFieldFocusNode2?.dispose();
   }
 }
 
@@ -424,8 +424,4 @@ class FFButtonOptions {
     required this.borderSide,
     required this.borderRadius,
   });
-}
-
-extension on GoRouter {
-  void prepareAuthEvent() {}
 }

@@ -6,8 +6,6 @@ import 'package:event_finder/view/home_page_widget.dart';
 import 'package:event_finder/view/search_result_page_widget.dart';
 import 'package:event_finder/view_model/home_page_model.dart';
 import 'package:go_router/go_router.dart';
-
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -548,7 +546,7 @@ class _SearchResultsPageWidgetState extends State<SearchResultsPageWidget> {
 class GetArtPieceCall {
   static call({required String objectID}) {
     // Implementation here.
-    return ApiCallResponse(jsonBody: {});
+    // return ApiCallResponse(jsonBody: {});
   }
 }
 
@@ -560,7 +558,7 @@ extension WithoutNullsExtension on Map<String, dynamic> {
 class SearchArtCall {
   static call({String? q}) {
     // Implementation here.
-    return ApiCallResponse(jsonBody: {});
+    // return ApiCallResponse(jsonBody: {});
   }
 }
 

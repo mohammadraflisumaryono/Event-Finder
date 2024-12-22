@@ -1,8 +1,6 @@
 // ignore_for_file: unused_import, unnecessary_import, prefer_typing_uninitialized_variables, constant_identifier_names
 
 import 'dart:core';
-
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';

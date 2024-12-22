@@ -1,8 +1,9 @@
-// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, unused_import, unnecessary_import, deprecated_member_use
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, unused_import, unnecessary_import, deprecated_member_use, prefer_const_constructors, unused_local_variable
 
 import 'dart:io';
-
-import '/auth/custom_auth/auth_util.dart';
+import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/utils/utils.dart';
+import 'package:event_finder/view_model/auth_view_model.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -12,9 +13,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../view_model/login_page_model.dart';
-export '../view_model/login_page_model.dart';
-
 class LoginPageWidget extends StatefulWidget {
   const LoginPageWidget({super.key});
 
@@ -23,35 +21,33 @@ class LoginPageWidget extends StatefulWidget {
 }
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
-  late LoginPageModel _model;
+  // Controllers and FocusNodes
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final textFieldFocusNode1 = FocusNode();
+  final textFieldFocusNode2 = FocusNode();
+
+  // Password visibility state
+  bool passwordVisibility = false;
+
+  @override
+  void dispose() {
+    // Dispose controllers and focus nodes
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    textFieldFocusNode1.dispose();
+    textFieldFocusNode2.dispose();
+    super.dispose();
+  }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  
-  get authManager => null;
   
   bool get isAndroid => Platform.isAndroid; 
 
   @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => LoginPageModel());
-
-    _model.emailTextController ??= TextEditingController();
-    _model.textFieldFocusNode1 ??= FocusNode();
-
-    _model.passwordTextController ??= TextEditingController();
-    _model.textFieldFocusNode2 ??= FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _model.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+
     return Scaffold(
       key: scaffoldKey,
       body: Stack(
@@ -112,8 +108,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           20, 0, 20, 0),
                                       child: TextFormField(
-                                        controller: _model.emailTextController,
-                                        focusNode: _model.textFieldFocusNode1,
+                                        controller: emailTextController,
+                                        focusNode: textFieldFocusNode1,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           hintText: 'Email',
@@ -197,10 +193,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           20, 0, 20, 0),
                                       child: TextFormField(
-                                        controller:
-                                            _model.passwordTextController,
-                                        focusNode: _model.textFieldFocusNode2,
-                                        obscureText: !_model.passwordVisibility,
+                                        controller: passwordTextController,
+                                        focusNode: textFieldFocusNode2,
+                                        obscureText: !passwordVisibility,
                                         decoration: InputDecoration(
                                           hintText: 'Password',
                                           hintStyle: GoogleFonts.getFont(
@@ -255,13 +250,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           ),
                                           suffixIcon: InkWell(
                                             onTap: () => safeSetState(
-                                              () => _model.passwordVisibility =
-                                                  !_model.passwordVisibility,
+                                              () => passwordVisibility =
+                                                  !passwordVisibility,
                                             ),
                                             focusNode:
                                                 FocusNode(skipTraversal: true),
                                             child: Icon(
-                                              _model.passwordVisibility
+                                              passwordVisibility
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
@@ -289,13 +284,28 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       0, 0, 0, 18),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      await authManager.signIn();
+                                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
 
-                                      context.goNamedAuth(
-                                          'HomePage', context.mounted);
+                                      // Fungsi login dari AuthViewModel.
+                                      if (emailTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Email');
+                                      } else if (passwordTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Password');
+                                      } else if (passwordTextController.text.length < 6) {
+                                        Utils.toastMessage('Please Enter 6 Digit Password');
+                                      } else {
+                                        Map data = {
+                                          'email' : emailTextController.text.toString(),
+                                          'password' : passwordTextController.text.toString(),
+                                        };
+
+                                        authViewModel.loginApi(data, context);
+                                        print('api hit');
+                                      }
                                     },
-                                    text: 'Sign in with email',
+                                  text: context.watch<AuthViewModel>().loading 
+                                    ? 'Loading...' 
+                                    : 'Login',
                                     options: FFButtonOptions(
                                       width: 300,
                                       height: 50,
@@ -328,10 +338,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      context.goNamed('CreateAccountPage');
+                                      Navigator.pushNamed(context, RoutesName.register);
                                     },
                                     child: Text(
-                                      'Create Account',
+                                      'Dont Have An Accout?',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -348,41 +358,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             Padding(
                               padding:
                                   const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  GoRouter.of(context).prepareAuthEvent();
-                                  await authManager.signIn();
-
-                                  context.goNamedAuth(
-                                      'HomePage', context.mounted);
-                                },
-                                text: 'Continue as Guest',
-                                icon: const FaIcon(
-                                  FontAwesomeIcons.home,
-                                  color: Color(0xFF4B39EF),
-                                  size: 20,
-                                ),
-                                options: FFButtonOptions(
-                                  width: 200,
-                                  height: 44,
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                      3, 0, 10, 1),
-                                  color: Colors.white,
-                                  textStyle: GoogleFonts.getFont(
-                                    'Roboto',
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                  ),
-                                  elevation: 4,
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
+                                  // asalnya ada button
                             ),
                             Align(
                               alignment: const AlignmentDirectional(0, 0),
@@ -396,45 +372,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                     children: [
                                       Align(
                                         alignment: const AlignmentDirectional(0, 0),
-                                        child: FFButtonWidget(
-                                          onPressed: () async {
-                                            GoRouter.of(context)
-                                                .prepareAuthEvent();
-                                            await authManager.signIn();
-
-                                            context.goNamedAuth(
-                                                'HomePage', context.mounted);
-                                          },
-                                          text: 'Sign in with Google',
-                                          icon: const FaIcon(
-                                            FontAwesomeIcons.plus, // Ganti dengan ikon FontAwesome yang sesuai
-                                            color: Colors.transparent,
-                                            size: 20,
-                                            ),
-                                          options: FFButtonOptions(
-                                            width: 200,
-                                            height: 44,
-                                            padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 0, 0),
-                                            iconPadding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 8, 0),
-                                            color: Colors.white,
-                                            textStyle: GoogleFonts.getFont(
-                                              'Roboto',
-                                              color: const Color(0xFF606060),
-                                              fontSize: 15,
-                                            ),
-                                            elevation: 4,
-                                            borderSide: const BorderSide(
-                                              color: Colors.transparent,
-                                              width: 0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                        ),
+                                        // asalnya ada button
                                       ),
                                       Align(
                                         alignment:
@@ -462,41 +400,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                 : Padding(
                                     padding: const EdgeInsetsDirectional.fromSTEB(
                                         0, 0, 0, 15),
-                                    child: FFButtonWidget(
-                                      onPressed: () async {
-                                        GoRouter.of(context).prepareAuthEvent();
-                                        await authManager.signIn();
-
-                                        context.goNamedAuth(
-                                            'HomePage', context.mounted);
-                                      },
-                                      text: 'Sign in with Apple',
-                                      icon: const FaIcon(
-                                        FontAwesomeIcons.apple,
-                                        size: 20,
-                                      ),
-                                      options: FFButtonOptions(
-                                        width: 200,
-                                        height: 44,
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 0),
-                                        iconPadding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 10, 1),
-                                        color: Colors.white,
-                                        textStyle: GoogleFonts.getFont(
-                                          'Roboto',
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
-                                        elevation: 4,
-                                        borderSide: const BorderSide(
-                                          color: Colors.transparent,
-                                          width: 0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
+                                    // asalnya ada button
                                   ),
                             Align(
                               alignment: const AlignmentDirectional(0, 0),
@@ -507,46 +411,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                   children: [
                                     Align(
                                       alignment: const AlignmentDirectional(0, 0),
-                                      child: FFButtonWidget(
-                                        onPressed: () async {
-                                          GoRouter.of(context)
-                                              .prepareAuthEvent();
-                                          await authManager.signIn();
-
-                                          context.goNamedAuth(
-                                              'HomePage', context.mounted);
-                                        },
-                                        text: 'Login with Facebook',
-                                        icon: const FaIcon(
-                                          FontAwesomeIcons.plus, // Pilih ikon yang sesuai dari FontAwesome
-                                          color: Colors.transparent,
-                                          size: 20,
-                                          ),
-                                        options: FFButtonOptions(
-                                          width: 200,
-                                          height: 44,
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 0),
-                                          iconPadding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 8, 0),
-                                          color: Colors.white,
-                                          textStyle: GoogleFonts.getFont(
-                                            'Roboto',
-                                            color: const Color(0xFF1877F2),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                          ),
-                                          elevation: 4,
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                            width: 0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                      ),
+                                      // asalnya ada button
                                     ),
                                     Align(
                                       alignment: const AlignmentDirectional(-0.83, 0),
@@ -580,10 +445,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       ),
     );
   }
-  
-  LoginPageModel createModel(BuildContext context, LoginPageModel Function() param1) {
-  return param1();
-}
 
 Widget safeSetState(bool Function() param0) {
   if (param0()) {
@@ -595,14 +456,4 @@ Widget safeSetState(bool Function() param0) {
   FFButtonOptions({required int width, required int height, required EdgeInsetsDirectional padding, required EdgeInsetsDirectional iconPadding, required Color color, required TextStyle textStyle, required int elevation, required BorderSide borderSide, required BorderRadius borderRadius}) {}
   
   FFButtonWidget({required Future<Null> Function() onPressed, required String text, required options, required FaIcon icon}) {}
-}
-
-class GoRouter {
-  static of(BuildContext context) {}
-}
-
-extension on BuildContext {
-  void goNamedAuth(String s, bool mounted) {}
-  
-  void goNamed(String s) {}
 }
