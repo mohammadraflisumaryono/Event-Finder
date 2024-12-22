@@ -87,7 +87,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   0, 0, 0, 20),
                               child: Image.asset(
-                                'assets/images/logo_flutterMet@2x.png',
+                                'lib/res/assets/images/logo.png',
                                 width: 120,
                                 fit: BoxFit.cover,
                               ),
