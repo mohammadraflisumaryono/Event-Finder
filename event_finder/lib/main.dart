@@ -9,15 +9,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter App',
-      debugShowCheckedModeBanner: false,
-
-      // Tetapkan MainPage sebagai halaman awal
-      initialRoute: RoutesName.main,
-
-      // Generate rute sesuai dengan Routes.dart
-      onGenerateRoute: Routes.generateRoute,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthViewModel())],
+      child: MaterialApp(
+        title: 'Event Finder',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: RoutesName.login, // Mulai dari halaman HomePage
+        onGenerateRoute: Routes.generateRoute,
+      ),
     );
   }
 }

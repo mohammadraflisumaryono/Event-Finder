@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import '../../view/login_page_widget.dart'; // Login Page
 import '../../view/home_page_widget.dart'; // Home Page
@@ -14,20 +16,9 @@ class Routes {
         );
 
       case RoutesName.register:
-        return MaterialPageRoute(
-          builder: (context) => CreateAccountPageWidget(),
-        );
-
+        return MaterialPageRoute(builder: (context) => const CreateAccountPageWidget());
       case RoutesName.home:
-        return MaterialPageRoute(
-          builder: (context) => const HomePageWidget(),
-        );
-
-      case RoutesName.main: // Tetap arahkan ke MainPage
-        return MaterialPageRoute(
-          builder: (context) => const MainPage(),
-        );
-
+        return MaterialPageRoute(builder: (context) => const HomePageWidget());
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
@@ -40,5 +31,18 @@ class Routes {
           ),
         );
     }
+  }
+}
+
+// Corrected HomePageWidget class definition
+class HomePageWidget extends StatelessWidget {
+  const HomePageWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: const Center(child: Text('Welcome to the Home Page!')),
+    );
   }
 }
