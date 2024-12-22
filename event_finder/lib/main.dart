@@ -1,5 +1,7 @@
-import 'package:event_finder/view/create_event_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'utils/routes/routes.dart';
+import 'utils/routes/routes_name.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,33 +18,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Event Finder Home'),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreateEventPage()),
-            );
-          },
-          child: const Text('Go to Create Event Page'),
-        ),
-      ),
+      initialRoute:
+          RoutesName.createAccount, // Mulai dari halaman Create Account
+      onGenerateRoute: Routes.generateRoute, // Gunakan routing dinamis
     );
   }
 }

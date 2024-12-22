@@ -9,4 +9,6 @@
 
   // homescreen route name
   static const String home = 'home_screen';
+
+  static const String createAccount = 'create_account_screen';
  }

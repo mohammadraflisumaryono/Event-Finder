@@ -1,4 +1,6 @@
 
+// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, prefer_adjacent_string_concatenation
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:event_finder/data/app_exceptions.dart';
