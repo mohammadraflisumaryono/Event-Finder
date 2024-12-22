@@ -1,401 +1,288 @@
-// ignore_for_file: unused_import, unnecessary_import, prefer_typing_uninitialized_variables, constant_identifier_names
-
-import 'dart:core';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
+import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:event_finder/model/event_model.dart';
+import 'package:event_finder/model/popular_model.dart';
+import 'package:event_finder/shared/theme.dart';
+import 'package:event_finder/widgets/event_card.dart';
+import 'package:event_finder/widgets/popular_card.dart';
 
-import '../view_model/home_page_model.dart';
-export '../view_model/home_page_model.dart';
-
-class HomePageWidget extends StatefulWidget {
-  const HomePageWidget({super.key});
-
-  @override
-  State<HomePageWidget> createState() => _HomePageWidgetState();
-}
-
-class _HomePageWidgetState extends State<HomePageWidget> {
-  late HomePageModel _model;
-
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _model = HomePageModel(); // Inisialisasi benar
-
-    // Inisialisasi textController dan textFieldFocusNode jika null
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _model.dispose();
-    super.dispose();
-  }
+class HomePageWidget extends StatelessWidget {
+  const HomePageWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondary,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Stack(
-              children: [
-                Align(
-                  alignment: const AlignmentDirectional(0, 0),
-                  child: Image.asset(
-                    'assets/images/home_image.png',
-                    width: double.infinity,
-                    height: 255,
-                    fit: BoxFit.cover,
-                  ),
+    // Navbar widget
+    Widget navbar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.blue[700],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Event Finder",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                "Wanna Find Some Event?",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-                Align(
-                  alignment: const AlignmentDirectional(0, 0),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(20, 60, 20, 0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 17),
-                          child: Image.asset(
-                            'res/assets/images/logo.png',
-                            width: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Text(
-                          'Your place for searching ART.',
-                          style: FlutterFlowTheme
-                              .bodyMedium
-                              .copyWith(
-                                fontFamily: 'Inter',
-                                color: FlutterFlowTheme.of(context).secondary,
-                                fontSize: 16,
-                                letterSpacing: 0.0,
-                                fontStyle: FontStyle.italic,
-                              ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 27, 0, 0),
-                          child: Container(
-                            width: double.infinity,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context.pushNamed(
-                                        'SearchResultsPage',
-                                        queryParameters: {
-                                          'searchTerm': serializeParam(
-                                            _model.textController!.text,
-                                            ParamType.String as ParamType,
-                                          ),
-                                        }.withoutNulls,
-                                      );
-                                    },
-                                    child: Icon(
-                                      Icons.search,
-                                      color:
-                                          FlutterFlowTheme.of(context).tertiary,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          5, 0, 0, 2),
-                                      child: TextFormField(
-                                        controller: _model.textController,
-                                        focusNode: _model.textFieldFocusNode,
-                                        onFieldSubmitted: (_) async {
-                                          context.pushNamed(
-                                            'SearchResultsPage',
-                                            queryParameters: {
-                                              'searchTerm': serializeParam(
-                                                _model.textController!.text,
-                                                ParamType.String as ParamType,
-                                              ),
-                                            }.withoutNulls,
-                                          );
-                                        },
-                                        obscureText: false,
-                                        decoration: const InputDecoration(
-                                          hintText:
-                                              'Search artist, maker, department...',
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.only(
-                                              topLeft: Radius.circular(4.0),
-                                              topRight: Radius.circular(4.0),
-                                            ),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.only(
-                                              topLeft: Radius.circular(4.0),
-                                              topRight: Radius.circular(4.0),
-                                            ),
-                                          ),
-                                          errorBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.only(
-                                              topLeft: Radius.circular(4.0),
-                                              topRight: Radius.circular(4.0),
-                                            ),
-                                          ),
-                                          focusedErrorBorder:
-                                              UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.only(
-                                              topLeft: Radius.circular(4.0),
-                                              topRight: Radius.circular(4.0),
-                                            ),
-                                          ),
-                                        ),
-                                        style: FlutterFlowTheme
-                                            .bodyMedium
-                                            .copyWith(
-                                              fontFamily: 'Inter',
-                                              fontSize: 16,
-                                              letterSpacing: 0.0,
-                                            ),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Field ini tidak boleh kosong';
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: const Alignment(-1.0, 0.0),
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(10, 15, 0, 20),
-                            child: Text(
-                              'Museum Departments',
-                              style: FlutterFlowTheme.bodyMedium.copyWith(
-                                fontFamily: 'Inter',
-                                fontSize: 12,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        FutureBuilder<ApiCallResponse>(
-                          future: GetDepartmentsCall.call(),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                            final gridViewGetDepartmentsResponse =
-                                snapshot.data!;
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, RoutesName.login);
+                },
+                child: const Text(
+                  'Login',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const SizedBox(width: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, RoutesName.register);
+                },
+                child: const Text(
+                  'Signup',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
-                            return Builder(
-                              builder: (context) {
-                                final departments = getJsonField(
-                                  gridViewGetDepartmentsResponse.jsonBody,
-                                  r'''$.departments''',
-                                ).toList().take(30).toList();
-
-                                return GridView.builder(
-                                  padding: EdgeInsets.zero,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 1.6,
-                                  ),
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: departments.length,
-                                  itemBuilder: (context, departmentsIndex) {
-                                    final departmentsItem =
-                                        departments[departmentsIndex];
-                                    return InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        context.pushNamed(
-                                          'DepartmentHighlightsPage',
-                                          queryParameters: {
-                                            'departmentId': serializeParam(
-                                              getJsonField(
-                                                departmentsItem,
-                                                r'''$.departmentId''',
-                                              ),
-                                              ParamType.int as ParamType,
-                                            ),
-                                            'displayName': serializeParam(
-                                              getJsonField(
-                                                departmentsItem,
-                                                r'''$.displayName''',
-                                              ).toString(),
-                                              ParamType.String as ParamType,
-                                            ),
-                                          }.withoutNulls,
-                                        );
-                                      },
-                                      child: Card(
-                                        clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
-                                        color: Colors.white,
-                                        elevation: 4,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Align(
-                                          alignment: const AlignmentDirectional(0, 0),
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    5, 0, 5, 0),
-                                            child: Text(
-                                              getJsonField(
-                                                departmentsItem,
-                                                r'''$.displayName''',
-                                              ).toString(),
-                                              textAlign: TextAlign.center,
-                                              style:
-                                                  FlutterFlowTheme
-                                                      .displaySmall
-                                                      .copyWith(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ],
+    // Header widget
+    Widget header() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 24,
+          left: 24,
+          right: 24,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Find events near',
+                    style: placeholderTextStyle,
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    'Bandung, ID',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 20,
+                      fontWeight: semiBold,
                     ),
                   ),
+                ],
+              ),
+            ),
+            Container(
+              height: 48,
+              width: 48,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage('lib/res/assets/images/img_profile.png'),
                 ),
-              ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Search widget
+    Widget search() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 24,
+          left: 24,
+          right: 24,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        height: 54,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 24,
+              width: 24,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/res/assets/images/ic_search.png'),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Search all events...',
+                  hintStyle: placeholderTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: regular,
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Upcoming events widget
+    Widget upcomingEvents() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+              ),
+              child: Text(
+                'Upcoming Events',
+                style: primaryTextStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: semiBold,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 13,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 24,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: events
+                      .map(
+                        (item) => EventCard(item),
+                      )
+                      .toList(),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    // Popular now widget
+    Widget popularNow() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 24,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Popular Now',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      'See All',
+                      style: greyTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: medium,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 24,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    children:
+                        populars.map((item) => PopularCard(item)).toList()),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            navbar(),
+            Expanded(
+              child: ListView(
+                children: [
+                  header(),
+                  search(),
+                  upcomingEvents(),
+                  popularNow(),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
-  serializeParam(String text, ParamType type) {
-    return text;
-  }
-
-  getJsonField(dynamic json, String field) {
-    // Replace this with actual JSON parsing logic
-    return json[field] ?? [];
-  }
-}
-
-class HomePageModel {
-  TextEditingController? textController;
-  FocusNode? textFieldFocusNode;
-
-  HomePageModel() {
-    textController = TextEditingController();
-    textFieldFocusNode = FocusNode();
-  }
-
-  void dispose() {
-    textController?.dispose();
-    textFieldFocusNode?.dispose();
-  }
-}
-
-class GetDepartmentsCall {
-  static Future<ApiCallResponse> call() async {
-    return ApiCallResponse();
-  }
-}
-
-class ApiCallResponse {
-  dynamic get jsonBody => {};
-}
-
-extension ContextExtensions on BuildContext {
-  void pushNamed(String routeName, {required Map<String, dynamic> queryParameters}) {}
-}
-
-extension MapExtensions on Map<String, dynamic> {
-  Map<String, dynamic> get withoutNulls => this;
-}
-
-class ParamType {
-  static const String = 'String';
-  static const int = 'int';
-
-  static var JSON;
 }
