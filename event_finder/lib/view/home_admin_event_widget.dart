@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:event_finder/view_model/home_admin_event_model.dart';
 
-class HomeAdminEvent extends StatelessWidget {
+class HomeAdminEventPage extends StatelessWidget {
+  final bool isAdmin;
   final List<Event> events = [
     Event(
       id: 1,
       title: 'Music Festival',
       description: 'A grand music festival in the city.',
+      ticketPrice: 50.0,
+      startTime: DateTime.now(),
+      endTime: DateTime.now().add(const Duration(hours: 3)),
       isApproved: true,
       createdBy: 'GuestUser1',
     ),
@@ -13,29 +18,25 @@ class HomeAdminEvent extends StatelessWidget {
       id: 2,
       title: 'Art Exhibition',
       description: 'A modern art exhibition.',
+      ticketPrice: 20.0,
+      startTime: DateTime.now(),
+      endTime: DateTime.now().add(const Duration(hours: 2)),
       isApproved: false,
       createdBy: 'GuestUser2',
     ),
   ];
 
-  final bool isAdmin;
-
-  HomeAdminEvent({super.key, required this.isAdmin});
+  HomeAdminEventPage({super.key, required this.isAdmin});
 
   void onCreateEvent(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const CreateEventPage()),
-    );
+    Navigator.pushNamed(context, '/createEvent');
   }
 
   void onEditEvent(BuildContext context, Event event) {
     if (isAdmin || (!event.isApproved && event.createdBy == 'GuestUser1')) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => EditEventPage(event: event),
-        ),
+        MaterialPageRoute(builder: (context) => EditEventPage(event: event)),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -52,15 +53,13 @@ class HomeAdminEvent extends StatelessWidget {
         content: const Text('Are you sure you want to delete this event?'),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
-              events.removeWhere((event) => event.id == eventId);
               Navigator.pop(context);
+              // TODO: Add deletion logic here
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Event deleted successfully!')),
               );
@@ -75,12 +74,13 @@ class HomeAdminEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filteredEvents = isAdmin
-        ? events // Admin melihat semua event
+        ? events // Admin sees all events
         : events.where((event) => event.createdBy == 'GuestUser1').toList();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Event Management'),
+        backgroundColor: Colors.blueGrey,
         actions: [
           if (isAdmin)
             IconButton(
@@ -101,12 +101,16 @@ class HomeAdminEvent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(event.description),
+                  Text('Price: \$${event.ticketPrice.toStringAsFixed(2)}'),
                   Text(
                     'Status: ${event.isApproved ? 'Approved' : 'Pending'}',
                     style: TextStyle(
                       color: event.isApproved ? Colors.green : Colors.orange,
                     ),
                   ),
+                  Text(
+                      'Start: ${event.startTime.hour}:${event.startTime.minute}'),
+                  Text('End: ${event.endTime.hour}:${event.endTime.minute}'),
                   Text('Created by: ${event.createdBy}'),
                 ],
               ),
@@ -137,39 +141,10 @@ class HomeAdminEvent extends StatelessWidget {
       floatingActionButton: isAdmin
           ? FloatingActionButton(
               onPressed: () => onCreateEvent(context),
+              backgroundColor: Colors.blueGrey,
               child: const Icon(Icons.add),
             )
           : null,
-    );
-  }
-}
-
-class Event {
-  final int id;
-  final String title;
-  final String description;
-  final bool isApproved;
-  final String createdBy;
-
-  Event({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.isApproved,
-    required this.createdBy,
-  });
-}
-
-class CreateEventPage extends StatelessWidget {
-  const CreateEventPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Create Event')),
-      body: const Center(
-        child: Text('Form untuk membuat event baru'),
-      ),
     );
   }
 }
@@ -182,9 +157,12 @@ class EditEventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Event: ${event.title}')),
+      appBar: AppBar(
+        title: Text('Edit Event: ${event.title}'),
+        backgroundColor: Colors.blueGrey,
+      ),
       body: const Center(
-        child: Text('Form untuk mengedit event'),
+        child: Text('Form to edit the event'),
       ),
     );
   }
