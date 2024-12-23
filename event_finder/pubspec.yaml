@@ -1,6 +1,8 @@
 name: event_finder
 description: A new Flutter project.
 
+version: 1.0.0+1 # Tambahkan ini (build name 1.0.0, build number 1)
+
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
@@ -13,7 +15,7 @@ dependencies:
   cloud_firestore: 5.5.0
   cloud_firestore_platform_interface: 6.5.0
   cloud_firestore_web: 4.3.4
-  collection: 1.19.0
+  collection: 1.18.0
   equatable: 2.0.5
   firebase_auth: 5.3.3
   firebase_core: 3.8.0
@@ -51,15 +53,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/res/assets/images/logo.png
-    - lib/res/assets/images/ic_favorite.png
-    - lib/res/assets/images/ic_home.png
-    - lib/res/assets/images/ic_location.png
-    - lib/res/assets/images/ic_profile.png
-    - lib/res/assets/images/ic_search.png
-    - lib/res/assets/images/ic_ticket.png
-    - lib/res/assets/images/img_event_1.png
-    - lib/res/assets/images/img_event_2.png
-    - lib/res/assets/images/img_event_3.png
-    - lib/res/assets/images/img_event_4.png
-    - lib/res/assets/images/img_profile.png
+    - lib/res/assets/images/

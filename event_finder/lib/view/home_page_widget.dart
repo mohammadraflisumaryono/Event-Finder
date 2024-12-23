@@ -199,11 +199,11 @@ class HomePageWidget extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: events
-                      .map(
-                        (item) => EventCard(item),
-                      )
-                      .toList(),
+                  // children: events
+                  //     .map(
+                  //       (item) => EventCard(item),
+                  //     )
+                  //     .toList(),
                 ),
               ),
             )

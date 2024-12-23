@@ -47,6 +47,8 @@ class AuthViewModel with ChangeNotifier {
 
   Future<void> registerApi(dynamic data, BuildContext context) async {
 
+    print(data);
+
     setRegisterLoading(true);
 
     _myRepo.registerApi(data).then((value) {

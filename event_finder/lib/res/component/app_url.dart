@@ -3,11 +3,13 @@
 
 class AppUrl {
 
-  static var baseUrl = 'https://event-finder-production.up.railway.app';
+  static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
 
-  static var loginEndPoint = baseUrl + '/api/login';
+  static var loginEndPoint = baseUrl + 'login';
 
-  static var registerEndPoint = baseUrl + '/api/register';
+  static var registerEndPoint = baseUrl + 'register';
 
-  static var eventEndPoint = baseUrl + '/api/event';
+  static var eventEndPoint = baseUrl + 'events';
+
+  static var getAllEventsEndPoint = baseUrl + 'events';
 }

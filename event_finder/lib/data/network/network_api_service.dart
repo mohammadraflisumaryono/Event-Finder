@@ -29,11 +29,18 @@ class NetworkApiService extends BaseApiServices {
   Future getPostApiResponse(String url, dynamic data) async {
     
     dynamic responseJson;
+    print('url network: data: $data');
     try {
+      // Menampilkan data yang akan dikirim ke server
+      print("Data yang dikirim ke server: ${jsonEncode(data)}");
       
       Response response = await post(
         Uri.parse(url),
-        body: data
+        body: jsonEncode(data),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
       ).timeout(Duration(seconds: 10));
 
       responseJson = returnResponse(response);
@@ -48,6 +55,9 @@ class NetworkApiService extends BaseApiServices {
 
     switch(response.statusCode) {
       case 200:
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
+      case 201:
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:

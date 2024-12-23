@@ -1,9 +1,43 @@
-import 'package:event_finder/utils/routes/routes_name.dart';
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors, unused_local_variable, library_private_types_in_public_api
 
-class LoginPageWidget extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../utils/routes/routes_name.dart';
+import '../utils/utils.dart';
+import '../view_model/auth_view_model.dart';
+
+class LoginPageWidget extends StatefulWidget {
+  const LoginPageWidget({super.key});
+
+  @override
+  _LoginPageWidgetState createState() => _LoginPageWidgetState();
+}
+
+class _LoginPageWidgetState extends State<LoginPageWidget> {
+  // Controllers and FocusNodes
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final textFieldFocusNode1 = FocusNode();
+  final textFieldFocusNode2 = FocusNode();
+
+  @override
+  void dispose() {
+    // Dispose controllers and focus nodes
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    textFieldFocusNode1.dispose();
+    textFieldFocusNode2.dispose();
+    super.dispose();
+  }
+
+  // Password visibility state
+  bool passwordVisibility = false;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       body: Center(
@@ -34,7 +68,7 @@ class LoginPageWidget extends StatelessWidget {
                   const SizedBox(height: 10),
                   Center(
                     child: Text(
-                      "Login to continue",
+                      "Login to Create Event",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.blueGrey,
@@ -43,11 +77,13 @@ class LoginPageWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Image.asset(
-                    'lib/res/assets/images/logo.png', // Gambar relevan di folder assets
+                    'lib/res/assets/images/logo.png', 
                     height: 150,
                   ),
                   const SizedBox(height: 30),
                   TextField(
+                    controller: emailTextController,
+                    focusNode: textFieldFocusNode1,
                     decoration: InputDecoration(
                       hintText: "Email Address",
                       prefixIcon: Icon(Icons.email, color: Colors.blue[700]),
@@ -62,7 +98,10 @@ class LoginPageWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   TextField(
-                    obscureText: true,
+                    controller: passwordTextController,
+                    focusNode: textFieldFocusNode2,
+                    obscureText: !passwordVisibility,
+                    // obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
                       prefixIcon: Icon(Icons.lock, color: Colors.blue[700]),
@@ -77,7 +116,26 @@ class LoginPageWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 25),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async{
+                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+
+                                      // Fungsi login dari AuthViewModel.
+                                      if (emailTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Email');
+                                      } else if (passwordTextController.text.isEmpty) {
+                                        Utils.toastMessage('Please Enter Password');
+                                      } else if (passwordTextController.text.length < 6) {
+                                        Utils.toastMessage('Please Enter 6 Digit Password');
+                                      } else {
+                                        Map data = {
+                                          'email' : emailTextController.text.toString(),
+                                          'password' : passwordTextController.text.toString(),
+                                        };
+
+                                        authViewModel.loginApi(data, context);
+                                        print('api hit');
+                                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[700],
                       shape: RoundedRectangleBorder(
@@ -97,7 +155,7 @@ class LoginPageWidget extends StatelessWidget {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RoutesName.register); // Use the appropriate route name for sign up
+                        Navigator.pushNamed(context, RoutesName.register); 
                       },
                       child: RichText(
                         text: TextSpan(
@@ -127,4 +185,4 @@ class LoginPageWidget extends StatelessWidget {
       ),
     );
   }
-}
+}                                           
