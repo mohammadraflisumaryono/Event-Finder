@@ -7,8 +7,12 @@ class PopularCard extends StatelessWidget {
 
   const PopularCard(
     this.popular, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+  
+  get whiteColor => null;
+  
+  get ticketColor => null;
 
   @override
   Widget build(BuildContext context) {

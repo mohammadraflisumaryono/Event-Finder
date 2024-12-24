@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'res/theme.dart';
 import 'view/home_page_widget.dart';
+import 'view/create_event_page_widget.dart';
 
 void main() {
   runApp(const MyApp());

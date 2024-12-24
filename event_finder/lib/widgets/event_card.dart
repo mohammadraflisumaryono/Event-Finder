@@ -10,6 +10,8 @@ class EventCard extends StatelessWidget {
     this.event, {
     Key? key,
   }) : super(key: key);
+  
+  get whiteColor => null;
 
   @override
   Widget build(BuildContext context) {

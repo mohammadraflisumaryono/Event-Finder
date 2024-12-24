@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
 
+import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/view/create_account_page_widget.dart';
+import 'package:event_finder/view/login_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import intl untuk format tanggal
 import 'package:event_finder/model/event_category.dart';
@@ -11,6 +14,8 @@ class Event {
   final DateTime date;
   final String price;
   final String image;
+  final BoxFit fit;
+  final String placeholder; 
 
   Event({
     required this.title,
@@ -18,12 +23,13 @@ class Event {
     required this.date,
     required this.price,
     required this.image,
-  });
-}
+    this.fit = BoxFit.cover,
+    this.placeholder = 'assets/placeholder.jpg',
+    });
+  }
 
 class HomePageWidget extends StatelessWidget {
   const HomePageWidget({super.key});
-
   @override
   Widget build(BuildContext context) {
     // Daftar event yang ada
@@ -33,21 +39,21 @@ class HomePageWidget extends StatelessWidget {
         location: 'Gelora Bung Karno Stadium',
         date: DateTime(2023, 11, 15),
         price: 'IDR 1.100.000',
-        image: 'assets/coldplay.jpg',
+        image: 'https://i.pinimg.com/736x/6a/9a/9b/6a9a9b246937dd614475b439f5da81d4.jpg',
       ),
       Event(
         title: 'Muse: Will of the People',
         location: 'Jakarta, Indonesia',
         date: DateTime(2023, 7, 23),
         price: 'IDR 500.000',
-        image: 'assets/muse.jpg',
+        image: 'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
       ),
       Event(
         title: 'One Direction: Where We Are',
         location: 'Jakarta, Indonesia',
         date: DateTime(2023, 10, 29),
         price: 'IDR 800.000',
-        image: 'assets/one_direction.jpg',
+        image: 'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2014/10/12/1413103103754/acfe846d-18b9-4029-bb0b-acea080c47d1-620x372.jpeg?width=445&dpr=1&s=none&crop=none',
       ),
     ];
 
@@ -59,11 +65,45 @@ class HomePageWidget extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(Icons.menu, color: Theme.of(context).iconTheme.color),
-        actions: [
-          Icon(Icons.notifications_outlined, color: Theme.of(context).iconTheme.color),
-          SizedBox(width: 16),
-        ],
+        leading: Image.asset(
+        'lib/res/assets/images/logo.png', 
+        width: 40,
+        height: 40,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateAccountPageWidget()),
+            );
+          },
+          child: Text(
+            'Sign Up',
+            style: TextStyle(
+              color: Theme.of(context).iconTheme.color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPageWidget()),
+            );
+          },
+          child: Text(
+            'Login',
+            style: TextStyle(
+              color: Theme.of(context).iconTheme.color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(width: 16),
+      ]
+
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -134,7 +174,7 @@ class HomePageWidget extends StatelessWidget {
                     location: 'Jakarta, Indonesia',
                     date: 'July 23 2023',
                     price: 'IDR 500.000',
-                    image: 'assets/muse.jpg',
+                    image: 'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
                   ),
                   _buildEventCard(
                     context,
@@ -142,7 +182,7 @@ class HomePageWidget extends StatelessWidget {
                     location: 'Jakarta, Indonesia',
                     date: 'Oct 29 2023',
                     price: 'IDR 800.000',
-                    image: 'assets/one_direction.jpg',
+                    image: 'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2014/10/12/1413103103754/acfe846d-18b9-4029-bb0b-acea080c47d1-620x372.jpeg?width=445&dpr=1&s=none&crop=none',
                   ),
                 ],
               ),
@@ -263,7 +303,7 @@ class HomePageWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
-            image: AssetImage(image),
+            image: NetworkImage(image),
             fit: BoxFit.cover,
           ),
         ),

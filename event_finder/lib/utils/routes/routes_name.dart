@@ -13,4 +13,6 @@ class RoutesName {
 
   // createEventscreen route name
   static const String createEvent = 'create_event_screen';
+
+  RoutesName(Type loginPageWidget);
  }
