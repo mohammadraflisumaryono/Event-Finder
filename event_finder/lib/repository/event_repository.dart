@@ -18,5 +18,14 @@ class EventRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> createEventApi (dynamic data) async {
+    try {
+      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint, data);
+      return response;
+    } catch(e) {
+      throw e;
+    }
+  }
   
 }
