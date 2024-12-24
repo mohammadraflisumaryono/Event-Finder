@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'model/event_time.dart';
 import 'utils/routes/routes.dart';
 import 'utils/routes/routes_name.dart';
-
 import 'package:event_finder/repository/event_repository.dart';
 
 void main() async {
