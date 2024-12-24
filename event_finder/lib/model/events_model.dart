@@ -1,4 +1,6 @@
 
+// ignore_for_file: unnecessary_this
+
 import 'package:event_finder/model/event_category.dart';
 import 'package:event_finder/model/event_time.dart';
 
@@ -45,7 +47,7 @@ class Event {
     this.image,
     this.category,
     this.ticketPrice,
-    this.registrationLink,
+    this.registrationLink, required String price,
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -59,7 +61,7 @@ class Event {
       image: json['image'],
       category: json['category'] != null ? EventCategoryExtension.fromString(json['category']) : null, // Mengonversi string ke enum
       ticketPrice: json['ticket_price']?.toDouble(),
-      registrationLink: json['registration_link'],
+      registrationLink: json['registration_link'], price: '',
     );
   }
 

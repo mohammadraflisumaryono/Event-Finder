@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:event_finder/model/popular_model.dart';
-import 'package:event_finder/shared/theme.dart';
+import 'package:event_finder/res/theme.dart';
 
 class PopularCard extends StatelessWidget {
   final PopularModel popular;
