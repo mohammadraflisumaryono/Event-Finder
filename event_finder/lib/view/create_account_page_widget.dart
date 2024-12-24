@@ -10,11 +10,12 @@ class CreateAccountPageWidget extends StatefulWidget {
   const CreateAccountPageWidget({super.key});
 
   @override
-  _CreateAccountPageWidgetState createState() => _CreateAccountPageWidgetState();
+  _CreateAccountPageWidgetState createState() =>
+      _CreateAccountPageWidgetState();
 }
 
 class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
-    // Controllers and FocusNodes
+  // Controllers and FocusNodes
   final nameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -40,7 +41,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
-    
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       body: Center(
@@ -121,7 +122,6 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                     controller: passwordTextController,
                     obscureText: !passwordVisibility,
                     focusNode: textFieldFocusNode3,
-                    // obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
                       prefixIcon: Icon(Icons.lock, color: Colors.blue[700]),
@@ -137,27 +137,23 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                   const SizedBox(height: 25),
                   ElevatedButton(
                     onPressed: () async {
-                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                      if (nameTextController.text.isEmpty) {
+                        Utils.toastMessage('Please Enter Name');
+                      } else if (emailTextController.text.isEmpty) {
+                        Utils.toastMessage('Please Enter Email');
+                      } else if (passwordTextController.text.isEmpty) {
+                        Utils.toastMessage('Please Enter Password');
+                      } else if (passwordTextController.text.length < 6) {
+                        Utils.toastMessage('Please Enter 6 Digit Password');
+                      } else {
+                        Map<String, dynamic> data = {
+                          'name': nameTextController.text.toString(),
+                          'email': emailTextController.text.toString(),
+                          'password': passwordTextController.text.toString(),
+                        };
 
-                        // Fungsi login dari AuthViewModel.
-                        if (nameTextController.text.isEmpty) {
-                          Utils.toastMessage('Please Enter Name');
-                        } else if (emailTextController.text.isEmpty) {
-                          Utils.toastMessage('Please Enter Email');
-                        } else if (passwordTextController.text.isEmpty) {
-                          Utils.toastMessage('Please Enter Password');
-                        } else if (passwordTextController.text.length < 6) {
-                          Utils.toastMessage('Please Enter 6 Digit Password');
-                        } else {
-                          Map <String, dynamic> data = {
-                            'name' : nameTextController.text.toString(),
-                            'email' : emailTextController.text.toString(),
-                            'password' : passwordTextController.text.toString(),
-                          };
-
-                          authViewModel.registerApi(data, context);
-                            print('api hit');
-                        }
+                        authViewModel.registerApi(data, context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[700],
@@ -187,15 +183,15 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                             color: Colors.blueGrey,
                             fontSize: 14,
                           ),
-                          // children: [
-                          //   TextSpan(
-                          //     text: "Log In",
-                          //     style: TextStyle(
-                          //       color: Colors.blue[700],
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ],
+                          children: [
+                            TextSpan(
+                              text: "Log In",
+                              style: TextStyle(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
