@@ -15,7 +15,6 @@ class Event {
   final String image;
   final BoxFit fit;
   final String placeholder;
-  final String placeholder;
 
   Event({
     required this.title,
@@ -25,8 +24,6 @@ class Event {
     required this.image,
     this.fit = BoxFit.cover,
     this.placeholder = 'assets/placeholder.jpg',
-  });
-}
   });
 }
 
