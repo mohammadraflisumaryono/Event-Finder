@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const eventController = require('../controllers/EventController');
 const verifyToken = require('../middlewares/AuthMiddleware'); // Assuming verifyToken middleware
+const upload = require('../middlewares/uploadImage');
 
 // Create event
-router.post('/events', verifyToken, eventController.createEvent);
+router.post('/events', upload.single('image'), verifyToken, eventController.createEvent);
+
 
 // Get all events
 router.get('/events', eventController.getAllEvents);
@@ -27,6 +29,9 @@ router.delete('/events/:eventId', verifyToken, eventController.deleteEvent);
 
 // Get trending events (default to top 3)
 router.get('/trending', eventController.getTrendingEvent);
+
+
+
 
 
 module.exports = router;

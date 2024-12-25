@@ -2,10 +2,13 @@ const EventService = require('../services/EventService');
 const verifyToken = require('../middlewares/AuthMiddleware');
 
 // Fungsi untuk membuat Event baru
+const path = require('path');
+
 exports.createEvent = async (req, res) => {
     try {
+        console.log('Creating event... User:', req.body);
         // Mendapatkan data dari body
-        const { title, date, time, location, description, image, category, ticket_price, registration_link } = req.body;
+        const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
 
         // Dapatkan userId dari req.user (dari middleware verifyToken)
         const userId = req.user._id;
@@ -20,6 +23,13 @@ exports.createEvent = async (req, res) => {
             });
         }
 
+        // Menyimpan hanya nama file gambar
+        let imageFileName = null;
+        if (req.file) {
+            // Mendapatkan nama file gambar yang diupload (tanpa path lengkap)
+            imageFileName = req.file.filename; // hanya nama file yang disimpan
+        }
+
         // Menyiapkan data event dengan userId
         const eventData = {
             title,
@@ -27,7 +37,7 @@ exports.createEvent = async (req, res) => {
             time,
             location,
             description,
-            image,
+            image: imageFileName, // Menyimpan hanya nama file
             category,
             ticket_price,
             registration_link,
@@ -52,6 +62,7 @@ exports.createEvent = async (req, res) => {
         });
     }
 };
+
 
 // Fungsi untuk mendapatkan semua Event
 exports.getAllEvents = async (req, res) => {

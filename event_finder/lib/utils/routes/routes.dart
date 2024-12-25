@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:event_finder/view/create_event_page_widget.dart'
-    as create_event;
+import 'package:event_finder/view/create_event_page.dart';
+import 'package:event_finder/view/create_event_page_widget.dart';
 import 'package:event_finder/view/details_page_widget.dart';
 import 'package:event_finder/view/home_admin_event_widget.dart';
 import 'package:event_finder/view/home_page.dart';
@@ -31,8 +31,7 @@ class Routes {
         return MaterialPageRoute(
             builder: (context) => HomeAdminEventPage(isAdmin: true));
       case RoutesName.createEvent:
-        return MaterialPageRoute(
-            builder: (context) => create_event.CreateEventPage());
+        return MaterialPageRoute(builder: (context) => CreateEventPage());
       case RoutesName.superAdmin:
         return MaterialPageRoute(builder: (context) => SuperAdminEventWidget());
       default:

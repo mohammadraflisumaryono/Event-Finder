@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable, unused_import
 
 import 'package:event_finder/utils/routes/routes_name.dart';
-import 'package:event_finder/view/create_event_page_widget.dart';
 import 'package:event_finder/view/login_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
