@@ -17,19 +17,23 @@ class Routes {
       case RoutesName.home:
         return MaterialPageRoute(builder: (context) => HomePageWidget());
       case RoutesName.search:
-        return MaterialPageRoute(builder: (context) => SearchResultPageWidget(query: ''));
+        return MaterialPageRoute(
+            builder: (context) => SearchResultPageWidget(query: ''));
       case RoutesName.detailEvent:
         return MaterialPageRoute(builder: (context) => DetailPage());
       case RoutesName.login:
         return MaterialPageRoute(builder: (context) => LoginPageWidget());
       case RoutesName.register:
-        return MaterialPageRoute(builder: (context) => CreateAccountPageWidget());
+        return MaterialPageRoute(
+            builder: (context) => CreateAccountPageWidget());
       case RoutesName.adminHome:
-        return MaterialPageRoute(builder: (context) => HomeAdminEventPage(isAdmin: true));
+        return MaterialPageRoute(
+            builder: (context) => HomeAdminEventPage(isAdmin: true));
       case RoutesName.createEvent:
-        return MaterialPageRoute(builder: (context) => create_event.CreateEventPage());
+        return MaterialPageRoute(
+            builder: (context) => create_event.CreateEventPage());
       case RoutesName.superAdmin:
-        return MaterialPageRoute(builder: (context) => SuperAdminEventPage());
+        return MaterialPageRoute(builder: (context) => SuperAdminEventWidget());
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(

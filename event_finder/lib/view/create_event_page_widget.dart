@@ -55,10 +55,18 @@ class CreateEventPage extends StatelessWidget {
               ),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 16),
+            Spacer(),
             ElevatedButton(
-              onPressed: () {},
-              child: Text('Create Event'),
+              onPressed: () {
+                // Tambahkan logika untuk membuat event di sini
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Event created successfully!')),
+                );
+              },
+              child: Text(
+                'Create Event',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
@@ -73,3 +81,7 @@ class CreateEventPage extends StatelessWidget {
     );
   }
 }
+
+void main() => runApp(MaterialApp(
+      home: CreateEventPage(),
+    ));
