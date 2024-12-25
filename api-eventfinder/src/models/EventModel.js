@@ -50,6 +50,15 @@ const eventSchema = new Schema({
         type: String,
         default: null
     },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+    },
+    views: {
+        type: Number,
+        default: 0
+    },
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,

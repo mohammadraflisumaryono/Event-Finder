@@ -31,6 +31,8 @@ exports.createEvent = async (req, res) => {
             category,
             ticket_price,
             registration_link,
+            status: 'pending',
+            views: 0,
             userId  // Menyertakan userId yang sudah didapatkan dari JWT
         };
 
@@ -74,7 +76,20 @@ exports.getAllEvents = async (req, res) => {
 exports.getEventById = async (req, res) => {
     try {
         const eventId = req.params.eventId;
+
+        // Cari event berdasarkan ID
         const event = await EventService.getEventById(eventId);
+        if (!event) {
+            return res.status(404).json({
+                status: 'error',
+                data: null,
+                message: 'Event not found'
+            });
+        }
+        // Tingkatkan jumlah view
+        event.views += 1;
+        await event.save();
+
         res.status(200).json({
             status: 'success',
             data: event,
@@ -89,6 +104,7 @@ exports.getEventById = async (req, res) => {
         });
     }
 };
+
 
 // Fungsi untuk mengupdate Event
 exports.updateEvent = async (req, res) => {

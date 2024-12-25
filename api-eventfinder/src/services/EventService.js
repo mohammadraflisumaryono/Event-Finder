@@ -7,7 +7,7 @@ class EventService {
     static async createEvent(data, userId) {
         console.log(data);
         try {
-            // Menambahkan userId yang terautentikasi ke dalam data event
+           
             data.userId = userId;  // Menyisipkan userId yang valid dari token
 
             const newEvent = new Event(data);
@@ -123,6 +123,18 @@ class EventService {
         } catch (error) {
             console.error('Error fetching events by category:', error.message);
             throw new Error(`Error fetching events by category: ${error.message}`);
+        }
+    }
+
+    // get all events created by a organizer
+    static async getEventsByOrganizer(userId) {
+        try {
+            const events = await Event.find({ userId }).populate('userId', 'name email').sort({ createdAt: -1 });
+            console.log('Fetched events by organizer:', events);
+            return events;
+        } catch (error) {
+            console.error('Error fetching events by organizer:', error.message);
+            throw new Error(`Error fetching events by organizer: ${error.message}`);
         }
     }
 
