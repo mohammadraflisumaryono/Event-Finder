@@ -44,6 +44,28 @@ class EventViewModel with  ChangeNotifier {
     }
   }
 
+  // Mengambil data event berdasarkan trending
+  Future<void> fetchTrendingEvents() async {
+    print('api hit');
+    setEventList(ApiResponse.loading());
+    try {
+      
+      // Panggil API untuk mendapatkan event trending berdasarkan views
+      final value = await _myRepo
+          .getTrendingEventApi(); // Memanggil API untuk mendapatkan data event
+      final trendingEvents = value.events
+          ?.where((event) =>
+              event.status !=
+              'expired') // Filter event yang statusnya bukan expired
+          .toList();
+
+      setEventList(
+          ApiResponse.completed(EventListModel(events: trendingEvents)));
+    } catch (error) {
+      setEventList(ApiResponse.error(error.toString()));
+    }
+  }
+
 
   // Mengambil data event by time
   Future<void> fetchUpcomingEvents(DateTime currentDate) async {

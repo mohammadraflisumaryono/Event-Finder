@@ -9,7 +9,6 @@ class EventRepository {
   final BaseApiServices _apiServices = NetworkApiService();
 
   Future<EventListModel> fetchEventsList() async {
-    // return await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
@@ -24,6 +23,16 @@ class EventRepository {
       dynamic response =
           await _apiServices.getPostApiResponse(AppUrl.eventEndPoint, data);
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getTrendingEventApi() async {
+    try {
+      dynamic response =
+          await _apiServices.getGetApiResponse(AppUrl.trendingEndPoint);
+      return response = EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

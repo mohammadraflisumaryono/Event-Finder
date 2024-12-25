@@ -13,7 +13,15 @@ class AppUrl {
 
   static var getAllEventsEndPoint = baseUrl + 'events';
 
+  static var trendingEndPoint = baseUrl + 'trending';
+
   static String eventByCategory(String category) {
     return '${baseUrl}events/category/$category';
   }
+
+  static String eventById(String id) {
+    return '${baseUrl}events/$id';
+  }
+
+
 }
