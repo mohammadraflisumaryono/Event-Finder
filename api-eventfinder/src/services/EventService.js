@@ -23,7 +23,7 @@ class EventService {
     // Fungsi untuk mendapatkan semua events
     static async getAllEvents() {
         try {
-            const events = await Event.find().populate('userId', 'name email');
+            const events = await Event.find().populate('userId', 'name email').sort({ createdAt: -1 });
             console.log('Fetched all events:', events);
             return events;
         } catch (error) {
@@ -91,6 +91,41 @@ class EventService {
             throw new Error(`Error deleting event: ${error.message}`);
         }
     }
+
+    // Function for searching events by title or description
+    static async searchEvent(query) {
+        try {
+            // Perform case-insensitive search for title and description fields
+            const events = await Event.find({
+                $or: [
+                    { title: { $regex: query, $options: 'i' } },
+                    { description: { $regex: query, $options: 'i' } }
+                ]
+            }).populate('userId', 'name email');
+
+            console.log('Search results:', events);
+            return events;
+        } catch (error) {
+            console.error('Error searching events:', error.message);
+            throw new Error(`Error searching events: ${error.message}`);
+        }
+    }
+
+
+
+    // Fungsi untuk mendapatkan events berdasarkan kategori
+    static async getEventsByCategory(category) {
+
+        try {
+            const events = await Event.find({ category: category }).populate('userId', 'name email');
+            console.log('Fetched events by category:', events);
+            return events;
+        } catch (error) {
+            console.error('Error fetching events by category:', error.message);
+            throw new Error(`Error fetching events by category: ${error.message}`);
+        }
+    }
+
 }
 
 module.exports = EventService;

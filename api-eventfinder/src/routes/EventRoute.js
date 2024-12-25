@@ -12,6 +12,13 @@ router.get('/events', eventController.getAllEvents);
 // Get event by ID
 router.get('/events/:eventId', eventController.getEventById);
 
+// Get event By Category
+router.get('/events/category/:category', eventController.eventByCategory);
+
+//search event
+router.get('/search', eventController.searchEvent);  // Corrected route for search
+
+
 // Update event
 router.put('/events/:eventId', verifyToken, eventController.updateEvent);
 

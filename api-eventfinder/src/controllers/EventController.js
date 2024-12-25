@@ -134,3 +134,55 @@ exports.deleteEvent = async (req, res) => {
         });
     }
 };
+
+exports.searchEvent = async (req, res) => {
+    try {
+        // Access the query parameter `q`
+        const query = req.query.q;
+
+        // Check if the query parameter is provided
+        if (!query || query.trim() === '') {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Search query is required'
+            });
+        }
+
+        // Call the search function from EventService
+        const events = await EventService.searchEvent(query);
+        res.status(200).json({
+            status: 'success',
+            data: events,
+            message: 'Events fetched successfully'
+        });
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching events: ${error.message}`
+        });
+    }
+};
+
+
+// Fungsi untuk mendapatkan event berdasarkan kategori
+exports.eventByCategory = async (req, res) => {
+    try {
+        const category = req.params.category;
+        const events = await EventService.getEventsByCategory(category);
+        res.status(200).json({
+            status: 'success',
+            data: events,
+            message: 'Events fetched successfully'
+        });
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching events: ${error.message}`
+        });
+    }
+};
