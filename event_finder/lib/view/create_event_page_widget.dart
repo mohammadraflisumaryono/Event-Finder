@@ -1,51 +1,69 @@
 import 'package:flutter/material.dart';
 
-// Create Event Page UI
 class CreateEventPage extends StatelessWidget {
-  const CreateEventPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Event'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Create Event',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'Event Title',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: 'Event Name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 16),
             TextField(
+              decoration: InputDecoration(
+                labelText: 'Description',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
               maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: 'Event Description',
-                border: OutlineInputBorder(),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Ticket Price',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
+              keyboardType: TextInputType.number,
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {},
-              child: const Text('Create Event'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Update & Delete'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {},
+              child: Text('Create Event'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                backgroundColor: Colors.purple,
               ),
-              child: const Text('Log Out'),
             ),
           ],
         ),

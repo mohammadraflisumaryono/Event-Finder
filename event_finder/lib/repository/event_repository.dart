@@ -6,26 +6,26 @@ import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/res/component/app_url.dart';
 
 class EventRepository {
-
   final BaseApiServices _apiServices = NetworkApiService();
 
   Future<EventListModel> fetchEventsList() async {
     // return await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
     try {
-      dynamic response = await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
+      dynamic response =
+          await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
       return response = EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<dynamic> createEventApi (dynamic data) async {
+  Future<dynamic> createEventApi(dynamic data) async {
     try {
-      dynamic response = await _apiServices.getPostApiResponse(AppUrl.eventEndPoint, data);
+      dynamic response =
+          await _apiServices.getPostApiResponse(AppUrl.eventEndPoint, data);
       return response;
-    } catch(e) {
-      throw e;
+    } catch (e) {
+      rethrow;
     }
   }
-  
 }

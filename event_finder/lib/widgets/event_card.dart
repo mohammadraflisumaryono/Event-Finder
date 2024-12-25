@@ -8,9 +8,9 @@ class EventCard extends StatelessWidget {
   final EventModel event;
   const EventCard(
     this.event, {
-    Key? key,
-  }) : super(key: key);
-  
+    super.key,
+  });
+
   get whiteColor => null;
 
   @override

@@ -1,12 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:event_finder/model/event_category.dart';
-import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'res/theme.dart';
 import 'view/home_page_widget.dart';
-import 'view/create_event_page_widget.dart';
 
 void main() {
   runApp(const MyApp());

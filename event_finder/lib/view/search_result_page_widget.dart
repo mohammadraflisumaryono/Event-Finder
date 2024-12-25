@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SearchResultPageWidget extends StatelessWidget {
   final String query;
 
-  SearchResultPageWidget({required this.query});
+  const SearchResultPageWidget({super.key, required this.query});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class SearchResultPageWidget extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Results'),
+        title: const Text('Search Results'),
         backgroundColor: Colors.purple,
       ),
       body: ListView.builder(

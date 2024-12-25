@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use
 
-import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/view/create_account_page_widget.dart';
 import 'package:event_finder/view/login_page_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class Event {
   final String price;
   final String image;
   final BoxFit fit;
-  final String placeholder; 
+  final String placeholder;
 
   Event({
     required this.title,
@@ -25,8 +24,8 @@ class Event {
     required this.image,
     this.fit = BoxFit.cover,
     this.placeholder = 'assets/placeholder.jpg',
-    });
-  }
+  });
+}
 
 class HomePageWidget extends StatelessWidget {
   const HomePageWidget({super.key});
@@ -39,21 +38,24 @@ class HomePageWidget extends StatelessWidget {
         location: 'Gelora Bung Karno Stadium',
         date: DateTime(2023, 11, 15),
         price: 'IDR 1.100.000',
-        image: 'https://i.pinimg.com/736x/6a/9a/9b/6a9a9b246937dd614475b439f5da81d4.jpg',
+        image:
+            'https://i.pinimg.com/736x/6a/9a/9b/6a9a9b246937dd614475b439f5da81d4.jpg',
       ),
       Event(
         title: 'Muse: Will of the People',
         location: 'Jakarta, Indonesia',
         date: DateTime(2023, 7, 23),
         price: 'IDR 500.000',
-        image: 'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
+        image:
+            'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
       ),
       Event(
         title: 'One Direction: Where We Are',
         location: 'Jakarta, Indonesia',
         date: DateTime(2023, 10, 29),
         price: 'IDR 800.000',
-        image: 'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2014/10/12/1413103103754/acfe846d-18b9-4029-bb0b-acea080c47d1-620x372.jpeg?width=445&dpr=1&s=none&crop=none',
+        image:
+            'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2014/10/12/1413103103754/acfe846d-18b9-4029-bb0b-acea080c47d1-620x372.jpeg?width=445&dpr=1&s=none&crop=none',
       ),
     ];
 
@@ -63,48 +65,47 @@ class HomePageWidget extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Image.asset(
-        'lib/res/assets/images/logo.png', 
-        width: 40,
-        height: 40,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreateAccountPageWidget()),
-            );
-          },
-          child: Text(
-            'Sign Up',
-            style: TextStyle(
-              color: Theme.of(context).iconTheme.color,
-              fontWeight: FontWeight.bold,
-            ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Image.asset(
+            'lib/res/assets/images/logo.png',
+            width: 40,
+            height: 40,
           ),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPageWidget()),
-            );
-          },
-          child: Text(
-            'Login',
-            style: TextStyle(
-              color: Theme.of(context).iconTheme.color,
-              fontWeight: FontWeight.bold,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateAccountPageWidget()),
+                );
+              },
+              child: Text(
+                'Sign Up',
+                style: TextStyle(
+                  color: Theme.of(context).iconTheme.color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-        ),
-        SizedBox(width: 16),
-      ]
-
-      ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPageWidget()),
+                );
+              },
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  color: Theme.of(context).iconTheme.color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(width: 16),
+          ]),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
@@ -126,11 +127,14 @@ class HomePageWidget extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Search event...',
-                  prefixIcon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
-                  suffixIcon: Icon(Icons.filter_list, color: Theme.of(context).iconTheme.color),
+                  prefixIcon: Icon(Icons.search,
+                      color: Theme.of(context).iconTheme.color),
+                  suffixIcon: Icon(Icons.filter_list,
+                      color: Theme.of(context).iconTheme.color),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Theme.of(context).dividerColor),
+                    borderSide:
+                        BorderSide(color: Theme.of(context).dividerColor),
                   ),
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.surface,
@@ -141,7 +145,8 @@ class HomePageWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: EventCategory.values
-                      .map((category) => _buildCategoryChip(context, category.value))
+                      .map((category) =>
+                          _buildCategoryChip(context, category.value))
                       .toList(),
                 ),
               ),
@@ -174,7 +179,8 @@ class HomePageWidget extends StatelessWidget {
                     location: 'Jakarta, Indonesia',
                     date: 'July 23 2023',
                     price: 'IDR 500.000',
-                    image: 'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
+                    image:
+                        'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
                   ),
                   _buildEventCard(
                     context,
@@ -182,7 +188,8 @@ class HomePageWidget extends StatelessWidget {
                     location: 'Jakarta, Indonesia',
                     date: 'Oct 29 2023',
                     price: 'IDR 800.000',
-                    image: 'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2014/10/12/1413103103754/acfe846d-18b9-4029-bb0b-acea080c47d1-620x372.jpeg?width=445&dpr=1&s=none&crop=none',
+                    image:
+                        'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2014/10/12/1413103103754/acfe846d-18b9-4029-bb0b-acea080c47d1-620x372.jpeg?width=445&dpr=1&s=none&crop=none',
                   ),
                 ],
               ),
@@ -212,11 +219,17 @@ class HomePageWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
           'See all',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ],
     );
@@ -264,12 +277,18 @@ class HomePageWidget extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     location,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.white),
                   ),
                   SizedBox(height: 4),
                   Text(
                     date,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.white),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -334,12 +353,18 @@ class HomePageWidget extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(
                       location,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.white),
                     ),
                     SizedBox(height: 4),
                     Text(
                       date,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.white),
                     ),
                     SizedBox(height: 4),
                     Text(
