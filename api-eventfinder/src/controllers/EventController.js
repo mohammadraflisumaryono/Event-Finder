@@ -4,6 +4,7 @@ const verifyToken = require('../middlewares/AuthMiddleware');
 // Fungsi untuk membuat Event baru
 exports.createEvent = async (req, res) => {
     try {
+        console.log('Creating event... User:', req.body);
         // Mendapatkan data dari body
         const { title, date, time, location, description, image, category, ticket_price, registration_link } = req.body;
 
@@ -19,6 +20,8 @@ exports.createEvent = async (req, res) => {
                 message: 'User not authenticated'
             });
         }
+        image = req.file ? req.file.path : null;
+        
 
         // Menyiapkan data event dengan userId
         const eventData = {

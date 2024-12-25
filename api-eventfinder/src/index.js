@@ -14,6 +14,13 @@ app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
+app.use((err, req, res, next) => {
+    res.status(400).json({
+        status: 'error',
+        message: err.message
+    });
+});
+
 
 
 
