@@ -25,4 +25,8 @@ router.put('/events/:eventId', verifyToken, eventController.updateEvent);
 // Delete event
 router.delete('/events/:eventId', verifyToken, eventController.deleteEvent);
 
+// Get trending events (default to top 3)
+router.get('/trending', eventController.getTrendingEvent);
+
+
 module.exports = router;

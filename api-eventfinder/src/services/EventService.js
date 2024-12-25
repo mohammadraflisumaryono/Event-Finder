@@ -7,7 +7,7 @@ class EventService {
     static async createEvent(data, userId) {
         console.log(data);
         try {
-           
+
             data.userId = userId;  // Menyisipkan userId yang valid dari token
 
             const newEvent = new Event(data);
@@ -137,6 +137,59 @@ class EventService {
             throw new Error(`Error fetching events by organizer: ${error.message}`);
         }
     }
+
+    // Function to update event views
+    static async updateEventViews(eventId) {
+        try {
+            const event = await Event.findById(eventId);
+            if (!event) {
+                throw new Error('Event not found');
+            }
+
+            event.views += 1;
+            await event.save();
+            console.log('Updated event views:', event);
+            return event;
+        }
+        catch (error) {
+            console.error('Error updating event views:', error.message);
+            throw new Error(`Error updating event views: ${error.message}`);
+        }
+    }
+
+    // Function to approve or reject an event
+    static async approveEvent(eventId, status) {
+        try {
+            const event = await Event.findById(eventId);
+            if (!event) {
+                throw new Error('Event not found');
+            }
+
+            event.status = status;
+            await event.save();
+            console.log('Updated event status:', event);
+            return event;
+        } catch (error) {
+            console.error('Error updating event status:', error.message);
+            throw new Error(`Error updating event status: ${error.message}`);
+        }
+    }
+
+    static async getTrendingEvents() {
+        try {
+            // Sort events by 'views' in descending order and limit to the top 3
+            const events = await Event.find().sort({ views: -1 }).limit(3);
+
+            // Log the fetched events (optional, for debugging)
+            console.log('Fetched trending events:', events);
+
+            return events;
+        } catch (error) {
+            console.error('Error fetching trending events:', error.message);
+            throw new Error(`Error fetching trending events: ${error.message}`);
+        }
+    }
+
 
 }
 

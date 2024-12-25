@@ -86,6 +86,7 @@ exports.getEventById = async (req, res) => {
                 message: 'Event not found'
             });
         }
+
         // Tingkatkan jumlah view
         event.views += 1;
         await event.save();
@@ -199,6 +200,29 @@ exports.eventByCategory = async (req, res) => {
             status: 'error',
             data: null,
             message: `Error fetching events: ${error.message}`
+        });
+    }
+};
+
+
+// fungsi get tranding event
+exports.getTrendingEvent = async (req, res) => {
+    try {
+        // Call the service to get the trending events
+        const events = await EventService.getTrendingEvents();
+
+        // Return the response with the trending events
+        res.status(200).json({
+            status: 'success',
+            data: events,
+            message: 'Trending Events fetched successfully'
+        });
+    } catch (error) {
+        console.error('Error fetching trending events:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching trending events: ${error.message}`
         });
     }
 };
