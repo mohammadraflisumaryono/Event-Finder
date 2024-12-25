@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:event_finder/res/theme.dart'; // Import your AppTheme
 
 class DetailPage extends StatelessWidget {
+  const DetailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.lightTheme; // Access the custom theme
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: Icon(CupertinoIcons.back),
+          child: Icon(CupertinoIcons.back, color: theme.iconTheme.color),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        middle: Text("Event Details"),
+        middle: Text("Event Details", style: theme.appBarTheme.titleTextStyle),
         border: null,
       ),
       child: SafeArea(
@@ -35,11 +40,11 @@ class DetailPage extends StatelessWidget {
                     left: 16,
                     right: 16,
                     child: Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: theme.scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black12,
                             blurRadius: 8,
@@ -52,39 +57,35 @@ class DetailPage extends StatelessWidget {
                         children: [
                           Text(
                             "Coldplay : Music of the Spheres",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                            style: theme.textTheme.titleLarge,
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Row(
                             children: [
-                              Icon(CupertinoIcons.location, size: 16),
-                              SizedBox(width: 4),
+                              Icon(CupertinoIcons.location, size: 16, color: theme.iconTheme.color),
+                              const SizedBox(width: 4),
                               Text(
                                 "Gelora Bung Karno Stadium, Jakarta",
-                                style: TextStyle(fontSize: 14),
+                                style: theme.textTheme.bodyMedium,
                               ),
                             ],
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Row(
                             children: [
-                              Icon(CupertinoIcons.calendar, size: 16),
-                              SizedBox(width: 4),
-                              Text("November 15 2023", style: TextStyle(fontSize: 14)),
+                              Icon(CupertinoIcons.calendar, size: 16, color: theme.iconTheme.color),
+                              const SizedBox(width: 4),
+                              Text("November 15 2023", style: theme.textTheme.bodyMedium),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Row(
                             children: [
-                              Icon(CupertinoIcons.person_2, size: 16),
-                              SizedBox(width: 4),
+                              Icon(CupertinoIcons.person_2, size: 16, color: theme.iconTheme.color),
+                              const SizedBox(width: 4),
                               Text(
                                 "50K+ Participants",
-                                style: TextStyle(fontSize: 14, color: CupertinoColors.systemGrey),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
                               ),
                             ],
                           ),
@@ -94,7 +95,7 @@ class DetailPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Description Section
               Padding(
@@ -104,29 +105,26 @@ class DetailPage extends StatelessWidget {
                   children: [
                     Text(
                       "Description",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: theme.textTheme.titleLarge,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       "Integer id augue iaculis, iaculis orci ut, blandit quam. Donec in elit auctor, finibus quam in, pharetra velit. Proin id ligula dictum, covalis enim ut, facilisis massa. Mauris a nisi ut sapien blandit imperdiet.",
-                      style: TextStyle(fontSize: 14, color: CupertinoColors.systemGrey),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       child: Text(
                         "Read More..",
-                        style: TextStyle(color: CupertinoColors.systemPurple),
+                        style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.secondary),
                       ),
                       onPressed: () {},
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Venue & Location Section
               Padding(
@@ -136,12 +134,9 @@ class DetailPage extends StatelessWidget {
                   children: [
                     Text(
                       "Venue & Location",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: theme.textTheme.titleLarge,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
@@ -154,7 +149,7 @@ class DetailPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Price and Buy Button Section
               Padding(
@@ -167,23 +162,16 @@ class DetailPage extends StatelessWidget {
                       children: [
                         Text(
                           "Start from",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: CupertinoColors.systemGrey,
-                          ),
+                          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
                         ),
                         Text(
                           "IDR 1.100.000",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                          style: theme.textTheme.titleLarge,
                         ),
                       ],
                     ),
                     CupertinoButton.filled(
-                      child: Text("Buy Ticket"),
+                      child: const Text("Buy Ticket"),
                       onPressed: () {},
                     ),
                   ],

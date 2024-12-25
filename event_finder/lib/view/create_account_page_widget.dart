@@ -1,6 +1,8 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable
+// ignore_for_file: prefer_const_constructors, unused_local_variable, unused_import
 
 import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/view/create_event_page_widget.dart';
+import 'package:event_finder/view/login_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/utils.dart';
@@ -10,11 +12,12 @@ class CreateAccountPageWidget extends StatefulWidget {
   const CreateAccountPageWidget({super.key});
 
   @override
-  _CreateAccountPageWidgetState createState() => _CreateAccountPageWidgetState();
+  _CreateAccountPageWidgetState createState() =>
+      _CreateAccountPageWidgetState();
 }
 
 class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
-    // Controllers and FocusNodes
+  // Controllers and FocusNodes
   final nameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -40,7 +43,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
-    
+
     return Scaffold(
       backgroundColor: Colors.blue[50],
       body: Center(
@@ -50,10 +53,9 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            elevation: 8,
-            shadowColor: Colors.blue[200],
+            elevation: 4,
             child: Padding(
-              padding: const EdgeInsets.all(30.0),
+              padding: const EdgeInsets.all(25.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -61,42 +63,21 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                   Center(
                     child: Text(
                       "Wanna up some event?",
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue[700],
-                      ),
-                      textAlign: TextAlign.center,
+                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      "Sign up to get started",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Image.asset(
-                    'lib/res/assets/images/logo.png', // Add the relevant image to assets folder
-                    height: 150,
-                  ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 15),
+                  const SizedBox(height: 25),
                   TextField(
                     controller: nameTextController,
                     focusNode: textFieldFocusNode1,
                     decoration: InputDecoration(
                       hintText: "Full Name",
-                      prefixIcon: Icon(Icons.person, color: Colors.blue[700]),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -105,74 +86,74 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                     controller: emailTextController,
                     focusNode: textFieldFocusNode2,
                     decoration: InputDecoration(
-                      hintText: "Email Address",
-                      prefixIcon: Icon(Icons.email, color: Colors.blue[700]),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
+                      hintText: "Email",
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                  ),
+                    ),
                   const SizedBox(height: 15),
                   TextField(
                     controller: passwordTextController,
                     obscureText: !passwordVisibility,
                     focusNode: textFieldFocusNode3,
-                    // obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
-                      prefixIcon: Icon(Icons.lock, color: Colors.blue[700]),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              passwordVisibility
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                passwordVisibility = !passwordVisibility;
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 25),
                   ElevatedButton(
-                    onPressed: () async {
-                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                        onPressed: () async {
+                          final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                          if (nameTextController.text.isEmpty) {
+                            Utils.toastMessage('Please Enter Name');
+                          } else if (emailTextController.text.isEmpty) {
+                            Utils.toastMessage('Please Enter Email');
+                          } else if (passwordTextController.text.isEmpty) {
+                            Utils.toastMessage('Please Enter Password');
+                          } else if (passwordTextController.text.length < 6) {
+                            Utils.toastMessage('Please Enter 6 Digit Password');
+                          } else {
+                            Map<String, dynamic> data = {
+                              'name': nameTextController.text.toString(),
+                              'email': emailTextController.text.toString(),
+                              'password': passwordTextController.text.toString(),
+                            };
 
-                        // Fungsi login dari AuthViewModel.
-                        if (nameTextController.text.isEmpty) {
-                          Utils.toastMessage('Please Enter Name');
-                        } else if (emailTextController.text.isEmpty) {
-                          Utils.toastMessage('Please Enter Email');
-                        } else if (passwordTextController.text.isEmpty) {
-                          Utils.toastMessage('Please Enter Password');
-                        } else if (passwordTextController.text.length < 6) {
-                          Utils.toastMessage('Please Enter 6 Digit Password');
-                        } else {
-                          Map <String, dynamic> data = {
-                            'name' : nameTextController.text.toString(),
-                            'email' : emailTextController.text.toString(),
-                            'password' : passwordTextController.text.toString(),
-                          };
-
-                          authViewModel.registerApi(data, context);
+                            authViewModel.registerApi(data, context);
                             print('api hit');
                         }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[700],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    child: const Text("Register"),
+                    
                   ),
                   const SizedBox(height: 15),
                   Center(
@@ -183,29 +164,26 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                       child: RichText(
                         text: TextSpan(
                           text: "Already have an account? ",
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 14,
-                          ),
-                          // children: [
-                          //   TextSpan(
-                          //     text: "Log In",
-                          //     style: TextStyle(
-                          //       color: Colors.blue[700],
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ],
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          children: [
+                            TextSpan(
+                              text: "Log In",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ]
             ),
           ),
         ),
-      ),
+    ),
+    ),
     );
   }
 }

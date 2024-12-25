@@ -1,9 +1,13 @@
 
+// ignore_for_file: unnecessary_this
+
 import 'package:event_finder/model/event_category.dart';
 import 'package:event_finder/model/event_time.dart';
 
 class EventListModel {
   List<Event>? events;
+
+  EventListModel({this.events});
 
   EventListModel.fromJson(Map<String, dynamic> json) {
     if (json['events'] != null) {
@@ -35,7 +39,7 @@ class Event {
   double? ticketPrice;
   String? registrationLink;
 
-  Event({
+  Event ({
     this.id,
     this.title,
     this.date,

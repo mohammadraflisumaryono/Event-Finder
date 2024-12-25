@@ -1,8 +1,8 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors
 
+import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../utils/routes/routes_name.dart';
 import '../utils/utils.dart';
 import '../view_model/auth_view_model.dart';
 
@@ -48,129 +48,121 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               borderRadius: BorderRadius.circular(20),
             ),
             elevation: 8,
-            shadowColor: Colors.blue[200],
             child: Padding(
               padding: const EdgeInsets.all(30.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: Text(
-                      "Welcome Back!",
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue[700],
-                      ),
-                    ),
+                  Text(
+                    "Log in to Event",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      "Login to Create Event",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Image.asset(
-                    'lib/res/assets/images/logo.png', 
-                    height: 150,
-                  ),
                   const SizedBox(height: 30),
                   TextField(
                     controller: emailTextController,
                     focusNode: textFieldFocusNode1,
                     decoration: InputDecoration(
                       hintText: "Email Address",
-                      prefixIcon: Icon(Icons.email, color: Colors.blue[700]),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
                   const SizedBox(height: 15),
                   TextField(
                     controller: passwordTextController,
-                    focusNode: textFieldFocusNode2,
                     obscureText: !passwordVisibility,
-                    // obscureText: true,
+                    focusNode: textFieldFocusNode2,
                     decoration: InputDecoration(
                       hintText: "Password",
-                      prefixIcon: Icon(Icons.lock, color: Colors.blue[700]),
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          passwordVisibility
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            passwordVisibility = !passwordVisibility;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // Add forgot password logic
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 25),
                   ElevatedButton(
-                    onPressed: () async{
-                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                    onPressed: () async {
+                      if (emailTextController.text.isEmpty) {
+                        Utils.toastMessage('Please Enter Email');
+                      } else if (passwordTextController.text.isEmpty) {
+                        Utils.toastMessage('Please Enter Password');
+                      } else if (passwordTextController.text.length < 6) {
+                        Utils.toastMessage('Please Enter 6 Digit Password');
+                      } else {
+                        Map<String, dynamic> data = {
+                          'email': emailTextController.text.toString(),
+                          'password': passwordTextController.text.toString(),
+                        };
 
-                                      // Fungsi login dari AuthViewModel.
-                                      if (emailTextController.text.isEmpty) {
-                                        Utils.toastMessage('Please Enter Email');
-                                      } else if (passwordTextController.text.isEmpty) {
-                                        Utils.toastMessage('Please Enter Password');
-                                      } else if (passwordTextController.text.length < 6) {
-                                        Utils.toastMessage('Please Enter 6 Digit Password');
-                                      } else {
-                                        Map data = {
-                                          'email' : emailTextController.text.toString(),
-                                          'password' : passwordTextController.text.toString(),
-                                        };
-
-                                        authViewModel.loginApi(data, context);
-                                        print('api hit');
-                                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[700],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                      authViewModel.loginApi(data, context);
+                      print('api hit');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: const Text(
-                      "Log In",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    child: const Text("Login"),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RoutesName.register); 
+                        Navigator.pushNamed(context, RoutesName.createEvent);
                       },
                       child: RichText(
                         text: TextSpan(
                           text: "Don’t have an account? ",
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 14,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
                           children: [
                             TextSpan(
                               text: "Sign Up",
-                              style: TextStyle(
-                                color: Colors.blue[700],
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -185,4 +177,4 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       ),
     );
   }
-}                                           
+}
