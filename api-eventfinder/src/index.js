@@ -8,8 +8,7 @@ require('dotenv').config();
 const port = process.env.EXPRESS_PORT || 3000;
 
 connectToDb();
-
-
+require('./config/cronjob');
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

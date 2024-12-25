@@ -23,7 +23,9 @@ class EventService {
     // Fungsi untuk mendapatkan semua events
     static async getAllEvents() {
         try {
-            const events = await Event.find().populate('userId', 'name email').sort({ createdAt: -1 });
+            const events = await Event.find({ status: { $ne: 'expired' } })  // Menambahkan kondisi status != expired
+                .populate('userId', 'name email')
+                .sort({ createdAt: -1 });
             console.log('Fetched all events:', events);
             return events;
         } catch (error) {
@@ -117,7 +119,8 @@ class EventService {
     static async getEventsByCategory(category) {
 
         try {
-            const events = await Event.find({ category: category }).populate('userId', 'name email');
+            const events = await Event.find({ category: category, status: { $ne: 'expired' } })  // Hanya mengambil event yang statusnya bukan expired
+                .populate('userId', 'name email');
             console.log('Fetched events by category:', events);
             return events;
         } catch (error) {
@@ -129,7 +132,9 @@ class EventService {
     // get all events created by a organizer
     static async getEventsByOrganizer(userId) {
         try {
-            const events = await Event.find({ userId }).populate('userId', 'name email').sort({ createdAt: -1 });
+            const events = await Event.find({ userId, status: { $ne: 'expired' } })  // Hanya mengambil event yang statusnya bukan expired
+                .populate('userId', 'name email')
+                .sort({ createdAt: -1 });
             console.log('Fetched events by organizer:', events);
             return events;
         } catch (error) {
@@ -178,8 +183,9 @@ class EventService {
     static async getTrendingEvents() {
         try {
             // Sort events by 'views' in descending order and limit to the top 3
-            const events = await Event.find().sort({ views: -1 }).limit(3);
-
+            const events = await Event.find({ status: { $ne: 'expired' } })  // Hanya mengambil event yang statusnya bukan expired
+                .sort({ views: -1 })
+                .limit(3);
             // Log the fetched events (optional, for debugging)
             console.log('Fetched trending events:', events);
 
@@ -190,6 +196,22 @@ class EventService {
         }
     }
 
+    //    cek semua event yang telah lewat lalu buat expired
+    static async checkExpiredEvent() {
+        try {
+            const events = await Event.find({ status: 'approved' });
+            const currentDate = new Date();
+            events.forEach(async (event) => {
+                if (event.endDate < currentDate) {
+                    event.status = 'expired';
+                    await event.save();
+                }
+            });
+        } catch (error) {
+            console.error('Error checking expired events:', error.message);
+            throw new Error(`Error checking expired events: ${error.message}`);
+        }
+    }
 
 }
 

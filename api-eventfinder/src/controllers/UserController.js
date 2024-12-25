@@ -75,11 +75,13 @@ exports.loginUser = async (req, res, next) => {
         };
 
         const token = await UserServices.generateToken(tokenData, process.env.JWT_SECRET, '1h');
+        // get role 
+        const role = user.role;
 
         // Kirim response sukses
         res.status(200).json({
             status: 'success',
-            data: { token },
+            data: { token, role },
             message: 'Login success'
         });
     } catch (error) {
