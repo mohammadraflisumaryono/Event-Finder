@@ -23,5 +23,8 @@ class RoutesName {
   // editEventscreen route name
   static const String editEvent = 'edit_event_screen';
 
+  // superAdminscreen route name
+  static const String superAdmin = 'super_admin_screen';
+
   RoutesName(Type loginPageWidget);
  }
