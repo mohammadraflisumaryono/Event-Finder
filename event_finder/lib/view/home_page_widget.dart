@@ -15,6 +15,7 @@ class Event {
   final String image;
   final BoxFit fit;
   final String placeholder;
+  final String placeholder;
 
   Event({
     required this.title,
@@ -26,13 +27,24 @@ class Event {
     this.placeholder = 'assets/placeholder.jpg',
   });
 }
+  });
+}
 
-class HomePageWidget extends StatelessWidget {
+class HomePageWidget extends StatefulWidget {
   const HomePageWidget({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  _HomePageWidgetState createState() => _HomePageWidgetState();
+}
+
+class _HomePageWidgetState extends State<HomePageWidget> {
+  late List<Event> events;
+
+  @override
+  void initState() {
+    super.initState();
     // Daftar event yang ada
-    List<Event> events = [
+    events = [
       Event(
         title: 'Coldplay: Music of the Spheres',
         location: 'Gelora Bung Karno Stadium',
@@ -61,51 +73,54 @@ class HomePageWidget extends StatelessWidget {
 
     // Urutkan berdasarkan tanggal terbaru
     events.sort((a, b) => b.date.compareTo(a.date));
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: Image.asset(
-            'lib/res/assets/images/logo.png',
-            width: 40,
-            height: 40,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Image.asset(
+          'lib/res/assets/images/logo.png',
+          width: 40,
+          height: 40,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateAccountPageWidget()),
+              );
+            },
+            child: Text(
+              'Sign Up',
+              style: TextStyle(
+                color: Theme.of(context).iconTheme.color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateAccountPageWidget()),
-                );
-              },
-              child: Text(
-                'Sign Up',
-                style: TextStyle(
-                  color: Theme.of(context).iconTheme.color,
-                  fontWeight: FontWeight.bold,
-                ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPageWidget()),
+              );
+            },
+            child: Text(
+              'Login',
+              style: TextStyle(
+                color: Theme.of(context).iconTheme.color,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPageWidget()),
-                );
-              },
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  color: Theme.of(context).iconTheme.color,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(width: 16),
-          ]),
+          ),
+          SizedBox(width: 16),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
@@ -156,8 +171,8 @@ class HomePageWidget extends StatelessWidget {
 
               // Menampilkan event terbaru
               for (var event in events) ...[
-                _buildTrendingEventCard(
-                  context,
+                _buildEventCard(
+                  context, events,
                   title: event.title,
                   location: event.location,
                   date: DateFormat('MMM dd, yyyy').format(event.date),
@@ -174,7 +189,7 @@ class HomePageWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildEventCard(
-                    context,
+                    context, events,
                     title: 'Muse : Will of the People',
                     location: 'Jakarta, Indonesia',
                     date: 'July 23 2023',
@@ -183,7 +198,7 @@ class HomePageWidget extends StatelessWidget {
                         'https://farm8.staticflickr.com/7878/47302195272_aa4ecd4016_h.jpg',
                   ),
                   _buildEventCard(
-                    context,
+                    context, events,
                     title: 'One Direction : Where We Are',
                     location: 'Jakarta, Indonesia',
                     date: 'Oct 29 2023',
@@ -290,13 +305,10 @@ class HomePageWidget extends StatelessWidget {
                         .bodyMedium
                         ?.copyWith(color: Colors.white),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4),
                   Text(
-                    'Start from $price',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.orangeAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    price,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ],
               ),
@@ -307,77 +319,37 @@ class HomePageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildEventCard(
-    BuildContext context, {
+  Widget _buildEventCard(BuildContext context, List<Event> events, {
     required String title,
     required String location,
     required String date,
     required String price,
     required String image,
   }) {
-    return Expanded(
+    return GestureDetector(
+      onTap: () {},
       child: Container(
-        margin: EdgeInsets.only(right: 8),
-        height: 150,
+        width: MediaQuery.of(context).size.width * 0.45,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            image: NetworkImage(image),
-            fit: BoxFit.cover,
-          ),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.1), spreadRadius: 2, blurRadius: 4),
+          ],
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Positioned(
-              bottom: 8,
-              left: 8,
-              right: 8,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.black.withOpacity(0.6),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      location,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      date,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      price,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.orangeAccent,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            Image.network(image, fit: BoxFit.cover, width: double.infinity, height: 100),
+            SizedBox(height: 8),
+            Text(title, style: Theme.of(context).textTheme.bodyLarge),
+            SizedBox(height: 4),
+            Text(location, style: Theme.of(context).textTheme.bodySmall),
+            SizedBox(height: 4),
+            Text(date, style: Theme.of(context).textTheme.bodySmall),
+            SizedBox(height: 8),
+            Text(price, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
           ],
         ),
       ),

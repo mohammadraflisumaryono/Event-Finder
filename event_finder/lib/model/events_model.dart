@@ -7,6 +7,8 @@ import 'package:event_finder/model/event_time.dart';
 class EventListModel {
   List<Event>? events;
 
+  EventListModel({this.events});
+
   EventListModel.fromJson(Map<String, dynamic> json) {
     if (json['events'] != null) {
       events = <Event>[];
@@ -37,7 +39,7 @@ class Event {
   double? ticketPrice;
   String? registrationLink;
 
-  Event({
+  Event ({
     this.id,
     this.title,
     this.date,
@@ -47,7 +49,7 @@ class Event {
     this.image,
     this.category,
     this.ticketPrice,
-    this.registrationLink, required String price,
+    this.registrationLink,
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -61,7 +63,7 @@ class Event {
       image: json['image'],
       category: json['category'] != null ? EventCategoryExtension.fromString(json['category']) : null, // Mengonversi string ke enum
       ticketPrice: json['ticket_price']?.toDouble(),
-      registrationLink: json['registration_link'], price: '',
+      registrationLink: json['registration_link'],
     );
   }
 

@@ -12,4 +12,8 @@ class AppUrl {
   static var eventEndPoint = baseUrl + 'events';
 
   static var getAllEventsEndPoint = baseUrl + 'events';
+
+  static String eventByCategory(String category) {
+    return '${baseUrl}events/category/$category';
+  }
 }

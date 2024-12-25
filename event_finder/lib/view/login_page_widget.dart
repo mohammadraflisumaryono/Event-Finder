@@ -1,6 +1,6 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors
 
-import 'package:event_finder/view/create_account_page_widget.dart';
+import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/utils.dart';
@@ -131,10 +131,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           'password': passwordTextController.text.toString(),
                         };
 
-                        authViewModel.loginApi(data, context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
+                      authViewModel.loginApi(data, context);
+                      print('api hit');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -146,11 +147,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateAccountPageWidget()),
-                        );
+                        Navigator.pushNamed(context, RoutesName.createEvent);
                       },
                       child: RichText(
                         text: TextSpan(

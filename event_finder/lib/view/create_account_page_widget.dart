@@ -142,7 +142,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                               'password': passwordTextController.text.toString(),
                             };
 
-                         authViewModel.registerApi(data, context);
+                            authViewModel.registerApi(data, context);
                             print('api hit');
                         }
                     },
@@ -159,10 +159,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPageWidget()),
-                        );
+                        Navigator.pushNamed(context, RoutesName.login);
                       },
                       child: RichText(
                         text: TextSpan(
