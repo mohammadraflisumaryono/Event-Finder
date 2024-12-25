@@ -80,7 +80,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Image.asset(
-          'lib/res/assets/images/logo.png',
+          'lib/res/assets/images/logo goova.png',
           width: 40,
           height: 40,
         ),

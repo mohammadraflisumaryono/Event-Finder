@@ -9,12 +9,13 @@ import 'package:event_finder/utils/routes/routes.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/view/super_admin_page_widget.dart';
 import 'package:event_finder/view_model/auth_view_model.dart';
+import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'res/theme.dart';
 import 'view/home_page_widget.dart';
 
-main()  {
+main() {
   // final eventRepository = EventRepository();
   //  try {
   //   final events = await eventRepository.fetchEventsList();
@@ -39,10 +40,10 @@ main()  {
 
   // // Konversi event ke format JSON
   // String jsonString = jsonEncode(event.toJson());
-  
+
   // // Cetak hasil JSON
-  // print(jsonString); 
-  
+  // print(jsonString);
+
   runApp(const MyApp());
 }
 
@@ -52,11 +53,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AuthViewModel())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => EventViewModel())
+      ],
       child: MaterialApp(
         title: 'Event Finder',
         theme: AppTheme.lightTheme, // Menggunakan tema dari res/theme.dart
-        initialRoute: RoutesName.superAdmin, // Mulai dari halaman HomePage
+        initialRoute: RoutesName.home, // Mulai dari halaman HomePage
         onGenerateRoute: Routes.generateRoute,
       ),
     );

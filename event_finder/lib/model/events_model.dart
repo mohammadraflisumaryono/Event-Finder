@@ -3,6 +3,7 @@
 
 import 'package:event_finder/model/event_category.dart';
 import 'package:event_finder/model/event_time.dart';
+import 'package:event_finder/model/status_event.dart';
 
 class EventListModel {
   List<Event>? events;
@@ -38,6 +39,8 @@ class Event {
   EventCategory? category;  // Menggunakan EventCategory enum
   double? ticketPrice;
   String? registrationLink;
+  StatusEvent? status;
+  int? views;
 
   Event ({
     this.id,
@@ -50,6 +53,8 @@ class Event {
     this.category,
     this.ticketPrice,
     this.registrationLink,
+    this.status,
+    this.views
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -64,6 +69,10 @@ class Event {
       category: json['category'] != null ? EventCategoryExtension.fromString(json['category']) : null, // Mengonversi string ke enum
       ticketPrice: json['ticket_price']?.toDouble(),
       registrationLink: json['registration_link'],
+      status: json['status'] != null
+          ? StatusEventExtension.fromString(json['status'])
+          : null,
+      views: json['views']
     );
   }
 
@@ -79,6 +88,8 @@ class Event {
       'category': category?.value,  // Menggunakan EventCategoryExtension untuk mengambil value string
       'ticket_price': ticketPrice,
       'registration_link': registrationLink,
+      'status': status,
+      'views': views
     };
   }
 }
