@@ -7,6 +7,7 @@ import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/repository/event_repository.dart';
 import 'package:event_finder/utils/routes/routes.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/view/super_admin_page_widget.dart';
 import 'package:event_finder/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Event Finder',
         theme: AppTheme.lightTheme, // Menggunakan tema dari res/theme.dart
-        initialRoute: RoutesName.home, // Mulai dari halaman HomePage
+        initialRoute: RoutesName.superAdmin, // Mulai dari halaman HomePage
         onGenerateRoute: Routes.generateRoute,
       ),
     );

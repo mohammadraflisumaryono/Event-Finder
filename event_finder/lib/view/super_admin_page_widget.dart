@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 class SuperAdminEventPage extends StatelessWidget {
@@ -7,7 +9,7 @@ class SuperAdminEventPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Manage Events',
           style: TextStyle(
             color: Colors.black,
@@ -19,8 +21,8 @@ class SuperAdminEventPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          EventCard(),
-          EventCard(),
+          // const EventCard(),
+          // const EventCard(),
         ],
       ),
     );

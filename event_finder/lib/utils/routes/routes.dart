@@ -5,6 +5,7 @@ import 'package:event_finder/view/details_page_widget.dart';
 import 'package:event_finder/view/home_admin_event_widget.dart';
 import 'package:event_finder/view/home_page_widget.dart';
 import 'package:event_finder/view/search_result_page_widget.dart';
+import 'package:event_finder/view/super_admin_page_widget.dart';
 import 'package:flutter/material.dart';
 import '../../view/login_page_widget.dart'; // Login Page
 import '../../view/create_account_page_widget.dart'; // Register Page
@@ -27,6 +28,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => HomeAdminEventPage(isAdmin: true));
       case RoutesName.createEvent:
         return MaterialPageRoute(builder: (context) => create_event.CreateEventPage());
+      case RoutesName.superAdmin:
+        return MaterialPageRoute(builder: (context) => SuperAdminEventPage());
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
