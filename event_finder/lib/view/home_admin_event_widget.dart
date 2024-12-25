@@ -12,7 +12,7 @@ class HomeAdminEventPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Trending Events',
+          'Manage Events',
           style: TextStyle(
             color: Colors.purple,
             fontWeight: FontWeight.bold,
@@ -22,7 +22,9 @@ class HomeAdminEventPage extends StatelessWidget {
           if (isAdmin)
             IconButton(
               icon: Icon(Icons.add, color: Colors.purple),
-              onPressed: () {},
+              onPressed: () {
+                // Tambahkan aksi untuk membuat event baru
+              },
             ),
         ],
       ),
@@ -30,7 +32,7 @@ class HomeAdminEventPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           Text(
-            'Events Near You',
+            'Events List',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -38,9 +40,9 @@ class HomeAdminEventPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16),
-          // Replace with ListView.builder for dynamic items
-          EventCard(),
-          EventCard(),
+          // Daftar event, gunakan ListView.builder jika data dinamis
+          EventCard(isAdmin: isAdmin),
+          EventCard(isAdmin: isAdmin),
         ],
       ),
     );
@@ -48,6 +50,10 @@ class HomeAdminEventPage extends StatelessWidget {
 }
 
 class EventCard extends StatelessWidget {
+  final bool isAdmin;
+
+  EventCard({required this.isAdmin});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -73,9 +79,117 @@ class EventCard extends StatelessWidget {
                 color: Colors.black54,
               ),
             ),
+            if (isAdmin) ...[
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditEventDialog(),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Edit',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Tambahkan logika untuk menghapus event
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Event Deleted')),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
     );
   }
 }
+
+class EditEventDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Edit Event'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Event Name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Event Description',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              maxLines: 3,
+            ),
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Ticket Price',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Tambahkan logika untuk menyimpan perubahan
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Event Updated')),
+            );
+          },
+          child: Text('Save'),
+        ),
+      ],
+    );
+  }
+}
+
+void main() => runApp(MaterialApp(
+      home: HomeAdminEventPage(isAdmin: true),
+    ));
