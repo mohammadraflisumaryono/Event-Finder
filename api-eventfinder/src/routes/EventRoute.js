@@ -7,6 +7,7 @@ const upload = require('../middlewares/uploadImage');
 // Create event
 router.post('/events', upload.single('image'), verifyToken, eventController.createEvent);
 
+
 // Get all events
 router.get('/events', eventController.getAllEvents);
 
