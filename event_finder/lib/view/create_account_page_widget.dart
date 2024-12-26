@@ -59,6 +59,12 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Image.asset(
+                    '/lib/res/assets/images/logo.png',
+                    height: 100, 
+                    width: 100,
+                  ),
+                  const SizedBox(height: 20),
                   Center(
                     child: Text(
                       "Wanna up some event?",

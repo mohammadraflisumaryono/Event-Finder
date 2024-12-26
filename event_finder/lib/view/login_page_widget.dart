@@ -54,8 +54,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Image.asset(
+                    '/lib/res/assets/images/logo.png',
+                    height: 100, 
+                    width: 100,
+                  ),
+                  const SizedBox(height: 20),
                   Text(
-                    "Log in to Event",
+                    "Log in to Goova",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
