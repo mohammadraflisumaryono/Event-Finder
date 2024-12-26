@@ -16,7 +16,7 @@ class NetworkApiService extends BaseApiServices {
     String? token =
         await UserPreferences.getToken(); // Ambil token dari SharedPreferences
     if (token == null || token.isEmpty) {
-      throw FetchDataException('Token is missing');
+      token = '';
     }
     return token;
   }
@@ -26,13 +26,25 @@ class NetworkApiService extends BaseApiServices {
     dynamic responseJson;
     print('url network: $url');
     try {
+      String token = await _getToken();
 
-      final response = await http.get(Uri.parse(url), headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      }).timeout(const Duration(seconds: 10));
-      responseJson = returnResponse(response);
+      if (token.isEmpty || token == '') {
+        final response = await http.get(Uri.parse(url), headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        }).timeout(const Duration(seconds: 10));
+        responseJson = returnResponse(response);
+      } else {
+        final response = await http.get(Uri.parse(url), headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+          'Authorization': 'Bearer $token',
+        }).timeout(const Duration(seconds: 10));
+        responseJson = returnResponse(response);
+      }
+      
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -49,14 +61,22 @@ class NetworkApiService extends BaseApiServices {
 
       String token = await _getToken();
 
-      Response response =
-          await post(Uri.parse(url), body: jsonEncode(data), headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        'Authorization': 'Bearer $token',
-      }).timeout(Duration(seconds: 10));
-
-      responseJson = returnResponse(response);
+      if (token.isEmpty || token == '') {
+        Response response =
+            await post(Uri.parse(url), body: jsonEncode(data), headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        }).timeout(Duration(seconds: 10));
+        responseJson = returnResponse(response);
+      } else {
+        Response response =
+            await post(Uri.parse(url), body: jsonEncode(data), headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          'Authorization': 'Bearer $token',
+        }).timeout(Duration(seconds: 10));
+        responseJson = returnResponse(response);
+      }
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -144,18 +164,20 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getGetUserApiResponse(String url) async {
+  Future getDeleteApiResponse(String url) async {
     dynamic responseJson;
-    print('url network: $url');
     try {
       String token = await _getToken();
+    
+      // Mengirim permintaan DELETE dengan token untuk otentikasi
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      ).timeout(const Duration(seconds: 10));
 
-      final response = await http.get(Uri.parse(url), headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-        'Authorization': 'Bearer $token',
-      }).timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');

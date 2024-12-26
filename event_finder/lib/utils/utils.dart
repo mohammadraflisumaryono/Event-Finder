@@ -17,7 +17,8 @@ class Utils {
     Fluttertoast.showToast(
       msg: message,
       backgroundColor: Colors.black,
-      textColor: Colors.white
+      textColor: Colors.white,
+      timeInSecForIosWeb: 3,
       );
   }
 
