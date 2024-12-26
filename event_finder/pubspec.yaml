@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
   file_picker: ^5.2.4
-  # another_flushbar: 1.10.29
   auto_size_text: 3.0.0
   cached_network_image: 3.4.1
   cloud_firestore: 5.5.0

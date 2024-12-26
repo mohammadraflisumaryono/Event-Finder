@@ -6,7 +6,6 @@ import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
-
 import '../model/status_event.dart';
 import '../utils/utils.dart';
 
@@ -90,9 +89,12 @@ class EventViewModel with ChangeNotifier {
 
   // Fungsi untuk mengambil dan mengelompokkan event berdasarkan status
   Future<void> fetchAndCategorizeEvents(String organizerId) async {
+    print('Fetching organizer events...');
     setEventList(ApiResponse.loading());
     try {
       final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);
+
+      print('Response: $eventListModel');
 
       // Mengelompokkan event berdasarkan status
       final Map<StatusEvent, List<Event>> categorizedEvents = {
@@ -118,6 +120,7 @@ class EventViewModel with ChangeNotifier {
 
       setEventList(ApiResponse.completed(EventListModel(events: allEvents)));
     } catch (error) {
+      print('Error: $error');
       setEventList(ApiResponse.error(error.toString()));
     }
   }

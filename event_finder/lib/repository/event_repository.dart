@@ -64,7 +64,9 @@ class EventRepository {
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
-      return response = EventListModel.fromJson(response);
+
+          print(response);
+      return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
