@@ -18,7 +18,7 @@ class Routes {
       case RoutesName.search:
         return MaterialPageRoute(
             builder: (context) => SearchResultPageWidget(query: ''));
-      case RoutesName.DetailPage:
+      case RoutesName.detailEvent:
         return MaterialPageRoute(builder: (context) => DetailPage());
       case RoutesName.login:
         return MaterialPageRoute(builder: (context) => LoginPageWidget());

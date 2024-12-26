@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, prefer_adjacent_string_concatenation
+// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, prefer_adjacent_string_concatenation, depend_on_referenced_packages
 
 import 'dart:convert';
 import 'dart:io';
@@ -26,13 +26,11 @@ class NetworkApiService extends BaseApiServices {
     dynamic responseJson;
     print('url network: $url');
     try {
-      String token = await _getToken();
 
       final response = await http.get(Uri.parse(url), headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
         'Expires': '0',
-        'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
@@ -141,6 +139,26 @@ class NetworkApiService extends BaseApiServices {
       throw FetchDataException('No Internet Connection');
     } catch (e) {
       throw FetchDataException('Error occurred: ${e.toString()}');
+    }
+    return responseJson;
+  }
+
+  @override
+  Future getGetUserApiResponse(String url) async {
+    dynamic responseJson;
+    print('url network: $url');
+    try {
+      String token = await _getToken();
+
+      final response = await http.get(Uri.parse(url), headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Authorization': 'Bearer $token',
+      }).timeout(const Duration(seconds: 10));
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
     }
     return responseJson;
   }
