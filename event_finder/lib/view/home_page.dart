@@ -88,6 +88,10 @@ class _HomePageState extends State<HomePage> {
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.surface,
                 ),
+                onSubmitted: (value) {
+                  Navigator.pushNamed(context, RoutesName.search,
+                      arguments: value);
+                },
               ),
               SizedBox(height: 16),
               SingleChildScrollView(
