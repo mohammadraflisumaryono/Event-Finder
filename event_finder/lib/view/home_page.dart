@@ -20,8 +20,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Memanggil fetchTrendingEvents() ketika HomePage pertama kali ditampilkan
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<EventViewModel>(context, listen: false).fetchTrendingEvents();
     });
   }
@@ -123,8 +122,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                ],
+                children: [],
               ),
             ],
           ),
@@ -147,6 +145,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSectionHeader(BuildContext context, String title) {
+    print(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

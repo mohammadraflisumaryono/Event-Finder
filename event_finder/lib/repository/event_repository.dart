@@ -31,8 +31,8 @@ class EventRepository {
   Future<dynamic> getTrendingEventApi() async {
     try {
       dynamic response =
-          await _apiServices.getGetApiResponse(AppUrl.trendingEndPoint);
-      return response = EventListModel.fromJson(response);
+          await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
+      return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

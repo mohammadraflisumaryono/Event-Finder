@@ -1,4 +1,3 @@
-
 // ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, prefer_adjacent_string_concatenation
 
 import 'dart:convert';
@@ -9,22 +8,16 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class NetworkApiService extends BaseApiServices {
-
   @override
   Future getGetApiResponse(String url) async {
-
     dynamic responseJson;
     print('url network: $url');
     try {
-
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-        ).timeout(const Duration(seconds: 10));
+      final response = await http.get(Uri.parse(url), headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }).timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
@@ -35,21 +28,18 @@ class NetworkApiService extends BaseApiServices {
 
   @override
   Future getPostApiResponse(String url, dynamic data) async {
-    
     dynamic responseJson;
     print('url network: data: $data');
     try {
       // Menampilkan data yang akan dikirim ke server
       print("Data yang dikirim ke server: ${jsonEncode(data)}");
-      
-      Response response = await post(
-        Uri.parse(url),
-        body: jsonEncode(data),
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        }
-      ).timeout(Duration(seconds: 10));
+
+      Response response = await post(Uri.parse(url),
+          body: jsonEncode(data),
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          }).timeout(Duration(seconds: 10));
 
       responseJson = returnResponse(response);
     } on SocketException {
@@ -59,9 +49,8 @@ class NetworkApiService extends BaseApiServices {
     return responseJson;
   }
 
-  dynamic returnResponse (http.Response response) {
-
-    switch(response.statusCode) {
+  dynamic returnResponse(http.Response response) {
+    switch (response.statusCode) {
       case 200:
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
@@ -74,8 +63,10 @@ class NetworkApiService extends BaseApiServices {
       case 404:
         throw UnauthorisedException(response.body.toString());
       default:
-        throw FetchDataException('Error accured while communicaating with server' + 
-          'with status code' +response.statusCode.toString());
+        throw FetchDataException(
+            'Error accured while communicaating with server' +
+                'with status code' +
+                response.statusCode.toString());
     }
   }
 }

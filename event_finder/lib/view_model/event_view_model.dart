@@ -1,4 +1,3 @@
-
 import 'package:event_finder/data/response/api_response.dart';
 import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/model/event_category.dart';
@@ -9,7 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/utils.dart';
 
-class EventViewModel with  ChangeNotifier {
+class EventViewModel with ChangeNotifier {
   final _myRepo = EventRepository();
 
   ApiResponse<EventListModel> eventsList = ApiResponse.loading();
@@ -36,52 +35,56 @@ class EventViewModel with  ChangeNotifier {
     try {
       final value = await _myRepo.fetchEventsList();
       final filteredEvents = value.events
-          ?.where((event) => event.category?.value.toLowerCase() == category.toLowerCase())
+          ?.where((event) =>
+              event.category?.value.toLowerCase() == category.toLowerCase())
           .toList();
-      setEventList(ApiResponse.completed(EventListModel(events: filteredEvents)));
+      setEventList(
+          ApiResponse.completed(EventListModel(events: filteredEvents)));
     } catch (error) {
       setEventList(ApiResponse.error(error.toString()));
     }
   }
 
-  // Mengambil data event berdasarkan trending
   Future<void> fetchTrendingEvents() async {
-    print('api hit');
-    setEventList(ApiResponse.loading());
-    try {
-      
-      // Panggil API untuk mendapatkan event trending berdasarkan views
-      final value = await _myRepo
-          .getTrendingEventApi(); // Memanggil API untuk mendapatkan data event
-      final trendingEvents = value.events
-          ?.where((event) =>
-              event.status !=
-              'expired') // Filter event yang statusnya bukan expired
-          .toList();
+    print('Fetching trending events...');
+    setEventList(ApiResponse.loading()); // Menandai state sebagai "loading"
 
+    try {
+      // Panggil API untuk mendapatkan trending events
+      final EventListModel value = await _myRepo.getTrendingEventApi();
+
+      print('Response: $value');
+      // Filter event yang statusnya bukan expired
+      final trendingEvents = value.events;
+
+      print('Filtered events: $trendingEvents');
+
+      // Update state dengan data yang berhasil diambil
       setEventList(
           ApiResponse.completed(EventListModel(events: trendingEvents)));
     } catch (error) {
-      setEventList(ApiResponse.error(error.toString()));
+      print('Error: $error');
+      setEventList(
+          ApiResponse.error(error.toString())); // Update state dengan error
     }
   }
 
-
   // Mengambil data event by time
   Future<void> fetchUpcomingEvents(DateTime currentDate) async {
-  setEventList(ApiResponse.loading());
-  try {
-    final value = await _myRepo.fetchEventsList();
-    final upcomingEvents = value.events
-        ?.where((event) => event.date != null && event.date!.isAfter(currentDate))
-        .toList()
-      ?..sort((a, b) => a.date!.compareTo(b.date!));
-    setEventList(ApiResponse.completed(EventListModel(events: upcomingEvents)));
-  } catch (error) {
-    setEventList(ApiResponse.error(error.toString()));
+    setEventList(ApiResponse.loading());
+    try {
+      final value = await _myRepo.fetchEventsList();
+      final upcomingEvents = value.events
+          ?.where(
+              (event) => event.date != null && event.date!.isAfter(currentDate))
+          .toList()
+        ?..sort((a, b) => a.date!.compareTo(b.date!));
+      setEventList(
+          ApiResponse.completed(EventListModel(events: upcomingEvents)));
+    } catch (error) {
+      setEventList(ApiResponse.error(error.toString()));
+    }
   }
-}
-
 
   bool _loading = false;
   bool get loading => _loading;
@@ -98,7 +101,8 @@ class EventViewModel with  ChangeNotifier {
     _myRepo.createEventApi(data).then((value) {
       setLoading(false);
       Utils.toastMessage('Event Created Successfully');
-      Navigator.pop(context, RoutesName.adminHome); // Kembali ke halaman sebelumnya
+      Navigator.pop(
+          context, RoutesName.adminHome); // Kembali ke halaman sebelumnya
       if (kDebugMode) {
         print(value.toString());
       }
@@ -124,6 +128,5 @@ class EventViewModel with  ChangeNotifier {
   //     setEventList(ApiResponse.error(error.toString()));
 
   //   });
-  // } 
-
- }
+  // }
+}

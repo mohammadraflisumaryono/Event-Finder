@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:event_finder/view/create_event_page.dart';
-import 'package:event_finder/view/create_event_page_widget.dart';
 import 'package:event_finder/view/details_page_widget.dart';
 import 'package:event_finder/view/home_admin_event_widget.dart';
 import 'package:event_finder/view/home_page.dart';
