@@ -62,6 +62,9 @@ class EventService {
                 throw new Error("You are not authorized to update this event.");
             }
 
+            // edit status event jaadi pending
+            data.status = 'pending';
+
             // Mengupdate event
             Object.assign(event, data);
             await event.save();
@@ -212,6 +215,7 @@ class EventService {
             throw new Error(`Error checking expired events: ${error.message}`);
         }
     }
+
 
 }
 

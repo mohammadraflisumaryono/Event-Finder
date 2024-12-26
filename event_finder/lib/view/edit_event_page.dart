@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, library_private_types_in_public_api
-
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,15 +6,18 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:provider/provider.dart';
+import 'package:event_finder/model/events_model.dart';
 
-import '../utils/routes/routes_name.dart';
+class EditEventPage extends StatefulWidget {
+  final Event event;
 
-class CreateEventPage extends StatefulWidget {
+  EditEventPage({required this.event}); // Accept the event as a parameter
+
   @override
-  _CreateEventPageState createState() => _CreateEventPageState();
+  _EditEventPageState createState() => _EditEventPageState();
 }
 
-class _CreateEventPageState extends State<CreateEventPage> {
+class _EditEventPageState extends State<EditEventPage> {
   final _formKey = GlobalKey<FormState>();
   String? _title;
   DateTime? _date;
@@ -42,7 +43,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _date ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -69,7 +70,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     }
   }
 
-  String? _imageFileName; // Tambahkan variable untuk nama file
+  String? _imageFileName; // Store the file name
 
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
@@ -83,7 +84,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
       if (bytes != null) {
         setState(() {
           _image = bytes;
-          _imageFileName = result.files.single.name; // Simpan nama file
+          _imageFileName = result.files.single.name; // Store the file name
         });
       } else {
         print('File bytes are null');
@@ -91,6 +92,21 @@ class _CreateEventPageState extends State<CreateEventPage> {
     } else {
       print('No file selected');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize fields with the existing event data
+    _title = widget.event.title;
+    _date = widget.event.date;
+    _startTime = TimeOfDay.fromDateTime(widget.event.time!.start);
+    _endTime = TimeOfDay.fromDateTime(widget.event.time!.end);
+    _location = widget.event.location;
+    _description = widget.event.description;
+    _ticketPrice = widget.event.ticketPrice;
+    _registrationLink = widget.event.registrationLink;
+    _category = widget.event.category;
   }
 
   @override
@@ -103,28 +119,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Create Event',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'lib/res/assets/images/logogoova.png',
-              width: 40, // Ganti dengan ukuran logo sesuai kebutuhan
-            ),
+        title: Text(
+          'Edit Event',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -133,9 +135,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
           child: ListView(
             children: [
               TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Event Title',
-                ),
+                initialValue: _title,
+                decoration: InputDecoration(labelText: 'Event Title'),
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter a title' : null,
                 onSaved: (value) => _title = value,
@@ -165,6 +166,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                initialValue: _location,
                 decoration: InputDecoration(labelText: 'Location'),
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter a location' : null,
@@ -172,15 +174,13 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                initialValue: _description,
                 decoration: InputDecoration(labelText: 'Description'),
                 maxLines: 3,
                 onSaved: (value) => _description = value,
               ),
               SizedBox(height: 16),
-              Text(
-                "Event Image :",
-                style: TextStyle(fontSize: 16),
-              ),
+              Text("Event Image:", style: TextStyle(fontSize: 16)),
               Column(
                 children: [
                   ListTile(
@@ -196,6 +196,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<EventCategory>(
+                value: _category,
                 decoration: InputDecoration(labelText: 'Category'),
                 items: EventCategory.values
                     .map((category) => DropdownMenuItem(
@@ -213,17 +214,16 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                initialValue: _ticketPrice?.toString(),
                 decoration: InputDecoration(labelText: 'Ticket Price'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter
-                      .digitsOnly, // Membatasi hanya angka
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a ticket price';
                   }
-                  // Menambahkan validasi jika input tidak bisa diparsing menjadi angka
                   final parsedValue = double.tryParse(value);
                   if (parsedValue == null) {
                     return 'Please enter a valid number';
@@ -234,6 +234,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                initialValue: _registrationLink,
                 decoration: InputDecoration(labelText: 'Registration Link'),
                 onSaved: (value) => _registrationLink = value,
               ),
@@ -266,13 +267,13 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       'location': _location,
                       'description': _description,
                       'category': _category!.value,
-                      'ticket_price':
-                          _ticketPrice.toString(), // Convert to string
+                      'ticket_price': _ticketPrice.toString(),
                       'registration_link': _registrationLink,
                     };
+
                     try {
-                      // Gunakan method baru untuk upload dengan image
-                      await eventViewModel.createEventWithImage(
+                      await eventViewModel.updateEventWithImage(
+                        eventId: widget.event.id!,
                         eventData: eventData,
                         imageBytes: _image!,
                         fileName: _imageFileName ?? 'image.jpg',
@@ -281,37 +282,21 @@ class _CreateEventPageState extends State<CreateEventPage> {
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              'Your event is created and awaiting approval by Superadmin.'),
+                          content: Text('Event Updated Successfully!'),
                           duration: Duration(seconds: 3),
                         ),
                       );
 
-                      // Setelah berhasil, arahkan ke halaman berikutnya
-                      Future.delayed(Duration(seconds: 3), () {
-                        Navigator.pushNamed(context, RoutesName.adminHome);
-                      });
+                      Navigator.pop(context); // Go back after saving
                     } catch (error) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                              'Failed to create event: ${error.toString()}'),
+                              'Failed to update event: ${error.toString()}'),
                           backgroundColor: Colors.red,
                         ),
                       );
                     }
-
-                    // // Panggil API untuk mengunggah event
-                    // await eventViewModel.createEventApi(data, context);
-                    // print('api hit');
-
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(
-                    //     content: Text(
-                    //         'Your event is created and awaiting approval by Superadmin.'),
-                    //     duration: Duration(seconds: 3),
-                    //   ),
-                    // );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -322,7 +307,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   backgroundColor: Colors.purple,
                 ),
                 child: Text(
-                  'Create Event', // Tulisan pada button
+                  'Save Changes',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),

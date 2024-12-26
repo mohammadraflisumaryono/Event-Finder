@@ -2,191 +2,197 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DetailPage extends StatelessWidget {
-  final String title;
-  final String location;
-  final String date;
-  final String participants;
-  final String description;
-  final String mapLocation;
-  final double price;
-  final String imageUrl;
-
-  const DetailPage({
-    super.key,
-    required this.title,
-    required this.location,
-    required this.date,
-    required this.participants,
-    required this.description,
-    required this.mapLocation,
-    required this.price,
-    required this.imageUrl,
-  });
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Details'),
-        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text("Event Details"),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Event image
-            Stack(
-              children: [
-                Container(
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
-                    image: DecorationImage(
-                      image: NetworkImage(imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 20,
-                  left: 10,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            // Event Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
                 children: [
-                  // Event details card
-                  Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: GoogleFonts.outfit(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on, size: 20),
-                              const SizedBox(width: 5),
-                              Text(location,
-                                  style: Theme.of(context).textTheme.bodyMedium),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(Icons.date_range, size: 20),
-                              const SizedBox(width: 5),
-                              Text(date,
-                                  style: Theme.of(context).textTheme.bodyMedium),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(Icons.people, size: 20),
-                              const SizedBox(width: 5),
-                              Text(participants,
-                                  style: Theme.of(context).textTheme.bodyMedium),
-                            ],
-                          ),
-                        ],
+                  Image.network(
+                    "https://via.placeholder.com/600x300?text=Event+Image",
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    left: 16,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "Coldplay: Music of the Spheres",
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
 
-                  const SizedBox(height: 20),
-
-                  // Description
-                  Text(
-                    "Description",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+            // Event Info Card
+            Card(
+              margin: EdgeInsets.zero,
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.location_on, color: Colors.purple, size: 20),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            "Gelora Bung Karno Stadium, Jakarta",
+                            style: GoogleFonts.outfit(fontSize: 14),
+                          ),
                         ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    description,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Map Section
-                  Text(
-                    "Venue & Location",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      mapLocation,
-                      height: 150,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                      ],
                     ),
-                  ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.event, color: Colors.purple, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          "November 15, 2023",
+                          style: GoogleFonts.outfit(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.people, color: Colors.purple, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          "50K+ Participants",
+                          style: GoogleFonts.outfit(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
 
-                  const SizedBox(height: 20),
+            // Description Section
+            Text(
+              "Description",
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              "Coldplay will perform their spectacular 'Music of the Spheres' tour live in Jakarta. Enjoy an unforgettable night filled with magical music, stunning visuals, and a crowd of passionate fans.",
+              style: GoogleFonts.outfit(fontSize: 14, color: Colors.grey[800]),
+            ),
+            SizedBox(height: 16),
 
-                  // Price and Buy Ticket Button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // Venue & Location Section
+            Text(
+              "Venue & Location",
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                "https://via.placeholder.com/600x300?text=Map+Image",
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 20),
+
+            // Price & Button Section
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Start from",
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
                       ),
                       Text(
-                        "IDR ${price.toStringAsFixed(3)}",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        "IDR 1.100.000",
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // Add ticket purchasing logic
+                      // Buy ticket action
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text("Buy Ticket"),
+                    child: Text(
+                      "Join Event",
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),
