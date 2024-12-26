@@ -10,12 +10,12 @@ const port = process.env.EXPRESS_PORT || 3000;
 
 connectToDb();
 require('./config/cronjob');
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`);
 });
 
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use((err, req, res, next) => {
     res.status(400).json({

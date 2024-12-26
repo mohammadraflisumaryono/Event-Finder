@@ -7,6 +7,7 @@ import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/widgets/trending_event_carousel.dart';
 import 'package:event_finder/widgets/event_card.dart';
 import 'package:provider/provider.dart';
+import 'package:event_finder/view/event_list_page.dart'; // Adjust the path according to your project structure
 
 import '../data/response/status.dart';
 
@@ -89,8 +90,15 @@ class _HomePageState extends State<HomePage> {
                   fillColor: Theme.of(context).colorScheme.surface,
                 ),
                 onSubmitted: (value) {
-                  Navigator.pushNamed(context, RoutesName.search,
-                      arguments: value);
+                  Provider.of<EventViewModel>(context, listen: false)
+                      .fetchSearchAndCategory(query: value, category: null);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EventListPage(searchQuery: value, category: null),
+                    ),
+                  );
                 },
               ),
               SizedBox(height: 16),
@@ -103,9 +111,11 @@ class _HomePageState extends State<HomePage> {
                       .toList(),
                 ),
               ),
+
               SizedBox(height: 24),
               _buildSectionHeader(context, 'Trending Events'),
               SizedBox(height: 16),
+
               Consumer<EventViewModel>(
                 builder: (context, viewModel, child) {
                   if (viewModel.eventsList.status == Status.LOADING) {
@@ -170,12 +180,25 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCategoryChip(BuildContext context, String categoryName) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Chip(
-        label: Text(
-          categoryName,
-          style: Theme.of(context).textTheme.bodyMedium,
+      child: GestureDetector(
+        onTap: () {
+          Provider.of<EventViewModel>(context, listen: false)
+              .fetchSearchAndCategory(query: null, category: categoryName);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  EventListPage(searchQuery: '', category: categoryName),
+            ),
+          );
+        },
+        child: Chip(
+          label: Text(
+            categoryName,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          backgroundColor: Theme.of(context).chipTheme.backgroundColor,
         ),
-        backgroundColor: Theme.of(context).chipTheme.backgroundColor,
       ),
     );
   }

@@ -224,4 +224,28 @@ class EventViewModel with ChangeNotifier {
       setLatestEvent(ApiResponse.error(error.toString()));
     }
   }
+
+  Future<void> fetchSearchAndCategory({
+    String? query,
+    String? category,
+  }) async {
+    setEventList(ApiResponse.loading());
+    try {
+      final value = await _myRepo.fetchEventsList();
+
+      // Filter berdasarkan query dan/atau kategori
+      final filteredEvents = value.events?.where((event) {
+        final matchesQuery = query == null ||
+            event.title?.toLowerCase().contains(query.toLowerCase()) == true;
+        final matchesCategory = category == null ||
+            event.category?.value.toLowerCase() == category.toLowerCase();
+        return matchesQuery && matchesCategory;
+      }).toList();
+
+      setEventList(
+          ApiResponse.completed(EventListModel(events: filteredEvents)));
+    } catch (error) {
+      setEventList(ApiResponse.error(error.toString()));
+    }
+  }
 }
