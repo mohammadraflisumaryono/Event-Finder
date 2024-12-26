@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
 class AppUrl {
-  // static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
-  static var baseUrl = 'http://localhost:3002/api/';
-
-  static var ImageUrl = 'http://localhost:3002/uploads/images/';
+  static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
+  static var ImageUrl = 'https://event-finder-production.up.railway.app/uploads/images/';
+  // static var baseUrl = 'http://localhost:3002/api/';
+  // static var ImageUrl = 'http://localhost:3002/uploads/images/';
 
   static var loginEndPoint = baseUrl + 'login';
 
