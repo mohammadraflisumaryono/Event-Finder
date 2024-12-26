@@ -5,6 +5,7 @@ const EventRoute = require('./routes/EventRoute');
 const cors = require('cors');
 
 const app = express();
+
 app.use(cors());
 
 // Atur batas ukuran payload pada body-parser

@@ -14,9 +14,6 @@ class EventRepository {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
 
-      response['data'].forEach((element) {
-        element['image'] = AppUrl.ImageUrl + element['image'];
-      });
       return response = EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -72,10 +69,10 @@ class EventRepository {
   // Ambil data event berdasarkan ID organizer
   Future<dynamic> getEventByOrganizerApi(String organizerId) async {
     try {
-      dynamic response =
-          await _apiServices.getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
+      dynamic response = await _apiServices
+          .getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
 
-          print(response);
+      print(response);
       return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
