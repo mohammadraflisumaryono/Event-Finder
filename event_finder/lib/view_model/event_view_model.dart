@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+import '../model/status_event.dart';
 import '../utils/utils.dart';
 
 class EventViewModel with ChangeNotifier {
@@ -87,27 +88,33 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
-  // Mengambil data event by Organizer ID
-  Future<void> fetchEventsByOrganizer(String organizerId) async {
+  // Fungsi untuk mengambil dan mengelompokkan event berdasarkan status
+  Future<void> fetchAndCategorizeEvents(String organizerId) async {
     setEventList(ApiResponse.loading());
     try {
-      final value = await _myRepo.getEventByOrganizerApi(organizerId);
-      final allEvents = value.events?.toList()
-        ?..sort((a, b) => a.date!
-            .compareTo(b.date!)); // Urutkan berdasarkan tanggal terlebih dahulu
+      final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);
 
-      // Mengurutkan berdasarkan status setelah tanggal diurutkan
-      allEvents?.sort((a, b) {
-        // Prioritaskan status: approved > pending > rejected
-        if (a.status == 'approved' && b.status != 'approved') {
-          return -1;
-        } else if (a.status == 'pending' && b.status == 'rejected') {
-          return -1;
-        } else if (a.status == 'rejected' && b.status != 'rejected') {
-          return 1;
+      // Mengelompokkan event berdasarkan status
+      final Map<StatusEvent, List<Event>> categorizedEvents = {
+        StatusEvent.approved: [],
+        StatusEvent.pending: [],
+        StatusEvent.rejected: [],
+        StatusEvent.expired: []
+      };
+
+      for (var event in eventListModel.events ?? []) {
+        if (event.status != null) {
+          categorizedEvents[event.status!]!.add(event);
         }
-        return 0; // Jika status sama, urutkan berdasarkan tanggal yang sudah dilakukan sebelumnya
+      }
+
+      // Menyortir setiap kategori event berdasarkan tanggal
+      categorizedEvents.forEach((status, events) {
+        events.sort((a, b) => a.date!.compareTo(b.date!));
       });
+
+      // Menggabungkan semua event yang telah dikelompokkan
+      final allEvents = categorizedEvents.values.expand((x) => x).toList();
 
       setEventList(ApiResponse.completed(EventListModel(events: allEvents)));
     } catch (error) {
