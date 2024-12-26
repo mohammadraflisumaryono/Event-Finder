@@ -114,19 +114,4 @@ class EventViewModel with ChangeNotifier {
       }
     });
   }
-
-  // Future<void> fetchEventListApi() async {
-
-  //   setEventList(ApiResponse.loading());
-
-  //   _myRepo.fetchEventsList().then((value){
-
-  //     setEventList(ApiResponse.completed(value));
-
-  //   }).onError((error, StackTrace) {
-
-  //     setEventList(ApiResponse.error(error.toString()));
-
-  //   });
-  // }
-}
+ }

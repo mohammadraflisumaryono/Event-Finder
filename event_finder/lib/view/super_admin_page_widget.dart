@@ -24,7 +24,7 @@ class SuperAdminEventWidget extends StatelessWidget {
             Text(
               'Event List',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepPurple,
               ),
@@ -35,8 +35,11 @@ class SuperAdminEventWidget extends StatelessWidget {
                 itemCount: 5, // Total jumlah event
                 itemBuilder: (context, index) {
                   return Card(
-                    elevation: 4,
+                    elevation: 3,
                     margin: EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -45,7 +48,7 @@ class SuperAdminEventWidget extends StatelessWidget {
                           Text(
                             'Event Title $index',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
@@ -53,8 +56,10 @@ class SuperAdminEventWidget extends StatelessWidget {
                           SizedBox(height: 8),
                           Text(
                             'Event Description $index',
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.black54),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -69,33 +74,41 @@ class SuperAdminEventWidget extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              if (index % 2 ==
-                                  0) // Tombol hanya muncul jika status "Pending"
-                                ElevatedButton(
+                              if (index % 2 == 0)
+                                ElevatedButton.icon(
                                   onPressed: () {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                          content:
-                                              Text('Event $index Approved')),
+                                        content: Text('Event $index Approved'),
+                                      ),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
-                                  child: Text('✅ Approve'),
+                                  icon: Icon(Icons.check, size: 18),
+                                  label: Text('Approve'),
                                 ),
                               SizedBox(width: 8),
-                              ElevatedButton(
+                              ElevatedButton.icon(
                                 onPressed: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Text('Event $index Rejected')),
+                                      content: Text('Event $index Rejected'),
+                                    ),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                 ),
-                                child: Text('❌ Reject'),
+                                icon: Icon(Icons.close, size: 18),
+                                label: Text('Reject'),
                               ),
                             ],
                           ),
@@ -115,6 +128,7 @@ class SuperAdminEventWidget extends StatelessWidget {
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: SuperAdminEventWidget(),
   ));
 }

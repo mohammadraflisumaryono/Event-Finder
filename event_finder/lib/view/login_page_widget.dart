@@ -147,7 +147,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RoutesName.createEvent);
+                        Navigator.pushNamed(context, RoutesName.register);
                       },
                       child: RichText(
                         text: TextSpan(

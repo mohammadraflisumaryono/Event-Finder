@@ -31,8 +31,8 @@ class Routes {
             builder: (context) => HomeAdminEventPage(isAdmin: true));
       case RoutesName.createEvent:
         return MaterialPageRoute(builder: (context) => CreateEventPage());
-      case RoutesName.superAdmin:
-        return MaterialPageRoute(builder: (context) => SuperAdminEventWidget());
+      // case RoutesName.superAdmin:
+      //   return MaterialPageRoute(builder: (context) => SuperAdminEventWidget());
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
