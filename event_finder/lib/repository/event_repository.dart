@@ -13,7 +13,7 @@ class EventRepository {
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
-          
+
       response['data'].forEach((element) {
         element['image'] = AppUrl.ImageUrl + element['image'];
       });
@@ -75,6 +75,17 @@ class EventRepository {
       dynamic response = await _apiServices
           .getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
       return response = EventListModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+// Update data event
+  Future<dynamic> updateEventApi(String eventId, dynamic data) async {
+    try {
+      dynamic response = await _apiServices.getPutApiResponse(
+          AppUrl.eventEndPoint + '/$eventId', data);
+      return response;
     } catch (e) {
       rethrow;
     }

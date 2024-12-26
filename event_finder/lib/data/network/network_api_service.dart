@@ -92,6 +92,28 @@ class NetworkApiService extends BaseApiServices {
     return responseJson;
   }
 
+  @override
+  Future getPutApiResponse(String url, dynamic data) async {
+    dynamic responseJson;
+    try {
+      // Menampilkan data yang akan dikirim ke server
+      print("Data yang dikirim ke server: ${jsonEncode(data)}");
+
+      Response response =
+          await put(Uri.parse(url), body: jsonEncode(data), headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        'Authorization': 'Bearer $token',
+      }).timeout(Duration(seconds: 10));
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+
+    return responseJson;
+  }
+
   dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
