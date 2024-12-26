@@ -1,9 +1,8 @@
-
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
 class AppUrl {
-
-  static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
+  // static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
+  static var baseUrl = 'http://localhost:3002/api/';
 
   static var loginEndPoint = baseUrl + 'login';
 
@@ -22,6 +21,4 @@ class AppUrl {
   static String eventById(String id) {
     return '${baseUrl}events/$id';
   }
-
-
 }

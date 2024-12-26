@@ -28,8 +28,6 @@ const eventSchema = new Schema({
     description: {
         type: String,
         required: true,
-        minlength: 10,
-        maxlength: 1000
     },
     image: {
         type: String,
@@ -37,7 +35,7 @@ const eventSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ['Concert', 'Seminar', 'Exhibition', 'Workshop', 'Festival', 'Other'],
+        enum: ['Concert', 'Conference', 'Seminar', 'Workshop', 'Festival', 'Other'],
         required: true
     },
     ticket_price: {

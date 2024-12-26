@@ -115,4 +115,36 @@ class EventViewModel with ChangeNotifier {
       }
     });
   }
- }
+
+  Future<void> createEventWithImage({
+    required Map<String, dynamic> eventData,
+    required List<int> imageBytes,
+    required String fileName,
+    required BuildContext context,
+  }) async {
+    setLoading(true);
+
+    try {
+      final value = await _myRepo.createEventWithImageApi(
+        eventData: eventData,
+        imageBytes: imageBytes,
+        fileName: fileName,
+      );
+
+      setLoading(false);
+      Utils.toastMessage('Event Created Successfully');
+      Navigator.pop(context, RoutesName.adminHome);
+
+      if (kDebugMode) {
+        print('Event created successfully: ${value.toString()}');
+      }
+    } catch (error) {
+      setLoading(false);
+      Utils.toastMessage(error.toString());
+
+      if (kDebugMode) {
+        print('Error creating event: ${error.toString()}');
+      }
+    }
+  }
+}

@@ -37,4 +37,22 @@ class EventRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> createEventWithImageApi({
+    required Map<String, dynamic> eventData,
+    required List<int> imageBytes,
+    required String fileName,
+  }) async {
+    try {
+      dynamic response = await _apiServices.postMultipartApiResponse(
+        AppUrl.eventEndPoint,
+        eventData,
+        imageBytes,
+        fileName,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

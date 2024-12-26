@@ -74,7 +74,7 @@ exports.loginUser = async (req, res, next) => {
             email: user.email
         };
 
-        const token = await UserServices.generateToken(tokenData, process.env.JWT_SECRET, '1h');
+        const token = await UserServices.generateToken(tokenData, process.env.JWT_SECRET, '100h');
         // get role 
         const role = user.role;
 

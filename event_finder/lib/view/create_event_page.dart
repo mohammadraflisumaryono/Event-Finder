@@ -67,19 +67,21 @@ class _CreateEventPageState extends State<CreateEventPage> {
     }
   }
 
+  String? _imageFileName; // Tambahkan variable untuk nama file
+
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.image, // Hanya mengizinkan file gambar
-      withData: true, // Meminta data file dalam bentuk byte
+      type: FileType.image,
+      withData: true,
     );
 
     if (result != null && result.files.isNotEmpty) {
-      final bytes =
-          result.files.single.bytes; // Mengakses data file dalam bentuk byte
+      final bytes = result.files.single.bytes;
 
       if (bytes != null) {
         setState(() {
-          _image = bytes; // Simpan data byte ke variabel
+          _image = bytes;
+          _imageFileName = result.files.single.name; // Simpan nama file
         });
       } else {
         print('File bytes are null');
@@ -246,46 +248,67 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    // Mendapatkan instance dari EventViewModel tanpa mendengarkan pembaruan
                     var eventViewModel =
                         Provider.of<EventViewModel>(context, listen: false);
 
-                        // Konversi TimeOfDay ke DateTime
                     DateTime startDateTime =
                         convertTimeOfDayToDateTime(_date!, _startTime!);
                     DateTime endDateTime =
                         convertTimeOfDayToDateTime(_date!, _endTime!);
-                      
-                    // Menyiapkan data untuk dikirimkan ke API
-                    Map<String, dynamic> data = {
+
+                    Map<String, dynamic> eventData = {
                       'title': _title,
                       'date': _date!.toIso8601String(),
                       'time_start': startDateTime.toIso8601String(),
                       'time_end': endDateTime.toIso8601String(),
                       'location': _location,
                       'description': _description,
-                      'image': _image,
                       'category': _category!.value,
-                      'ticket_price': _ticketPrice,
+                      'ticket_price':
+                          _ticketPrice.toString(), // Convert to string
                       'registration_link': _registrationLink,
                     };
+                    try {
+                      // Gunakan method baru untuk upload dengan image
+                      await eventViewModel.createEventWithImage(
+                        eventData: eventData,
+                        imageBytes: _image!,
+                        fileName: _imageFileName ?? 'image.jpg',
+                        context: context,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Your event is created and awaiting approval by Superadmin.'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
 
-                    // Panggil API untuk mengunggah event
-                    await eventViewModel.createEventApi(data, context);
-                    print('api hit');
+                      // Setelah berhasil, arahkan ke halaman berikutnya
+                      Future.delayed(Duration(seconds: 3), () {
+                        Navigator.pushNamed(context, RoutesName.adminHome);
+                      });
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Failed to create event: ${error.toString()}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            'Your event is created and awaiting approval by Superadmin.'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
+                    // // Panggil API untuk mengunggah event
+                    // await eventViewModel.createEventApi(data, context);
+                    // print('api hit');
 
-                    // Setelah berhasil, arahkan ke halaman berikutnya
-                    Future.delayed(Duration(seconds: 3), () {
-                      Navigator.pushNamed(context, RoutesName.adminHome);
-                    });
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(
+                    //     content: Text(
+                    //         'Your event is created and awaiting approval by Superadmin.'),
+                    //     duration: Duration(seconds: 3),
+                    //   ),
+                    // );
                   }
                 },
                 style: ElevatedButton.styleFrom(
