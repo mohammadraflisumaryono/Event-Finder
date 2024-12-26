@@ -6,10 +6,11 @@ import '../model/events_model.dart';
 
 class EventCardOrganizer extends StatelessWidget {
   final bool isAdmin;
-  final Event event; // Memastikan properti 'event' ada
+  final Event event;
+  final VoidCallback? onEdit; // Memastikan properti 'event' ada
 
   // Constructor
-  EventCardOrganizer({required this.isAdmin, required this.event});
+  EventCardOrganizer({required this.isAdmin, required this.event, this.onEdit});
 
   @override
   Widget build(BuildContext context) {

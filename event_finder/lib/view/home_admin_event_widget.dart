@@ -8,6 +8,8 @@ import '../model/events_model.dart';
 import '../model/status_event.dart';
 import '../view_model/event_view_model.dart';
 import '../widgets/event_card_organizer.dart';
+import '../widgets/edit_event_dialog.dart';
+
 
 class HomeAdminEventPage extends StatelessWidget {
   final bool isAdmin;
