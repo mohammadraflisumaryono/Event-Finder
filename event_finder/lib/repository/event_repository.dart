@@ -73,7 +73,7 @@ class EventRepository {
   Future<dynamic> getEventByOrganizerApi(String organizerId) async {
     try {
       dynamic response =
-          await _apiServices.getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
+          await _apiServices.getGetUserApiResponse(AppUrl.eventByOrganizer(organizerId));
 
           print(response);
       return EventListModel.fromJson(response);
