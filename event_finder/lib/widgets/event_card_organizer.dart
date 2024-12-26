@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import '../model/events_model.dart';
 
 class EventCardOrganizer extends StatelessWidget {
-  final bool isAdmin;
-  final Event event; // Memastikan properti 'event' ada
+  final bool isOrganizer;
+  final Event event; 
 
-  // Constructor
-  EventCardOrganizer({required this.isAdmin, required this.event});
+  EventCardOrganizer({required this.isOrganizer, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,8 @@ class EventCardOrganizer extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
-            if (isAdmin) ...[
+            // Menampilkan tombol Edit dan Delete hanya jika status event adalah pending
+            if (isOrganizer && event.status == 'pending') ...[
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -70,10 +70,7 @@ class EventCardOrganizer extends StatelessWidget {
                   SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      // Tambahkan logika untuk menghapus event
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Event Deleted')),
-                      );
+                      // deleteEvent(context); // Panggil fungsi deleteEvent
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,

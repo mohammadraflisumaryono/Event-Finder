@@ -83,13 +83,13 @@ class EventRepository {
   }
 
 // Update data event
-  Future<dynamic> updateEventApi(String eventId, dynamic data) async {
-    try {
-      dynamic response = await _apiServices.getPutApiResponse(
-          AppUrl.eventEndPoint + '/$eventId', data);
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  // Future<dynamic> updateEventApi(String eventId, dynamic data) async {
+  //   try {
+  //     dynamic response = await _apiServices.getPutApiResponse(
+  //         AppUrl.eventEndPoint + '/$eventId', data);
+  //     return response;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 }

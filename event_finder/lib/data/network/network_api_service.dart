@@ -8,19 +8,31 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 
-class NetworkApiService extends BaseApiServices {
-  String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzYyNGQ4MGNlNzI0YTRmY2I4MjMzOGMiLCJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5kb2FhYWVAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzUxODMyOTksImV4cCI6MTczNTU0MzI5OX0.77y5a-cBDx4E3LZ-DsFGHUv8Ngp6RSmfAU29YT2R-6U';
+import '../../view_model/user_preferences.dart';
 
+class NetworkApiService extends BaseApiServices {
+  // Ambil token dari UserPreferences
+  Future<String> _getToken() async {
+    String? token =
+        await UserPreferences.getToken(); // Ambil token dari SharedPreferences
+    if (token == null || token.isEmpty) {
+      throw FetchDataException('Token is missing');
+    }
+    return token;
+  }
+  
   @override
   Future getGetApiResponse(String url) async {
     dynamic responseJson;
     print('url network: $url');
     try {
+      String token = await _getToken();
+
       final response = await http.get(Uri.parse(url), headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
-        'Expires': '0'
+        'Expires': '0',
+        'Authorization': 'Bearer $token',
       }).timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
@@ -35,8 +47,9 @@ class NetworkApiService extends BaseApiServices {
     print('url network: data: $data');
     try {
       // Menampilkan data yang akan dikirim ke server
-
       print("Data yang dikirim ke server: ${jsonEncode(data)}");
+
+      String token = await _getToken();
 
       Response response =
           await post(Uri.parse(url), body: jsonEncode(data), headers: {
@@ -59,6 +72,8 @@ class NetworkApiService extends BaseApiServices {
       List<int> imageBytes, String fileName) async {
     dynamic responseJson;
     try {
+      String token = await _getToken();
+
       var request = http.MultipartRequest('POST', Uri.parse(url));
 
       // Add headers
@@ -96,6 +111,7 @@ class NetworkApiService extends BaseApiServices {
   Future getPutApiResponse(String url, dynamic data) async {
     dynamic responseJson;
     try {
+      String token = await _getToken();
       // Menampilkan data yang akan dikirim ke server
       print("Data yang dikirim ke server: ${jsonEncode(data)}");
 
