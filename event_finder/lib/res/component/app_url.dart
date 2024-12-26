@@ -21,4 +21,8 @@ class AppUrl {
   static String eventById(String id) {
     return '${baseUrl}events/$id';
   }
+
+  static String eventByOrganizer(String id) {
+    return '${baseUrl}events/organizer/$id';
+  }
 }

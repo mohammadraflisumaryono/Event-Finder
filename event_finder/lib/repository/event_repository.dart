@@ -8,6 +8,7 @@ import 'package:event_finder/res/component/app_url.dart';
 class EventRepository {
   final BaseApiServices _apiServices = NetworkApiService();
 
+  // Ambil semua data event
   Future<EventListModel> fetchEventsList() async {
     try {
       dynamic response =
@@ -18,6 +19,7 @@ class EventRepository {
     }
   }
 
+  // Membuat data event
   Future<dynamic> createEventApi(dynamic data) async {
     try {
       dynamic response =
@@ -28,6 +30,7 @@ class EventRepository {
     }
   }
 
+  // Ambil data event berdasarkan trending/views
   Future<dynamic> getTrendingEventApi() async {
     try {
       dynamic response =
@@ -51,6 +54,17 @@ class EventRepository {
         fileName,
       );
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Ambil data event berdasarkan ID organizer
+  Future<dynamic> getEventByOrganizerApi(String organizerId) async {
+    try {
+      dynamic response =
+          await _apiServices.getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
+      return response = EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

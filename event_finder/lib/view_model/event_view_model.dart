@@ -86,6 +86,34 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
+  // Mengambil data event by Organizer ID
+  Future<void> fetchEventsByOrganizer(String organizerId) async {
+    setEventList(ApiResponse.loading());
+    try {
+      final value = await _myRepo.getEventByOrganizerApi(organizerId);
+      final allEvents = value.events?.toList()
+        ?..sort((a, b) => a.date!
+            .compareTo(b.date!)); // Urutkan berdasarkan tanggal terlebih dahulu
+
+      // Mengurutkan berdasarkan status setelah tanggal diurutkan
+      allEvents?.sort((a, b) {
+        // Prioritaskan status: approved > pending > rejected
+        if (a.status == 'approved' && b.status != 'approved') {
+          return -1;
+        } else if (a.status == 'pending' && b.status == 'rejected') {
+          return -1;
+        } else if (a.status == 'rejected' && b.status != 'rejected') {
+          return 1;
+        }
+        return 0; // Jika status sama, urutkan berdasarkan tanggal yang sudah dilakukan sebelumnya
+      });
+
+      setEventList(ApiResponse.completed(EventListModel(events: allEvents)));
+    } catch (error) {
+      setEventList(ApiResponse.error(error.toString()));
+    }
+  }
+
   bool _loading = false;
   bool get loading => _loading;
 
@@ -102,8 +130,6 @@ class EventViewModel with ChangeNotifier {
     _myRepo.createEventApi(data).then((value) {
       setLoading(false);
       Utils.toastMessage('Event Created Successfully');
-      Navigator.pop(
-          context, RoutesName.adminHome); // Kembali ke halaman sebelumnya
       if (kDebugMode) {
         print(value.toString());
       }
