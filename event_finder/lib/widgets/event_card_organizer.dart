@@ -44,7 +44,7 @@ class EventCardOrganizer extends StatelessWidget {
               ),
             ),
             // Menampilkan tombol Edit dan Delete hanya jika status event adalah pending
-            if (isOrganizer && event.status == 'pending') ...[
+            if (isOrganizer && event.status == 'Pending') ...[
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
