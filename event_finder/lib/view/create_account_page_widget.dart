@@ -65,6 +65,12 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Image.asset(
+                    'lib/res/assets/images/logogoova.png',
+                    height: 150, 
+                    width: 150,
+                  ),
+                  const SizedBox(height: 20),
                   Center(
                     child: Text(
                       "Wanna up some event?",
@@ -81,7 +87,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                     decoration: InputDecoration(
                       hintText: "Full Name",
                       prefixIcon: Icon(
-                        Icons.email_outlined,
+                        Icons.person_outlined,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
@@ -106,7 +112,7 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                     decoration: InputDecoration(
                       hintText: "Password",
                       prefixIcon: Icon(
-                        Icons.email_outlined,
+                        Icons.lock_outlined,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       suffixIcon: Row(

@@ -1,184 +1,197 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:event_finder/res/theme.dart'; // Import your AppTheme
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  final String title;
+  final String location;
+  final String date;
+  final String participants;
+  final String description;
+  final String mapLocation;
+  final double price;
+  final String imageUrl;
+
+  const DetailPage({
+    super.key,
+    required this.title,
+    required this.location,
+    required this.date,
+    required this.participants,
+    required this.description,
+    required this.mapLocation,
+    required this.price,
+    required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.lightTheme; // Access the custom theme
-
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: Icon(CupertinoIcons.back, color: theme.iconTheme.color),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        middle: Text("Event Details", style: theme.appBarTheme.titleTextStyle),
-        border: null,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Event Details'),
+        centerTitle: true,
       ),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Event Image with Overlay
-              Stack(
-                children: [
-                  Image.network(
-                    "https://images.unsplash.com/photo-1587502536263-92963ecadcf0", // Placeholder URL
-                    width: double.infinity,
-                    height: 250,
-                    fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Event image
+            Stack(
+              children: [
+                Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                    ),
+                    image: DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  Positioned(
-                    bottom: 20,
-                    left: 16,
-                    right: 16,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: theme.scaffoldBackgroundColor,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
+                ),
+                Positioned(
+                  top: 20,
+                  left: 10,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Event details card
+                  Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Coldplay : Music of the Spheres",
-                            style: theme.textTheme.titleLarge,
+                            title,
+                            style: GoogleFonts.outfit(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(CupertinoIcons.location, size: 16, color: theme.iconTheme.color),
-                              const SizedBox(width: 4),
-                              Text(
-                                "Gelora Bung Karno Stadium, Jakarta",
-                                style: theme.textTheme.bodyMedium,
-                              ),
+                              const Icon(Icons.location_on, size: 20),
+                              const SizedBox(width: 5),
+                              Text(location,
+                                  style: Theme.of(context).textTheme.bodyMedium),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(CupertinoIcons.calendar, size: 16, color: theme.iconTheme.color),
-                              const SizedBox(width: 4),
-                              Text("November 15 2023", style: theme.textTheme.bodyMedium),
+                              const Icon(Icons.date_range, size: 20),
+                              const SizedBox(width: 5),
+                              Text(date,
+                                  style: Theme.of(context).textTheme.bodyMedium),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(CupertinoIcons.person_2, size: 16, color: theme.iconTheme.color),
-                              const SizedBox(width: 4),
-                              Text(
-                                "50K+ Participants",
-                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                              ),
+                              const Icon(Icons.people, size: 20),
+                              const SizedBox(width: 5),
+                              Text(participants,
+                                  style: Theme.of(context).textTheme.bodyMedium),
                             ],
                           ),
                         ],
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 20),
+
+                  // Description
+                  Text(
+                    "Description",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Map Section
+                  Text(
+                    "Venue & Location",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      mapLocation,
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Price and Buy Ticket Button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Start from",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      Text(
+                        "IDR ${price.toStringAsFixed(3)}",
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add ticket purchasing logic
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text("Buy Ticket"),
+                  ),
                 ],
               ),
-              const SizedBox(height: 16),
-
-              // Description Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Description",
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Integer id augue iaculis, iaculis orci ut, blandit quam. Donec in elit auctor, finibus quam in, pharetra velit. Proin id ligula dictum, covalis enim ut, facilisis massa. Mauris a nisi ut sapien blandit imperdiet.",
-                      style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                    ),
-                    const SizedBox(height: 8),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      child: Text(
-                        "Read More..",
-                        style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.secondary),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Venue & Location Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Venue & Location",
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        "https://maps.googleapis.com/maps/api/staticmap?center=San+Francisco&zoom=13&size=600x300&key=YOUR_API_KEY", // Placeholder Map
-                        width: double.infinity,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Price and Buy Button Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Start from",
-                          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                        ),
-                        Text(
-                          "IDR 1.100.000",
-                          style: theme.textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                    CupertinoButton.filled(
-                      child: const Text("Buy Ticket"),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

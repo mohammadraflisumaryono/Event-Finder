@@ -26,7 +26,6 @@ class NetworkApiService extends BaseApiServices {
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
-
     return responseJson;
   }
 
@@ -90,6 +89,28 @@ class NetworkApiService extends BaseApiServices {
     } catch (e) {
       throw FetchDataException('Error occurred: ${e.toString()}');
     }
+    return responseJson;
+  }
+
+  @override
+  Future getPutApiResponse(String url, dynamic data) async {
+    dynamic responseJson;
+    try {
+      // Menampilkan data yang akan dikirim ke server
+      print("Data yang dikirim ke server: ${jsonEncode(data)}");
+
+      Response response =
+          await put(Uri.parse(url), body: jsonEncode(data), headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        'Authorization': 'Bearer $token',
+      }).timeout(Duration(seconds: 10));
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+
     return responseJson;
   }
 

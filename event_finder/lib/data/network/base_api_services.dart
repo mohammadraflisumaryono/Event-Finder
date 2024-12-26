@@ -5,4 +5,7 @@ abstract class BaseApiServices {
 
   Future<dynamic> postMultipartApiResponse(String url,
       Map<String, dynamic> data, List<int> imageBytes, String fileName);
+
+  // Put Request
+  Future<dynamic> getPutApiResponse(String url, dynamic data);
 }

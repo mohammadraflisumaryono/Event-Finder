@@ -13,6 +13,10 @@ class EventRepository {
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
+
+      response['data'].forEach((element) {
+        element['image'] = AppUrl.ImageUrl + element['image'];
+      });
       return response = EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -35,6 +39,12 @@ class EventRepository {
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
+
+      // concat response with base url AppUrl.baseUrl/uploads/images/imageName
+      response['data'].forEach((element) {
+        element['image'] = AppUrl.ImageUrl + element['image'];
+      });
+
       return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -67,6 +77,17 @@ class EventRepository {
 
           print(response);
       return EventListModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+// Update data event
+  Future<dynamic> updateEventApi(String eventId, dynamic data) async {
+    try {
+      dynamic response = await _apiServices.getPutApiResponse(
+          AppUrl.eventEndPoint + '/$eventId', data);
+      return response;
     } catch (e) {
       rethrow;
     }

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/widgets/trending_event_carousel.dart';
+import 'package:event_finder/widgets/event_card.dart';
 import 'package:provider/provider.dart';
+import 'package:event_finder/view/event_list_page.dart'; // Adjust the path according to your project structure
 
 import '../data/response/status.dart';
 
@@ -22,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<EventViewModel>(context, listen: false).fetchTrendingEvents();
+      Provider.of<EventViewModel>(context, listen: false).getLatestEvents();
     });
   }
 
@@ -86,6 +89,17 @@ class _HomePageState extends State<HomePage> {
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.surface,
                 ),
+                onSubmitted: (value) {
+                  Provider.of<EventViewModel>(context, listen: false)
+                      .fetchSearchAndCategory(query: value, category: null);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EventListPage(searchQuery: value, category: null),
+                    ),
+                  );
+                },
               ),
               SizedBox(height: 16),
               SingleChildScrollView(
@@ -97,9 +111,11 @@ class _HomePageState extends State<HomePage> {
                       .toList(),
                 ),
               ),
+
               SizedBox(height: 24),
               _buildSectionHeader(context, 'Trending Events'),
               SizedBox(height: 16),
+
               Consumer<EventViewModel>(
                 builder: (context, viewModel, child) {
                   if (viewModel.eventsList.status == Status.LOADING) {
@@ -117,13 +133,43 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
-              // Bagian Events Near You (tetap sama)
-              _buildSectionHeader(context, 'Events Near You'),
+              // Menampilkan event terbaru menggunakan EventCard
+              _buildSectionHeader(context, 'Latest Event'),
               SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [],
+              Consumer<EventViewModel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.latestEvent.status == Status.LOADING) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (viewModel.latestEvent.status == Status.COMPLETED) {
+                    final events = viewModel.latestEvent.data?.events;
+                    if (events != null && events.isNotEmpty) {
+                      // Ambil 6 event terbaru
+                      final latestEvents = events.take(6).toList();
+                      print('Latest events: $latestEvents');
+
+                      // Tampilkan daftar event
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: latestEvents.length,
+                        itemBuilder: (context, index) {
+                          final event = latestEvents[index];
+                          return EventCard(
+                              event); // Gantikan dengan widget yang sesuai untuk menampilkan event
+                        },
+                      );
+                    } else {
+                      return Center(child: Text('No latest events found.'));
+                    }
+                  } else if (viewModel.latestEvent.status == Status.ERROR) {
+                    return Center(
+                      child: Text('Error: ${viewModel.latestEvent.message}'),
+                    );
+                  } else {
+                    return Center(child: Text('No latest events found.'));
+                  }
+                },
               ),
+              SizedBox(height: 24),
             ],
           ),
         ),
@@ -134,12 +180,25 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCategoryChip(BuildContext context, String categoryName) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Chip(
-        label: Text(
-          categoryName,
-          style: Theme.of(context).textTheme.bodyMedium,
+      child: GestureDetector(
+        onTap: () {
+          Provider.of<EventViewModel>(context, listen: false)
+              .fetchSearchAndCategory(query: null, category: categoryName);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  EventListPage(searchQuery: '', category: categoryName),
+            ),
+          );
+        },
+        child: Chip(
+          label: Text(
+            categoryName,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          backgroundColor: Theme.of(context).chipTheme.backgroundColor,
         ),
-        backgroundColor: Theme.of(context).chipTheme.backgroundColor,
       ),
     );
   }
