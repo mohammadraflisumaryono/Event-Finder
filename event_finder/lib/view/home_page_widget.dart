@@ -81,8 +81,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         elevation: 0,
         leading: Image.asset(
           'lib/res/assets/images/logo goova.png',
-          width: 40,
-          height: 40,
+          width: 100,
+          height: 100,
         ),
         actions: [
           TextButton(

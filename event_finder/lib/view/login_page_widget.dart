@@ -55,9 +55,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Image.asset(
-                    '/lib/res/assets/images/logo.png',
-                    height: 100, 
-                    width: 100,
+                    'lib/res/assets/images/logogoova.png',
+                    height: 150, 
+                    width: 150,
                   ),
                   const SizedBox(height: 20),
                   Text(
