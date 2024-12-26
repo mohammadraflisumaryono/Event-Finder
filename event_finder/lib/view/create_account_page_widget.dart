@@ -4,8 +4,14 @@ import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/view/login_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/utils.dart';
 import '../view_model/auth_view_model.dart';
+
+Future<void> saveUserId(String userId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('userId', userId);
+}
 
 class CreateAccountPageWidget extends StatefulWidget {
   const CreateAccountPageWidget({super.key});
@@ -131,26 +137,30 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                   const SizedBox(height: 25),
                   ElevatedButton(
                         onPressed: () async {
-                          final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-                          if (nameTextController.text.isEmpty) {
-                            Utils.toastMessage('Please Enter Name');
-                          } else if (emailTextController.text.isEmpty) {
-                            Utils.toastMessage('Please Enter Email');
-                          } else if (passwordTextController.text.isEmpty) {
-                            Utils.toastMessage('Please Enter Password');
-                          } else if (passwordTextController.text.length < 6) {
-                            Utils.toastMessage('Please Enter 6 Digit Password');
-                          } else {
-                            Map<String, dynamic> data = {
-                              'name': nameTextController.text.toString(),
-                              'email': emailTextController.text.toString(),
-                              'password': passwordTextController.text.toString(),
-                            };
+                        final authViewModel =
+                            Provider.of<AuthViewModel>(context, listen: false);
 
-                            authViewModel.registerApi(data, context);
-                            print('api hit');
+                        if (nameTextController.text.isEmpty) {
+                          Utils.toastMessage('Please Enter Name');
+                        } else if (emailTextController.text.isEmpty) {
+                          Utils.toastMessage('Please Enter Email');
+                        } else if (passwordTextController.text.isEmpty) {
+                          Utils.toastMessage('Please Enter Password');
+                        } else if (passwordTextController.text.length < 6) {
+                          Utils.toastMessage('Please Enter 6 Digit Password');
+                        } else {
+                          // Membuat data yang akan dikirim ke API
+                          Map<String, dynamic> data = {
+                            'name': nameTextController.text.toString(),
+                            'email': emailTextController.text.toString(),
+                            'password': passwordTextController.text.toString(),
+                          };
+
+                          // Panggil fungsi register API
+                          await authViewModel.registerApi(data, context);
+                          print('api hit');
                         }
-                    },
+                      },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(

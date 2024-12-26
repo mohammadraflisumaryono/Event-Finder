@@ -137,7 +137,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           'password': passwordTextController.text.toString(),
                         };
 
-                      authViewModel.loginApi(data, context);
+                      await authViewModel.loginApi(data, context);
                       print('api hit');
                     }
                   },

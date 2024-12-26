@@ -69,6 +69,7 @@ class HomeAdminEventPage extends StatelessWidget {
             builder: (context, eventViewModel, child) {
               // Menunggu data event dikategorikan berdasarkan status
               if (eventViewModel.eventsList.status == Status.LOADING) {
+                print('loading..');
                 return Center(child: CircularProgressIndicator());
               }
 
@@ -80,6 +81,8 @@ class HomeAdminEventPage extends StatelessWidget {
 
               final categorizedEvents =
                   eventViewModel.eventsList.data?.events ?? [];
+
+              print(categorizedEvents);
 
               // Pastikan categorizedEvents memiliki data
               if (categorizedEvents.isEmpty) {

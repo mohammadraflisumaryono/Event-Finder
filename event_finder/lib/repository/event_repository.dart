@@ -72,9 +72,11 @@ class EventRepository {
   // Ambil data event berdasarkan ID organizer
   Future<dynamic> getEventByOrganizerApi(String organizerId) async {
     try {
-      dynamic response = await _apiServices
-          .getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
-      return response = EventListModel.fromJson(response);
+      dynamic response =
+          await _apiServices.getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
+
+          print(response);
+      return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
