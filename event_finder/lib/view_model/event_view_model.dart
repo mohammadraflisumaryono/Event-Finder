@@ -14,9 +14,16 @@ class EventViewModel with ChangeNotifier {
   final _myRepo = EventRepository();
 
   ApiResponse<EventListModel> eventsList = ApiResponse.loading();
+  // State khusus untuk Latest Event
+  ApiResponse<EventListModel> latestEvent = ApiResponse.loading();
 
   setEventList(ApiResponse<EventListModel> response) {
     eventsList = response;
+    notifyListeners();
+  }
+
+  setLatestEvent(ApiResponse<EventListModel> response) {
+    latestEvent = response;
     notifyListeners();
   }
 
@@ -48,7 +55,6 @@ class EventViewModel with ChangeNotifier {
   }
 
   Future<void> fetchTrendingEvents() async {
-    print('Fetching trending events...');
     setEventList(ApiResponse.loading()); // Menandai state sebagai "loading"
 
     try {
@@ -196,6 +202,24 @@ class EventViewModel with ChangeNotifier {
       if (kDebugMode) {
         print('Error creating event: ${error.toString()}');
       }
+    }
+  }
+
+  // get latest event
+  Future<void> getLatestEvent() async {
+    setLatestEvent(ApiResponse.loading());
+    try {
+      final value = await _myRepo.fetchEventsList();
+      final latestEvent = value.events?.first;
+      if (latestEvent != null) {
+        setLatestEvent(
+          ApiResponse.completed(EventListModel(events: [latestEvent])),
+        );
+      } else {
+        setLatestEvent(ApiResponse.error("No events found"));
+      }
+    } catch (error) {
+      setLatestEvent(ApiResponse.error(error.toString()));
     }
   }
 }

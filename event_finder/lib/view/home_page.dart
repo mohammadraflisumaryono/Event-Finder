@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/widgets/trending_event_carousel.dart';
+import 'package:event_finder/widgets/event_card.dart';
 import 'package:provider/provider.dart';
 
 import '../data/response/status.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<EventViewModel>(context, listen: false).fetchTrendingEvents();
+      Provider.of<EventViewModel>(context, listen: false).getLatestEvent();
     });
   }
 
@@ -117,13 +119,29 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
-              // Bagian Events Near You (tetap sama)
-              _buildSectionHeader(context, 'Events Near You'),
+              // Menampilkan event terbaru menggunakan EventCard
+              _buildSectionHeader(context, 'Latest Event'),
               SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [],
+              Consumer<EventViewModel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.latestEvent.status == Status.LOADING) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (viewModel.latestEvent.status == Status.COMPLETED) {
+                    final event = viewModel.latestEvent.data?.events?.first;
+                    if (event != null) {
+                      return EventCard(event);
+                    } else {
+                      return Center(child: Text('No latest event found.'));
+                    }
+                  } else if (viewModel.latestEvent.status == Status.ERROR) {
+                    return Center(
+                        child: Text('Error: ${viewModel.latestEvent.message}'));
+                  } else {
+                    return Center(child: Text('No latest event found.'));
+                  }
+                },
               ),
+              SizedBox(height: 24),
             ],
           ),
         ),
