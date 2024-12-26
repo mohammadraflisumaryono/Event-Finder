@@ -71,7 +71,8 @@ exports.loginUser = async (req, res, next) => {
         let tokenData = {
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            role: user.role
         };
 
         const token = await UserServices.generateToken(tokenData, process.env.JWT_SECRET, '100h');

@@ -10,12 +10,12 @@ exports.createEvent = async (req, res) => {
         // Mendapatkan data dari body
         const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
 
+
         // Cek apakah time dalam bentuk string dan ubah menjadi object
         let eventTime = {};
         if (typeof time === 'string') {
             try {
-                // Mengambil string time dan mengonversinya ke objek dengan properti start dan end
-                eventTime = JSON.parse(time); // pastikan waktu dalam format JSON yang valid
+                eventTime = JSON.parse(time);
             } catch (error) {
                 return res.status(400).json({
                     status: 'error',
@@ -24,7 +24,7 @@ exports.createEvent = async (req, res) => {
                 });
             }
         } else if (typeof time === 'object' && time !== null) {
-            eventTime = time; // time sudah berupa object
+            eventTime = time;
         } else {
             return res.status(400).json({
                 status: 'error',
@@ -33,7 +33,7 @@ exports.createEvent = async (req, res) => {
             });
         }
 
-        // Pastikan time.start dan time.end dalam format tanggal
+        // Validasi waktu
         if (!eventTime.start || !eventTime.end) {
             return res.status(400).json({
                 status: 'error',
@@ -42,7 +42,6 @@ exports.createEvent = async (req, res) => {
             });
         }
 
-        // Pastikan start dan end adalah tanggal yang valid
         const startDate = new Date(eventTime.start);
         const endDate = new Date(eventTime.end);
 
@@ -54,7 +53,7 @@ exports.createEvent = async (req, res) => {
             });
         }
 
-        // Dapatkan userId dari req.user (dari middleware verifyToken)
+        // Dapatkan userId dari req.user
         const userId = req.user._id;
 
         console.log('User ID:', userId);
@@ -67,30 +66,30 @@ exports.createEvent = async (req, res) => {
             });
         }
 
-        // Menyimpan hanya nama file gambar
-        let imageFileName = null;
+        // Menyimpan URL gambar dari Cloudinary
+        let imageUrl = null;
         if (req.file) {
-            // Mendapatkan nama file gambar yang diupload (tanpa path lengkap)
-            imageFileName = req.file.filename; // hanya nama file yang disimpan
+            imageUrl = req.file.path; // Cloudinary memberikan URL lengkap di req.file.path
         }
 
-        // Menyiapkan data event dengan userId
+        // Menyiapkan data event
         const eventData = {
             title,
             date,
             time: { start: startDate, end: endDate },
             location,
             description,
-            image: imageFileName, // Menyimpan hanya nama file
+            image: imageUrl, // Menyimpan URL Cloudinary
             category,
             ticket_price,
             registration_link,
             status: 'pending',
             views: 0,
-            userId  // Menyertakan userId yang sudah didapatkan dari JWT
+            userId
         };
 
-        // Membuat event dengan data yang sudah diproses
+        console.log('Event data:', eventData);
+
         const newEvent = await EventService.createEvent(eventData, userId);
         res.status(201).json({
             status: 'success',
@@ -302,4 +301,47 @@ exports.eventByOrganizer = async (req, res) => {
             message: `Error fetching events: ${error.message}`
         });
     }
-};
+}
+
+exports.approveEvent = async (req, res) => {
+    try {
+        console.log('Approving event... User:', req.user);
+        console.log('Approving event... Event ID:', req.params.eventId);
+        console.log('Approving event... Status:', req.body.status);
+        const eventId = req.params.eventId;
+        const status = req.body.status;
+
+        // require status
+        if (status !== 'approved' && status !== 'rejected') {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Status is required'
+            });
+        }
+
+
+        // require admin role
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({
+                status: 'error',
+                data: null,
+                message: 'Unauthorized to approve event'
+            });
+        }
+
+        const event = await EventService.approveEvent(eventId, status);
+        res.status(200).json({
+            status: 'success',
+            data: event,
+            message: 'Event updated successfully'
+        });
+    } catch (error) {
+        console.error('Error updating event:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Failed to update event: ${error.message}`
+        });
+    }
+}

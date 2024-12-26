@@ -7,14 +7,43 @@ import '../data/response/status.dart';
 import '../model/events_model.dart';
 import '../model/status_event.dart';
 import '../view_model/event_view_model.dart';
+import '../view_model/user_preferences.dart';
 import '../widgets/event_card_organizer.dart';
 import '../widgets/edit_event_dialog.dart';
 
 
-class HomeAdminEventPage extends StatelessWidget {
-  final bool isAdmin;
+class HomeAdminEventPage extends StatefulWidget {
+  final bool isOrganizer;
 
-  HomeAdminEventPage({required this.isAdmin});
+  HomeAdminEventPage({required this.isOrganizer});
+
+  @override
+  _HomeAdminEventPageState createState() => _HomeAdminEventPageState();
+}
+
+class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
+  late String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserIdAndFetchEvents();
+  }
+
+  // Memuat userId dari SharedPreferences dan fetch event
+  void _loadUserIdAndFetchEvents() async {
+    String? fetchedUserId = await UserPreferences.getUserId();
+    if (fetchedUserId != null) {
+      setState(() {
+        userId = fetchedUserId;
+      });
+      // Setelah userId didapat, panggil fetchAndCategorizeEvents
+      await Provider.of<EventViewModel>(context, listen: false)
+          .fetchAndCategorizeEvents(userId);
+    } else {
+      print('User is not logged in');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,16 +95,13 @@ class HomeAdminEventPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Consumer untuk menampilkan data event
           Consumer<EventViewModel>(
             builder: (context, eventViewModel, child) {
-              // Menunggu data event dikategorikan berdasarkan status
               if (eventViewModel.eventsList.status == Status.LOADING) {
                 print('loading..');
                 return Center(child: CircularProgressIndicator());
               }
 
-              // Jika ada error
               if (eventViewModel.eventsList.status == Status.ERROR) {
                 return Center(
                     child: Text('Error: ${eventViewModel.eventsList.message}'));
@@ -176,7 +202,7 @@ class HomeAdminEventPage extends StatelessWidget {
         itemCount: events.length,
         itemBuilder: (context, index) {
           return EventCardOrganizer(
-            isAdmin: true, 
+            isOrganizer: true, 
             event: events[index],
           );
         },

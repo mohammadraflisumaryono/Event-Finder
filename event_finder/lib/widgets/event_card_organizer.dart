@@ -45,7 +45,8 @@ class EventCardOrganizer extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
-            if (isAdmin) ...[
+            // Menampilkan tombol Edit dan Delete hanya jika status event adalah pending
+            if (isOrganizer && event.status == 'Pending') ...[
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -71,10 +72,7 @@ class EventCardOrganizer extends StatelessWidget {
                   SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      // Tambahkan logika untuk menghapus event
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Event Deleted')),
-                      );
+                      // deleteEvent(context); // Panggil fungsi deleteEvent
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,

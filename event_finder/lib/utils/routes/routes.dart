@@ -18,7 +18,7 @@ class Routes {
       case RoutesName.search:
         return MaterialPageRoute(
             builder: (context) => SearchResultPageWidget(query: ''));
-      case RoutesName.DetailPage:
+      case RoutesName.detailEvent:
         return MaterialPageRoute(builder: (context) => DetailPage());
       case RoutesName.login:
         return MaterialPageRoute(builder: (context) => LoginPageWidget());
@@ -27,7 +27,7 @@ class Routes {
             builder: (context) => CreateAccountPageWidget());
       case RoutesName.adminHome:
         return MaterialPageRoute(
-            builder: (context) => HomeAdminEventPage(isAdmin: true));
+            builder: (context) => HomeAdminEventPage(isOrganizer: true));
       case RoutesName.createEvent:
         return MaterialPageRoute(builder: (context) => CreateEventPage());
       case RoutesName.superAdmin:

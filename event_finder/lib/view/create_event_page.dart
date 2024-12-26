@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/routes/routes_name.dart';
+
 class CreateEventPage extends StatefulWidget {
   @override
   _CreateEventPageState createState() => _CreateEventPageState();
