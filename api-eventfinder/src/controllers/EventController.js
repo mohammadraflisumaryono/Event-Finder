@@ -10,6 +10,7 @@ exports.createEvent = async (req, res) => {
         // Mendapatkan data dari body
         const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
 
+
         // Cek apakah time dalam bentuk string dan ubah menjadi object
         let eventTime = {};
         if (typeof time === 'string') {
@@ -86,6 +87,8 @@ exports.createEvent = async (req, res) => {
             views: 0,
             userId
         };
+
+        console.log('Event data:', eventData);
 
         const newEvent = await EventService.createEvent(eventData, userId);
         res.status(201).json({
