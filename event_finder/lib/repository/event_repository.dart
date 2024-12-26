@@ -37,11 +37,6 @@ class EventRepository {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
 
-      // concat response with base url AppUrl.baseUrl/uploads/images/imageName
-      response['data'].forEach((element) {
-        element['image'] = AppUrl.ImageUrl + element['image'];
-      });
-
       return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
