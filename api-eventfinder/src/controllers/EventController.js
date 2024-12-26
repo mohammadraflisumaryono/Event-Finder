@@ -236,4 +236,26 @@ exports.getTrendingEvent = async (req, res) => {
             message: `Error fetching trending events: ${error.message}`
         });
     }
+
+
+};
+
+// Fungsi untuk mendapatkan event berdasarkan organizer
+exports.eventByOrganizer = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const events = await EventService.getEventsByOrganizer(userId);
+        res.status(200).json({
+            status: 'success',
+            data: events,
+            message: 'Events fetched successfully'
+        });
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching events: ${error.message}`
+        });
+    }
 };

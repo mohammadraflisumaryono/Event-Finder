@@ -96,6 +96,7 @@ class EventViewModel with ChangeNotifier {
 
   // Fungsi untuk membuat event baru menggunakan API
   Future<void> createEventApi(dynamic data, BuildContext context) async {
+    print('dataaa $data');
     setLoading(true);
 
     _myRepo.createEventApi(data).then((value) {
