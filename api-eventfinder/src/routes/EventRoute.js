@@ -33,6 +33,9 @@ router.get('/trending', eventController.getTrendingEvent);
 // Get events by organizer
 router.get('/events/organizer/:userId', verifyToken, eventController.eventByOrganizer);
 
+// update status event by admin
+router.put('/events/status/:eventId', verifyToken, eventController.approveEvent);
+
 
 
 

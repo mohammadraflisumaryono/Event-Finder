@@ -302,4 +302,47 @@ exports.eventByOrganizer = async (req, res) => {
             message: `Error fetching events: ${error.message}`
         });
     }
-};
+}
+
+exports.approveEvent = async (req, res) => {
+    try {
+        console.log('Approving event... User:', req.user);
+        console.log('Approving event... Event ID:', req.params.eventId);
+        console.log('Approving event... Status:', req.body.status);
+        const eventId = req.params.eventId;
+        const status = req.body.status;
+
+        // require status
+        if (status !== 'approved' && status !== 'rejected') {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Status is required'
+            });
+        }
+
+
+        // require admin role
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({
+                status: 'error',
+                data: null,
+                message: 'Unauthorized to approve event'
+            });
+        }
+
+        const event = await EventService.approveEvent(eventId, status);
+        res.status(200).json({
+            status: 'success',
+            data: event,
+            message: 'Event updated successfully'
+        });
+    } catch (error) {
+        console.error('Error updating event:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Failed to update event: ${error.message}`
+        });
+    }
+}
