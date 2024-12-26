@@ -93,24 +93,39 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getPutApiResponse(String url, dynamic data) async {
+  Future getPutApiResponse(String url, Map<String, dynamic> data,
+      List<int> imageBytes, String fileName) async {
     dynamic responseJson;
     try {
-      // Menampilkan data yang akan dikirim ke server
-      print("Data yang dikirim ke server: ${jsonEncode(data)}");
+      var request = http.MultipartRequest('PUT', Uri.parse(url));
 
-      Response response =
-          await put(Uri.parse(url), body: jsonEncode(data), headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
+      // Add headers
+      request.headers.addAll({
         'Authorization': 'Bearer $token',
-      }).timeout(Duration(seconds: 10));
+        'Accept': 'application/json',
+      });
+
+      request.files.add(
+        http.MultipartFile.fromBytes('image', imageBytes,
+            filename: fileName, contentType: MediaType('image', 'png')),
+      );
+
+      // Add other fields
+      data.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Send request
+      var streamedResponse =
+          await request.send().timeout(Duration(seconds: 30));
+      var response = await http.Response.fromStream(streamedResponse);
 
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
+    } catch (e) {
+      throw FetchDataException('Error occurred: ${e.toString()}');
     }
-
     return responseJson;
   }
 

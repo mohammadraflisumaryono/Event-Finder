@@ -205,6 +205,54 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
+  // update event with image by id
+  Future<void> updateEventWithImage({
+    required Map<String, dynamic> eventData,
+    required List<int> imageBytes,
+    required String fileName,
+    required BuildContext context,
+    required String eventId,
+  }) async {
+    setLoading(true);
+
+    try {
+      // Menambahkan time_start dan time_end ke dalam objek time
+      final eventDataWithTime = {
+        ...eventData,
+        'time': jsonEncode({
+          'start': eventData['time_start'],
+          'end': eventData['time_end'],
+        }),
+        // Hapus properti time_start dan time_end yang sudah digabungkan
+        'time_start': null,
+        'time_end': null,
+      };
+
+      // Mengirim data ke API dengan format yang benar
+      final value = await _myRepo.updateEventWithImage(
+        eventData: eventDataWithTime,
+        imageBytes: imageBytes,
+        fileName: fileName,
+        eventId: eventId,
+      );
+
+      setLoading(false);
+      Utils.toastMessage('Event Updated Successfully');
+      Navigator.pop(context, RoutesName.adminHome);
+
+      if (kDebugMode) {
+        print('Event updated successfully: ${value.toString()}');
+      }
+    } catch (error) {
+      setLoading(false);
+      Utils.toastMessage(error.toString());
+
+      if (kDebugMode) {
+        print('Error updating event: ${error.toString()}');
+      }
+    }
+  }
+
   // get latest event
   Future<void> getLatestEvents() async {
     setLatestEvent(ApiResponse.loading());
