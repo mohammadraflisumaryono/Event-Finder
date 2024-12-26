@@ -1,14 +1,13 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'dart:io';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:event_finder/model/event_category.dart';
-
+import 'package:provider/provider.dart';
 
 class CreateEventPage extends StatefulWidget {
   @override
@@ -23,10 +22,20 @@ class _CreateEventPageState extends State<CreateEventPage> {
   TimeOfDay? _endTime;
   String? _location;
   String? _description;
-  String? _image;
+  Uint8List? _image;
   EventCategory? _category;
   double? _ticketPrice;
   String? _registrationLink;
+
+  DateTime convertTimeOfDayToDateTime(DateTime date, TimeOfDay time) {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -57,42 +66,26 @@ class _CreateEventPageState extends State<CreateEventPage> {
       });
     }
   }
+
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image, // Hanya mengizinkan file gambar
+      withData: true, // Meminta data file dalam bentuk byte
     );
 
-    if (result != null) {
-      setState(() {
-        _image = result.files.single.path;
-      });
-    }
-  }
+    if (result != null && result.files.isNotEmpty) {
+      final bytes =
+          result.files.single.bytes; // Mengakses data file dalam bentuk byte
 
-  void _submitForm() {
-    if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please select an image file")),
-      );
-      return;
-    }
-
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      print('Image path: $_image');
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Your event is created and awaiting approval by superadmin.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.pushNamed(context, RoutesName.adminHome);
-      });
+      if (bytes != null) {
+        setState(() {
+          _image = bytes; // Simpan data byte ke variabel
+        });
+      } else {
+        print('File bytes are null');
+      }
+    } else {
+      print('No file selected');
     }
   }
 
@@ -138,10 +131,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Event Title',
-                  hoverColor: const Color(0xFFF4F1F4),
-                  fillColor: const Color.fromARGB(255, 241, 240, 241),
-                  filled: true, // Aktifkan warna isi
-                  border: OutlineInputBorder(),
                 ),
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter a title' : null,
@@ -184,28 +173,21 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 onSaved: (value) => _description = value,
               ),
               SizedBox(height: 16),
-              Text("Event Image : "),
+              Text(
+                "Event Image :",
+                style: TextStyle(fontSize: 16),
+              ),
               Column(
                 children: [
                   ListTile(
-                    title: Text(_image == null
-                        ? 'No Image Selected'
-                        : 'Image Selected'),
+                    title: Text(
+                      _image == null ? 'No Image Selected' : 'Image Selected',
+                    ),
                     trailing: IconButton(
                       icon: Icon(Icons.file_upload),
                       onPressed: _pickFile,
                     ),
                   ),
-                  if (_image != null)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.file(
-                        File(_image!), // Menampilkan gambar berdasarkan path
-                        width: double.infinity,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
                 ],
               ),
               SizedBox(height: 16),
@@ -253,7 +235,59 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               SizedBox(height: 32),
               ElevatedButton(
-                onPressed: _submitForm,
+                onPressed: () async {
+                  if (_image == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Please select an image file")),
+                    );
+                    return;
+                  }
+
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+
+                    // Mendapatkan instance dari EventViewModel tanpa mendengarkan pembaruan
+                    var eventViewModel =
+                        Provider.of<EventViewModel>(context, listen: false);
+
+                        // Konversi TimeOfDay ke DateTime
+                    DateTime startDateTime =
+                        convertTimeOfDayToDateTime(_date!, _startTime!);
+                    DateTime endDateTime =
+                        convertTimeOfDayToDateTime(_date!, _endTime!);
+                      
+                    // Menyiapkan data untuk dikirimkan ke API
+                    Map<String, dynamic> data = {
+                      'title': _title,
+                      'date': _date!.toIso8601String(),
+                      'time_start': startDateTime.toIso8601String(),
+                      'time_end': endDateTime.toIso8601String(),
+                      'location': _location,
+                      'description': _description,
+                      'image': _image,
+                      'category': _category!.value,
+                      'ticket_price': _ticketPrice,
+                      'registration_link': _registrationLink,
+                    };
+
+                    // Panggil API untuk mengunggah event
+                    await eventViewModel.createEventApi(data, context);
+                    print('api hit');
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Your event is created and awaiting approval by Superadmin.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+
+                    // Setelah berhasil, arahkan ke halaman berikutnya
+                    Future.delayed(Duration(seconds: 3), () {
+                      Navigator.pushNamed(context, RoutesName.adminHome);
+                    });
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
@@ -263,9 +297,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 ),
                 child: Text(
                   'Create Event', // Tulisan pada button
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ],

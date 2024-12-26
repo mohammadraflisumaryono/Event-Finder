@@ -66,7 +66,6 @@ class EventViewModel with  ChangeNotifier {
     }
   }
 
-
   // Mengambil data event by time
   Future<void> fetchUpcomingEvents(DateTime currentDate) async {
   setEventList(ApiResponse.loading());
@@ -99,9 +98,9 @@ class EventViewModel with  ChangeNotifier {
       setLoading(false);
       Utils.toastMessage('Event Created Successfully');
       Navigator.pop(context, RoutesName.adminHome); // Kembali ke halaman sebelumnya
-      if (kDebugMode) {
-        print(value.toString());
-      }
+      // if (kDebugMode) {
+      //   print(value.toString());
+      // }
     }).onError((error, stackTrace) {
       setLoading(false);
       Utils.toastMessage(error.toString());
@@ -110,20 +109,4 @@ class EventViewModel with  ChangeNotifier {
       }
     });
   }
-
-  // Future<void> fetchEventListApi() async {
-
-  //   setEventList(ApiResponse.loading());
-
-  //   _myRepo.fetchEventsList().then((value){
-
-  //     setEventList(ApiResponse.completed(value));
-
-  //   }).onError((error, StackTrace) {
-
-  //     setEventList(ApiResponse.error(error.toString()));
-
-  //   });
-  // } 
-
  }
