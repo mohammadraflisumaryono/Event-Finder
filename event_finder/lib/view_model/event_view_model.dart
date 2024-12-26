@@ -5,6 +5,7 @@ import 'package:event_finder/repository/event_repository.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import '../utils/utils.dart';
 
@@ -150,9 +151,26 @@ class EventViewModel with ChangeNotifier {
   }) async {
     setLoading(true);
 
+    print(eventData);
+
     try {
+      // Menambahkan time_start dan time_end ke dalam objek time
+      final eventDataWithTime = {
+        ...eventData,
+        'time': jsonEncode({
+          'start': eventData['time_start'],
+          'end': eventData['time_end'],
+        }),
+        // Hapus properti time_start dan time_end yang sudah digabungkan
+        'time_start': null,
+        'time_end': null,
+      };
+
+      print('view model data : $eventDataWithTime');
+
+      // Mengirim data ke API dengan format yang benar
       final value = await _myRepo.createEventWithImageApi(
-        eventData: eventData,
+        eventData: eventDataWithTime,
         imageBytes: imageBytes,
         fileName: fileName,
       );

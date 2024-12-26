@@ -10,6 +10,50 @@ exports.createEvent = async (req, res) => {
         // Mendapatkan data dari body
         const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
 
+        // Cek apakah time dalam bentuk string dan ubah menjadi object
+        let eventTime = {};
+        if (typeof time === 'string') {
+            try {
+                // Mengambil string time dan mengonversinya ke objek dengan properti start dan end
+                eventTime = JSON.parse(time); // pastikan waktu dalam format JSON yang valid
+            } catch (error) {
+                return res.status(400).json({
+                    status: 'error',
+                    data: null,
+                    message: 'Invalid time format, should be a valid JSON string'
+                });
+            }
+        } else if (typeof time === 'object' && time !== null) {
+            eventTime = time; // time sudah berupa object
+        } else {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Time should be a valid object or JSON string'
+            });
+        }
+
+        // Pastikan time.start dan time.end dalam format tanggal
+        if (!eventTime.start || !eventTime.end) {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Start time and end time are required'
+            });
+        }
+
+        // Pastikan start dan end adalah tanggal yang valid
+        const startDate = new Date(eventTime.start);
+        const endDate = new Date(eventTime.end);
+
+        if (isNaN(startDate) || isNaN(endDate)) {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Start time or end time is invalid'
+            });
+        }
+
         // Dapatkan userId dari req.user (dari middleware verifyToken)
         const userId = req.user._id;
 
@@ -34,7 +78,7 @@ exports.createEvent = async (req, res) => {
         const eventData = {
             title,
             date,
-            time,
+            time: { start: startDate, end: endDate },
             location,
             description,
             image: imageFileName, // Menyimpan hanya nama file
