@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<EventViewModel>(context, listen: false).fetchTrendingEvents();
-      Provider.of<EventViewModel>(context, listen: false).getLatestEvent();
+      Provider.of<EventViewModel>(context, listen: false).getLatestEvents();
     });
   }
 
@@ -131,17 +131,31 @@ class _HomePageState extends State<HomePage> {
                   if (viewModel.latestEvent.status == Status.LOADING) {
                     return Center(child: CircularProgressIndicator());
                   } else if (viewModel.latestEvent.status == Status.COMPLETED) {
-                    final event = viewModel.latestEvent.data?.events?.first;
-                    if (event != null) {
-                      return EventCard(event);
+                    final events = viewModel.latestEvent.data?.events;
+                    if (events != null && events.isNotEmpty) {
+                      // Ambil 6 event terbaru
+                      final latestEvents = events.take(6).toList();
+                      print('Latest events: $latestEvents');
+
+                      // Tampilkan daftar event
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: latestEvents.length,
+                        itemBuilder: (context, index) {
+                          final event = latestEvents[index];
+                          return EventCard(
+                              event); // Gantikan dengan widget yang sesuai untuk menampilkan event
+                        },
+                      );
                     } else {
-                      return Center(child: Text('No latest event found.'));
+                      return Center(child: Text('No latest events found.'));
                     }
                   } else if (viewModel.latestEvent.status == Status.ERROR) {
                     return Center(
-                        child: Text('Error: ${viewModel.latestEvent.message}'));
+                      child: Text('Error: ${viewModel.latestEvent.message}'),
+                    );
                   } else {
-                    return Center(child: Text('No latest event found.'));
+                    return Center(child: Text('No latest events found.'));
                   }
                 },
               ),

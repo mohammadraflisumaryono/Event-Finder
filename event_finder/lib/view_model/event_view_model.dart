@@ -206,14 +206,16 @@ class EventViewModel with ChangeNotifier {
   }
 
   // get latest event
-  Future<void> getLatestEvent() async {
+  Future<void> getLatestEvents() async {
     setLatestEvent(ApiResponse.loading());
     try {
       final value = await _myRepo.fetchEventsList();
-      final latestEvent = value.events?.first;
-      if (latestEvent != null) {
+      // Ambil maksimal 6 event pertama dari daftar
+      final latestEvents = value.events?.take(6).toList();
+
+      if (latestEvents != null && latestEvents.isNotEmpty) {
         setLatestEvent(
-          ApiResponse.completed(EventListModel(events: [latestEvent])),
+          ApiResponse.completed(EventListModel(events: latestEvents)),
         );
       } else {
         setLatestEvent(ApiResponse.error("No events found"));
