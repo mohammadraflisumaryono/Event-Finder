@@ -6,6 +6,7 @@ import 'package:event_finder/data/app_exceptions.dart';
 import 'package:event_finder/data/network/base_api_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 
 class NetworkApiService extends BaseApiServices {
   String token =
@@ -69,11 +70,8 @@ class NetworkApiService extends BaseApiServices {
 
       // Add file
       request.files.add(
-        http.MultipartFile.fromBytes(
-          'image',
-          imageBytes,
-          filename: fileName,
-        ),
+        http.MultipartFile.fromBytes('image', imageBytes,
+            filename: fileName, contentType: MediaType('image', 'png')),
       );
 
       // Add other fields
