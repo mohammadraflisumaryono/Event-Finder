@@ -6,7 +6,11 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+
+// Atur batas ukuran payload pada body-parser
+app.use(bodyParser.json({ limit: '10mb' })); // Tingkatkan sesuai kebutuhan
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
 
 app.use('/api', UserRoute);
 app.use('/api', EventRoute);
