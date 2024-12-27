@@ -341,6 +341,22 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
+  // Fungsi untuk mengambil event berdasarkan status "pending"
+  Future<void> fetchEventByStatus() async {
+    setEventList(ApiResponse.loading());
+    try {
+      // Mengambil data event dengan status "pending"
+      final eventList = await _myRepo.getEventByStatusApi();
+      print('Event List fetched: $eventList');
+
+      // Membungkus List<Event> dalam EventListModel
+      setEventList(ApiResponse.completed(EventListModel(events: eventList)));
+    } catch (error) {
+      print(error.toString());
+      setEventList(ApiResponse.error(error.toString()));
+    }
+  }
+
   // Fungsi untuk mengubah status event menjadi "approved"
   Future<void> approveEvent(String eventId) async {
     try {
