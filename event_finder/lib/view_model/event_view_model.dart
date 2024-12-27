@@ -100,12 +100,6 @@ class EventViewModel with ChangeNotifier {
     try {
       final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);
 
-      // print('Events after deletion: ${eventListModel.events}');
-
-      // print('Response: $eventListModel');
-      // print('Event list model: ${eventListModel.events}');
-      // print('Total events fetched: ${eventListModel.events!.length}');
-
       // Mengelompokkan event berdasarkan status
       final Map<StatusEvent, List<Event>> categorizedEvents = {
         StatusEvent.approved: [],
@@ -132,7 +126,6 @@ class EventViewModel with ChangeNotifier {
       // Menambahkan notifyListeners untuk memberi tahu UI
       notifyListeners(); // Ini yang ditambahkan
     } catch (error) {
-      // print('Error: $error');
       setEventList(ApiResponse.error(error.toString()));
 
       // Menambahkan notifyListeners untuk memberi tahu UI saat terjadi error
@@ -277,19 +270,25 @@ class EventViewModel with ChangeNotifier {
   }) async {
     setEventList(ApiResponse.loading());
     try {
-      final value = await _myRepo.fetchEventsList();
+      // Jika query dan kategori null atau kosong, ambil semua event tanpa filter
+      if ((query == null || query.isEmpty) &&
+          (category == null || category.isEmpty)) {
+        final value = await _myRepo.fetchEventsList(); // Ambil semua event
+        setEventList(ApiResponse.completed(value));
+      } else {
+        final value = await _myRepo.fetchEventsList(); // Ambil semua event
+        // Filter berdasarkan query dan/atau kategori
+        final filteredEvents = value.events?.where((event) {
+          final matchesQuery = query == null ||
+              event.title?.toLowerCase().contains(query.toLowerCase()) == true;
+          final matchesCategory = category == null ||
+              event.category?.value.toLowerCase() == category.toLowerCase();
+          return matchesQuery && matchesCategory;
+        }).toList();
 
-      // Filter berdasarkan query dan/atau kategori
-      final filteredEvents = value.events?.where((event) {
-        final matchesQuery = query == null ||
-            event.title?.toLowerCase().contains(query.toLowerCase()) == true;
-        final matchesCategory = category == null ||
-            event.category?.value.toLowerCase() == category.toLowerCase();
-        return matchesQuery && matchesCategory;
-      }).toList();
-
-      setEventList(
-          ApiResponse.completed(EventListModel(events: filteredEvents)));
+        setEventList(
+            ApiResponse.completed(EventListModel(events: filteredEvents)));
+      }
     } catch (error) {
       setEventList(ApiResponse.error(error.toString()));
     }
@@ -333,7 +332,47 @@ class EventViewModel with ChangeNotifier {
       print('Event fetched: $value');
       setEventList(ApiResponse.completed(value));
     } catch (error) {
+      print(error.toString());
       setEventList(ApiResponse.error(error.toString()));
+    }
+  }
+
+  // Fungsi untuk mengambil event berdasarkan status "pending"
+  Future<void> fetchEventByStatus() async {
+    setEventList(ApiResponse.loading());
+    try {
+      // Mengambil data event dengan status "pending"
+      final eventList = await _myRepo.getEventByStatusApi();
+      print('Event List fetched: $eventList');
+
+      // Membungkus List<Event> dalam EventListModel
+      setEventList(ApiResponse.completed(EventListModel(events: eventList)));
+
+    } catch (error) {
+      print(error.toString());
+      setEventList(ApiResponse.error(error.toString()));
+    }
+  }
+
+  // Fungsi untuk mengubah status event menjadi "approved"
+  Future<void> approveEvent(String eventId) async {
+    try {
+      await _myRepo.updateEventStatus(eventId, 'approved');
+      // Update status setelah approve
+      fetchEventByStatus(); // Mengambil ulang data setelah status diperbarui
+    } catch (e) {
+      print('Error updating event: $e');
+    }
+  }
+
+  // Fungsi untuk mengubah status event menjadi "rejected"
+  Future<void> rejectEvent(String eventId) async {
+    try {
+      await _myRepo.updateEventStatus(eventId, 'rejected');
+      // Update status setelah reject
+      fetchEventByStatus(); // Mengambil ulang data setelah status diperbarui
+    } catch (e) {
+      print('Error updating event: $e');
     }
   }
 }

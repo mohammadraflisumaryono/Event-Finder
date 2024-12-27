@@ -46,8 +46,7 @@ class EventCard extends StatelessWidget {
                 image: DecorationImage(
                   image: event.image != null
                       ? NetworkImage(event.image!)
-                      : const AssetImage('assets/placeholder.png')
-                          as ImageProvider,
+                      : throw Exception('Image is required and cannot be null'),
                   fit: BoxFit.cover,
                 ),
               ),

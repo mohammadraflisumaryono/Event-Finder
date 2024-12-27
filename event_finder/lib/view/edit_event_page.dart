@@ -8,16 +8,18 @@ import 'package:intl/intl.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:provider/provider.dart';
 
-class EditEventDialog extends StatefulWidget {
+import '../utils/routes/routes_name.dart';
+
+class EditEventPage extends StatefulWidget {
   final Map<String, dynamic>? initialData;
 
-  const EditEventDialog({super.key, this.initialData});
+  const EditEventPage({super.key, this.initialData});
 
   @override
-  _EditEventDialogState createState() => _EditEventDialogState();
+  _EditEventPageState createState() => _EditEventPageState();
 }
 
-class _EditEventDialogState extends State<EditEventDialog> {
+class _EditEventPageState extends State<EditEventPage> {
   final _formKey = GlobalKey<FormState>();
   String? _title;
   DateTime? _date;
@@ -273,8 +275,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                 final response = await eventViewModel.updateEventWithImage(
                   eventData: eventData,
                   imageBytes: _image!, // Gunakan _image sebagai bytes
-                  fileName: _imageFileName ??
-                      '', // Default to an empty string if null
+                  fileName: _imageFileName ?? '', // Default to an empty string if null
                   eventId: _eventId!,
                   context: context,
                 );
@@ -285,7 +286,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   SnackBar(content: Text(response)), // Use the returned message
                 );
 
-                Navigator.pop(context, response);
+                Navigator.pushNamed(context, RoutesName.adminHome);
               } catch (error) {
                 print('error: $error');
                 ScaffoldMessenger.of(context).showSnackBar(

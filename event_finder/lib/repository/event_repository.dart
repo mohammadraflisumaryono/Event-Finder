@@ -49,9 +49,6 @@ class EventRepository {
     required List<int> imageBytes,
     required String fileName,
   }) async {
-    // print('data: $eventData');
-    // print('imageBytes: $imageBytes');
-    // print('fileName: $fileName');
 
     try {
       dynamic response = await _apiServices.postMultipartApiResponse(
@@ -60,7 +57,6 @@ class EventRepository {
         imageBytes,
         fileName,
       );
-      // print('response $response');
       return response;
     } catch (e) {
       rethrow;
@@ -119,6 +115,61 @@ class EventRepository {
       print('response: $response');
       print(Event.fromJson(response));
       return Event.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Ambil data event berdasarkan status
+  Future<List<Event>> getEventByStatusApi() async {
+    try {
+      // Kirim request API untuk mendapatkan event berdasarkan status
+      dynamic response = await _apiServices
+          .getGetApiResponse(AppUrl.eventStatusEndPoint);
+
+      // Print respons API untuk debug
+      print('response: $response');
+
+      // Proses data event yang diterima (misalnya dalam bentuk list)
+      List<Event> eventList =
+          List<Event>.from(response.map((event) => Event.fromJson(event)));
+
+      return eventList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Fungsi untuk memperbarui status event
+  Future<void> updateEventStatus(String eventId, String status) async {
+    try {
+      dynamic response = await _apiServices.getPutApiResponse(
+        AppUrl.eventById(eventId),
+        eventData,
+        imageBytes,
+        fileName,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+    final data = {'status': status};
+    await _apiServices.getPutApiResponse(AppUrl.updateStatusEvent(id), data);
+  }
+  Future<dynamic> updateEventWithImage({
+    required Map<String, dynamic> eventData,
+    required List<int> imageBytes,
+    required String fileName,
+    required String eventId,
+  }) async {
+    try {
+      dynamic response = await _apiServices.getPutApiResponse(
+        AppUrl.eventById(eventId),
+        eventData,
+        imageBytes,
+        fileName,
+      );
+      return response;
     } catch (e) {
       rethrow;
     }

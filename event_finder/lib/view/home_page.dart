@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Memberikan jarak horizontal
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, RoutesName.createEvent);
+                Navigator.pushNamed(context, RoutesName.login);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor, // Warna tombol
@@ -117,43 +117,15 @@ class _HomePageState extends State<HomePage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: EventCategory.values.map((category) {
-                    // Warna pastel yang berbeda untuk setiap kategori
-                    final colors = [
-                      Color(0xFFBDE0FE), // Pastel Blue
-                      Color(0xFFFFD6E0), // Pastel Pink
-                      Color.fromARGB(255, 244, 235, 184), // Pastel Yellow
-                      Color(0xFFC3FBD8), // Pastel Green
-                      Color(0xFFD5AAFF), // Pastel Purple
-                    ];
-
-                    // Gunakan warna sesuai indeks kategori
-                    final categoryIndex =
-                        EventCategory.values.indexOf(category);
-                    final chipColor = colors[categoryIndex % colors.length];
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Chip(
-                        label: Text(
-                          category.value,
-                          style: TextStyle(
-                            color: Colors.black, 
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        backgroundColor: chipColor,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: chipColor), // Border sesuai warna chip
-                          borderRadius: BorderRadius.circular(
-                              12.0), // Opsional: Sesuaikan bentuk
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                      ),
-                    );
-                  }).toList(),
+                  children: EventCategory.values
+                      .asMap()
+                      .entries
+                      .map((entry) => _buildCategoryChip(
+                            context,
+                            entry.value.value, // Nama kategori
+                            entry.key, // Indeks kategori
+                          ))
+                      .toList(),
                 ),
               ),
               SizedBox(height: 24),
@@ -227,7 +199,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCategoryChip(BuildContext context, String categoryName) {
+  Widget _buildCategoryChip(
+      BuildContext context, String categoryName, int index) {
+    final colors = [
+      Color(0xFFBDE0FE), // Pastel Blue
+      Color(0xFFFFD6E0), // Pastel Pink
+      Color.fromARGB(255, 244, 235, 184), // Pastel Yellow
+      Color(0xFFC3FBD8), // Pastel Green
+      Color(0xFFD5AAFF), // Pastel Purple
+    ];
+
+    final chipColor = colors[index % colors.length];
+
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: GestureDetector(
@@ -245,9 +228,19 @@ class _HomePageState extends State<HomePage> {
         child: Chip(
           label: Text(
             categoryName,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: TextStyle(
+              color: Colors.black, // Warna teks tetap hitam
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          backgroundColor: Theme.of(context).chipTheme.backgroundColor,
+          backgroundColor: chipColor,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: chipColor, // Border sesuai warna chip
+            ),
+            borderRadius: BorderRadius.circular(12.0), // Bentuk rounded
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         ),
       ),
     );
@@ -265,14 +258,27 @@ class _HomePageState extends State<HomePage> {
               .titleMedium
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
-        Text(
-          'See all',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
-      ],
-    );
+        GestureDetector(
+          onTap: () {
+            Provider.of<EventViewModel>(context, listen: false)
+              .fetchSearchAndCategory(query: null, category: null);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  EventListPage(searchQuery: '', category: null),
+                ),
+              );
+            },
+            child: Text(
+            'See all',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
+          ),
+        ]
+      );
   }
 }
