@@ -3,6 +3,7 @@ import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:event_finder/repository/event_repository.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/view_model/user_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -95,7 +96,6 @@ class EventViewModel with ChangeNotifier {
 
   // Fungsi untuk mengambil dan mengelompokkan event berdasarkan status
   Future<void> fetchAndCategorizeEvents(String organizerId) async {
-    // print('Fetching organizer events...');
     setEventList(ApiResponse.loading());
     try {
       final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);
@@ -149,21 +149,6 @@ class EventViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // Fungsi untuk membuat event baru menggunakan API
-  Future<void> createEventApi(dynamic data, BuildContext context) async {
-    // print('dataaa $data');
-    setLoading(true);
-
-    _myRepo.createEventApi(data).then((value) {
-      setLoading(false);
-      Utils.toastMessage('Event Created Successfully');
-    }).onError((error, stackTrace) {
-      setLoading(false);
-      Utils.toastMessage(error.toString());
-
-    });
-  }
-
   Future<void> createEventWithImage({
     required Map<String, dynamic> eventData,
     required List<int> imageBytes,
@@ -193,12 +178,21 @@ class EventViewModel with ChangeNotifier {
         imageBytes: imageBytes,
         fileName: fileName,
       );
+      // ambil user id dari shared preferences
+      final organizerId = UserPreferences.getUserId().toString();
 
       setLoading(false);
       Utils.toastMessage('Event Created Successfully');
       Navigator.pop(context, RoutesName.adminHome);
 
-    
+      notifyListeners(); // Memberitahu UI untuk memperbarui
+
+      // Setelah penghapusan, ambil ulang data events
+      await fetchAndCategorizeEvents(organizerId);
+
+      if (kDebugMode) {
+        print('Event created successfully: ${value.toString()}');
+      }
     } catch (error) {
       setLoading(false);
       Utils.toastMessage(error.toString());
@@ -213,6 +207,10 @@ class EventViewModel with ChangeNotifier {
     required BuildContext context,
     required String eventId,
   }) async {
+    print('update event view model');
+    print('Updating event with ID: $eventId'); 
+    print('Event data: $eventData');
+
     setLoading(true);
 
     try {
@@ -301,16 +299,16 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> deleteEventById({
-    required String id, required String organizerId, required BuildContext context}) async {
+  Future<void> deleteEventById(
+      {required String id,
+      required String organizerId,
+      required BuildContext context}) async {
     setLoading(true);
 
     try {
       print('Attempting to delete event with ID: $id'); // Debug log
 
-      final response =
-          await _myRepo.deleteEventApi(id); // Panggil API delete event
-      print('Delete response: $response'); // Debug log
+      await _myRepo.deleteEventApi(id); // Panggil API delete event
 
       // Update state untuk menghapus event dari daftar lokal (eventsList)
       eventsList.data!.events?.removeWhere((event) => event.id == id);

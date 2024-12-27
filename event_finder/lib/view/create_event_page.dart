@@ -285,11 +285,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           duration: Duration(seconds: 3),
                         ),
                       );
-
-                      // Setelah berhasil, arahkan ke halaman berikutnya
-                      // Future.delayed(Duration(seconds: 3), () {
-                      //   Navigator.pushNamed(context, RoutesName.adminHome);
-                      // });
                     } catch (error) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -299,18 +294,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         ),
                       );
                     }
-
-                    // // Panggil API untuk mengunggah event
-                    // await eventViewModel.createEventApi(data, context);
-                    // print('api hit');
-
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(
-                    //     content: Text(
-                    //         'Your event is created and awaiting approval by Superadmin.'),
-                    //     duration: Duration(seconds: 3),
-                    //   ),
-                    // );
                   }
                 },
                 style: ElevatedButton.styleFrom(

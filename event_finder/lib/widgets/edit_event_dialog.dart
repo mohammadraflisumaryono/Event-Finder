@@ -56,6 +56,11 @@ class _EditEventDialogState extends State<EditEventDialog> {
     }
   }
 
+  // get initial data event id
+  // void getEventId() {
+  //
+  // }
+
   Future<void> _selectDate(BuildContext context) async {
     final picked = await showDatePicker(
       context: context,
@@ -108,7 +113,8 @@ class _EditEventDialogState extends State<EditEventDialog> {
                 TextFormField(
                   initialValue: _title,
                   decoration: InputDecoration(labelText: 'Event Title'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a title' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter a title' : null,
                   onSaved: (value) => _title = value,
                 ),
                 ListTile(
@@ -135,7 +141,8 @@ class _EditEventDialogState extends State<EditEventDialog> {
                 TextFormField(
                   initialValue: _location,
                   decoration: InputDecoration(labelText: 'Location'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a location' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter a location' : null,
                   onSaved: (value) => _location = value,
                 ),
                 TextFormField(
@@ -184,7 +191,8 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter a ticket price';
+                    if (value == null || value.isEmpty)
+                      return 'Please enter a ticket price';
                     final parsed = double.tryParse(value);
                     if (parsed == null) return 'Please enter a valid number';
                     return null;
@@ -202,7 +210,8 @@ class _EditEventDialogState extends State<EditEventDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+        TextButton(
+            onPressed: () => Navigator.pop(context), child: Text('Cancel')),
         ElevatedButton(
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
@@ -214,7 +223,8 @@ class _EditEventDialogState extends State<EditEventDialog> {
               }
               if (_startTime == null || _endTime == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Please select both start and end times')),
+                  SnackBar(
+                      content: Text('Please select both start and end times')),
                 );
                 return;
               }
@@ -244,9 +254,16 @@ class _EditEventDialogState extends State<EditEventDialog> {
                 'image': _image,
                 'file_name': _imageFileName,
               };
+              // get event id
 
               // Memanggil method untuk update event
               try {
+                if (widget.initialData != null) {
+                  final data = widget.initialData!;
+                  _eventId = data['event_id'];
+                }
+
+                print('updating event..., $_imageFileName, $_eventId');
                 final response = await eventViewModel.updateEventWithImage(
                   eventData: eventData,
                   imageBytes: _image!, // Gunakan _image sebagai bytes
@@ -256,12 +273,15 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   context: context,
                 );
 
+                print('response: $response');
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(response)), // Use the returned message
                 );
 
                 Navigator.pop(context, response);
               } catch (error) {
+                print('error: $error');
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Error updating event: $error')),
                 );

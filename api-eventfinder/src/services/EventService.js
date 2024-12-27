@@ -78,8 +78,12 @@ class EventService {
 
     // Fungsi untuk menghapus event
     static async deleteEvent(eventId, userId) {
+        // debug
+        console.log('Event ID:', eventId);
+        console.log('User ID:', userId);
         try {
             const event = await Event.findById(eventId);
+            console.log('Event:', event);
             if (!event) {
                 throw new Error('Event not found');
             }
@@ -88,7 +92,7 @@ class EventService {
                 throw new Error("You are not authorized to delete this event.");
             }
 
-            await Event.deleteOne({ eventId });
+            await Event.deleteOne({ _id: eventId  });
             // return deleted data
             console.log('Deleted event:', event);
             return event;

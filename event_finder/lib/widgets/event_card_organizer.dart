@@ -78,6 +78,7 @@ class EventCardOrganizer extends StatelessWidget {
                                 ?.value, // Ambil nilai string dari enum menggunakan extension
                             'ticket_price': event.ticketPrice?.toString(),
                             'registration_link': event.registrationLink,
+                            'event_id': event.id,
                           },
                         ),
                       ).then((_) {
