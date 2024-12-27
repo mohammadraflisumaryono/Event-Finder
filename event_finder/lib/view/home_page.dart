@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                     if (events != null && events.isNotEmpty) {
                       // Ambil 6 event terbaru
                       final latestEvents = events.take(6).toList();
-                      print('Latest events: $latestEvents');
+                      //print('Latest events: $latestEvents');
 
                       // Tampilkan daftar event
                       return ListView.builder(
@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSectionHeader(BuildContext context, String title) {
-    print(context);
+    //print(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

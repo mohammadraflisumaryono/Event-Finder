@@ -87,15 +87,15 @@ class NetworkApiService extends BaseApiServices {
   @override
   Future postMultipartApiResponse(String url, Map<String, dynamic> data,
       List<int> imageBytes, String fileName) async {
-    print('url network: data: $data');
+    // print('url network: data: $data');
 
     dynamic responseJson;
     try {
       String token = await _getToken();
-      print('token: $token');
+      // print('token: $token');
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      print('request: $request');
+      // print('request: $request');
 
       // Add headers
       request.headers.addAll({
@@ -121,19 +121,19 @@ class NetworkApiService extends BaseApiServices {
 
       print('response: $response');
 
-      print('response.body: ${response.body}');
-      print('request.files: ${request.files}');
-      print('request.fields: ${request.fields}');
-      print('request.headers: ${request.headers}');
-      print('request.url: ${request.url}');
-      print('request.method: ${request.method}');
-      print('request.contentLength: ${request.contentLength}');
+      // print('response.body: ${response.body}');
+      // print('request.files: ${request.files}');
+      // print('request.fields: ${request.fields}');
+      // print('request.headers: ${request.headers}');
+      // print('request.url: ${request.url}');
+      // print('request.method: ${request.method}');
+      // print('request.contentLength: ${request.contentLength}');
 
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     } catch (e) {
-      print('Error: $e');
+      // print('Error: $e');
       throw FetchDataException('Error occurred: ${e.toString()}');
     }
     return responseJson;

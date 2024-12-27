@@ -22,7 +22,7 @@ class EventRepository {
 
   // Membuat data event
   Future<dynamic> createEventApi(dynamic data) async {
-    print('data: $data');
+    // print('data: $data');
     try {
       dynamic response =
           await _apiServices.getPostApiResponse(AppUrl.eventEndPoint, data);
@@ -49,9 +49,9 @@ class EventRepository {
     required List<int> imageBytes,
     required String fileName,
   }) async {
-    print('data: $eventData');
+    // print('data: $eventData');
     // print('imageBytes: $imageBytes');
-    print('fileName: $fileName');
+    // print('fileName: $fileName');
 
     try {
       dynamic response = await _apiServices.postMultipartApiResponse(
@@ -60,7 +60,7 @@ class EventRepository {
         imageBytes,
         fileName,
       );
-      print('response $response');
+      // print('response $response');
       return response;
     } catch (e) {
       rethrow;
@@ -87,7 +87,7 @@ class EventRepository {
     required String eventId,
   }) async {
     try {
-      dynamic response = await _apiServices.postMultipartApiResponse(
+      dynamic response = await _apiServices.getPutApiResponse(
         AppUrl.eventById(eventId),
         eventData,
         imageBytes,
@@ -102,8 +102,20 @@ class EventRepository {
   // Delete data event
   Future<dynamic> deleteEventApi(String id) async {
     try {
-      dynamic response = await _apiServices.getDeleteApiResponse(AppUrl.eventById(id));
+      dynamic response =
+          await _apiServices.getDeleteApiResponse(AppUrl.eventById(id));
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Ambil data event berdasarkan ID
+  Future<dynamic> getEventByIdApi(String id) async {
+    try {
+      dynamic response =
+          await _apiServices.getGetApiResponse(AppUrl.eventById(id));
+      return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

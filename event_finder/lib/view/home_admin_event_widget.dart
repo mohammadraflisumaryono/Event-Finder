@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 
 import 'package:event_finder/utils/routes/routes_name.dart';
+import 'package:event_finder/view_model/user_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/response/status.dart';
 import '../model/events_model.dart';
 import '../model/status_event.dart';
 import '../view_model/event_view_model.dart';
-import '../view_model/user_preferences.dart';
 import '../widgets/event_card_organizer.dart';
 
 class HomeAdminEventPage extends StatefulWidget {
   final bool isOrganizer;
 
-  HomeAdminEventPage({required this.isOrganizer});
+  const HomeAdminEventPage({super.key, required this.isOrganizer});
 
   @override
   _HomeAdminEventPageState createState() => _HomeAdminEventPageState();
@@ -94,13 +94,16 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
       ),
       body: Stack(
         children: [
+          // Consumer untuk menampilkan data event
           Consumer<EventViewModel>(
             builder: (context, eventViewModel, child) {
+              // Menunggu data event dikategorikan berdasarkan status
               if (eventViewModel.eventsList.status == Status.LOADING) {
                 print('loading..');
                 return Center(child: CircularProgressIndicator());
               }
 
+              // Jika ada error
               if (eventViewModel.eventsList.status == Status.ERROR) {
                 return Center(
                     child: Text('Error: ${eventViewModel.eventsList.message}'));

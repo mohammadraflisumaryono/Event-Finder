@@ -24,13 +24,13 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  String _userId = '';
+  final String _userId = '';
   String get userId => _userId;
 
-  String _token = '';
+  final String _token = '';
   String get token => _token;
 
-  String _role = '';
+  final String _role = '';
   String get role => _role;
 
   Future<void> loginApi(dynamic data, BuildContext context) async {

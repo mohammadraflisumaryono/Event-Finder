@@ -10,9 +10,9 @@ class TrendingEventCarousel extends StatefulWidget {
   final List<Event> events; // Trending events dari HomePage
 
   const TrendingEventCarousel({
-    Key? key,
+    super.key,
     required this.events,
-  }) : super(key: key);
+  });
 
   @override
   _TrendingEventCarouselState createState() => _TrendingEventCarouselState();
@@ -30,12 +30,12 @@ class _TrendingEventCarouselState extends State<TrendingEventCarousel> {
   }
 
   void _startAutoScroll() {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (_pageController.hasClients && widget.events.isNotEmpty) {
         _currentPage = (_currentPage + 1) % widget.events.length;
         _pageController.animateToPage(
           _currentPage,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -52,7 +52,7 @@ class _TrendingEventCarouselState extends State<TrendingEventCarousel> {
   @override
   Widget build(BuildContext context) {
     if (widget.events.isEmpty) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     return SizedBox(
       height: 220,
@@ -88,14 +88,14 @@ class TrendingEventCard extends StatelessWidget {
   final Event event; // Tambahkan properti Event untuk navigasi
 
   const TrendingEventCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.location,
     required this.date,
     required this.price,
     required this.image,
     required this.event, // Tambahkan parameter Event
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class TrendingEventCard extends StatelessWidget {
                 left: 16,
                 right: 16,
                 child: Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.black.withOpacity(0.6),
@@ -139,7 +139,7 @@ class TrendingEventCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         location,
                         style: Theme.of(context)
@@ -147,7 +147,7 @@ class TrendingEventCard extends StatelessWidget {
                             .bodyMedium
                             ?.copyWith(color: Colors.white),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         date,
                         style: Theme.of(context)
@@ -155,7 +155,7 @@ class TrendingEventCard extends StatelessWidget {
                             .bodyMedium
                             ?.copyWith(color: Colors.white),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         price,
                         style: Theme.of(context)

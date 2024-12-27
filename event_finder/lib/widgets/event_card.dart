@@ -7,8 +7,8 @@ class EventCard extends StatelessWidget {
 
   const EventCard(
     this.event, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

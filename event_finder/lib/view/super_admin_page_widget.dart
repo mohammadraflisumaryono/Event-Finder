@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class SuperAdminEventWidget extends StatelessWidget {
+  const SuperAdminEventWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Events', style: TextStyle(color: Colors.white)),
+        title: const Text('Manage Events', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.deepPurple,
         actions: [
           IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
+            icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
               // Tambahkan aksi untuk menambahkan event baru
             },
@@ -21,7 +23,7 @@ class SuperAdminEventWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Event List',
               style: TextStyle(
                 fontSize: 24,
@@ -29,14 +31,14 @@ class SuperAdminEventWidget extends StatelessWidget {
                 color: Colors.deepPurple,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
                 itemCount: 5, // Total jumlah event
                 itemBuilder: (context, index) {
                   return Card(
                     elevation: 3,
-                    margin: EdgeInsets.symmetric(vertical: 8),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -47,21 +49,21 @@ class SuperAdminEventWidget extends StatelessWidget {
                         children: [
                           Text(
                             'Event Title $index',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'Event Description $index',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black54,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'Status: ${index % 2 == 0 ? "Pending" : "Approved"}',
                             style: TextStyle(
@@ -70,7 +72,7 @@ class SuperAdminEventWidget extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -89,10 +91,10 @@ class SuperAdminEventWidget extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  icon: Icon(Icons.check, size: 18),
-                                  label: Text('Approve'),
+                                  icon: const Icon(Icons.check, size: 18),
+                                  label: const Text('Approve'),
                                 ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               ElevatedButton.icon(
                                 onPressed: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -107,8 +109,8 @@ class SuperAdminEventWidget extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                icon: Icon(Icons.close, size: 18),
-                                label: Text('Reject'),
+                                icon: const Icon(Icons.close, size: 18),
+                                label: const Text('Reject'),
                               ),
                             ],
                           ),
@@ -127,7 +129,7 @@ class SuperAdminEventWidget extends StatelessWidget {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: SuperAdminEventWidget(),
   ));

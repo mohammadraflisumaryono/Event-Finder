@@ -345,3 +345,22 @@ exports.approveEvent = async (req, res) => {
         });
     }
 }
+
+exports.updateEventViews = async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+        const event = await EventService.updateEventViews(eventId);
+        res.status(200).json({
+            status: 'success',
+            data: event,
+            message: 'Event views updated successfully'
+        });
+    } catch (error) {
+        console.error('Error updating event views:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Failed to update event views: ${error.message}`
+        });
+    }
+}

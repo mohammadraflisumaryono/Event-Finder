@@ -8,8 +8,7 @@ class EventListPage extends StatelessWidget {
   final String? category;
   final String searchQuery;
 
-  const EventListPage({Key? key, this.category, required this.searchQuery})
-      : super(key: key);
+  const EventListPage({super.key, this.category, required this.searchQuery});
 
   @override
   Widget build(BuildContext context) {

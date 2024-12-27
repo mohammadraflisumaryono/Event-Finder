@@ -92,7 +92,7 @@ class EventService {
                 throw new Error("You are not authorized to delete this event.");
             }
 
-            await Event.deleteOne({ _id: eventId  });
+            await Event.deleteOne({ _id: eventId });
             // return deleted data
             console.log('Deleted event:', event);
             return event;
@@ -218,6 +218,23 @@ class EventService {
         } catch (error) {
             console.error('Error checking expired events:', error.message);
             throw new Error(`Error checking expired events: ${error.message}`);
+        }
+    }
+
+    // Function to update event views
+    static async updateEventViews(eventId) {
+        try {
+            const event = await Event.findById(eventId);
+            if (!event) {
+                throw new Error('Event not found');
+            }
+            event.views += 1;
+            await event.save();
+            console.log('Updated event views:', event);
+            return event;
+        } catch (error) {
+            console.error('Error updating event views:', error.message);
+            throw new Error(`Error updating event views: ${error.message}`);
         }
     }
 

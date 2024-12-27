@@ -6,11 +6,13 @@ import 'package:url_launcher/url_launcher.dart';
 import '../model/events_model.dart';
 
 class DetailPage extends StatelessWidget {
+  const DetailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Menerima data Event yang dikirim melalui Navigator.pushNamed
     final Event? event = ModalRoute.of(context)?.settings.arguments as Event?;
-    print(ModalRoute.of(context)?.settings.arguments);
+    // print(ModalRoute.of(context)?.settings.arguments);
 
     if (event == null) {
       return Scaffold(
@@ -25,7 +27,7 @@ class DetailPage extends StatelessWidget {
     }
 
     // Fungsi untuk membuka URL (registration link)
-    Future<void> _launchURL() async {
+    Future<void> launchURL() async {
       final Uri url = Uri.parse(event.registrationLink ?? '');
       if (await canLaunch(url.toString())) {
         await launch(url.toString());
@@ -198,7 +200,7 @@ class DetailPage extends StatelessWidget {
                     ],
                   ),
                   ElevatedButton(
-                    onPressed: _launchURL, // Membuka URL pendaftaran
+                    onPressed: launchURL, // Membuka URL pendaftaran
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
                           horizontal: 24, vertical: 12),
