@@ -1,18 +1,16 @@
 
 // // ignore_for_file: prefer_const_constructors
 
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import '../model/events_model.dart';
-// import '../model/status_event.dart';
-// import '../view_model/auth_view_model.dart';
-// import '../view_model/event_view_model.dart';
+import 'package:flutter/material.dart';
+import '../model/events_model.dart';
 
-// class EventCardOrganizer extends StatelessWidget {
-//   final bool isOrganizer;
-//   final Event event; 
+class EventCardOrganizer extends StatelessWidget {
+  final bool isAdmin;
+  final Event event;
+  final VoidCallback? onEdit; // Memastikan properti 'event' ada
 
-//   EventCardOrganizer({required this.isOrganizer, required this.event});
+  // Constructor
+  EventCardOrganizer({required this.isAdmin, required this.event, this.onEdit});
 
 //   @override
 //   Widget build(BuildContext context) {

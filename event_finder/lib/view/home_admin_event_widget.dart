@@ -10,6 +10,8 @@ import '../view_model/auth_view_model.dart';
 import '../view_model/event_view_model.dart';
 import '../view_model/user_preferences.dart';
 import '../widgets/event_card_organizer.dart';
+import '../widgets/edit_event_dialog.dart';
+
 
 class HomeAdminEventPage extends StatefulWidget {
   final bool isOrganizer;
