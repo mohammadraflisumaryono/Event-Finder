@@ -67,19 +67,27 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                 children: [
                   Image.asset(
                     'lib/res/assets/images/logogoova.png',
-                    height: 150, 
-                    width: 150,
+                    height: 120, 
+                    width: 120,
                   ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      "Wanna up some event?",
-                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  const SizedBox(height: 10),
+                  Text(
+                      "Sign Up",
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
+                            fontSize: 24,
                           ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 15),
+                    const SizedBox(height: 8),
+                    Text(
+                      "and Unlock Event Creation on Goova!",
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.primary),
+                      textAlign: TextAlign.center,
+                    ),
                   const SizedBox(height: 25),
                   TextField(
                     controller: nameTextController,
@@ -162,12 +170,16 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                         }
                       },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary, // Background color
+                        foregroundColor: Colors.white, // Text color
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text("Register"),
+                    child: const Text("Sign Up"),
                     
                   ),
                   const SizedBox(height: 15),

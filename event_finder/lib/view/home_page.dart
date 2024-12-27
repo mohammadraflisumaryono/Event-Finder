@@ -35,25 +35,37 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Image.asset(
-          'lib/res/assets/images/logogoova.png',
-          width: 40,
-          height: 40,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0), // Memberikan jarak agar lebih proporsional
+          child: Image.asset(
+            'lib/res/assets/images/logogoova.png',
+            fit: BoxFit.contain),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, RoutesName.login);
-            },
-            child: Text(
-              'Create Event',
-              style: TextStyle(
-                color: Theme.of(context).iconTheme.color,
-                fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Memberikan jarak horizontal
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RoutesName.createEvent);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor, // Warna tombol
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // Bentuk tombol
+                ),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 18, vertical: 12), // Ukuran tombol
+                elevation: 5, // Efek bayangan tombol
+              ),
+              child: Text(
+                'Create Event',
+                style: TextStyle(
+                  color: Colors.white, // Warna teks tombol
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-          SizedBox(width: 16),
         ],
       ),
       body: Padding(
@@ -105,17 +117,42 @@ class _HomePageState extends State<HomePage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: EventCategory.values
-                      .map((category) =>
-                          _buildCategoryChip(context, category.value))
-                      .toList(),
+                  children: EventCategory.values.map((category) {
+                    // Warna pastel yang berbeda untuk setiap kategori
+                    final colors = [
+                      Color(0xFFBDE0FE), // Pastel Blue
+                      Color(0xFFFFD6E0), // Pastel Pink
+                      Color(0xFFFFF5BA), // Pastel Yellow
+                      Color(0xFFC3FBD8), // Pastel Green
+                      Color(0xFFD5AAFF), // Pastel Purple
+                    ];
+
+                    // Gunakan warna sesuai indeks kategori
+                    final categoryIndex =
+                        EventCategory.values.indexOf(category);
+                    final chipColor = colors[categoryIndex % colors.length];
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Chip(
+                        label: Text(
+                          category.value,
+                          style: TextStyle(
+                            color: Colors.black, 
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        backgroundColor: chipColor,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-
               SizedBox(height: 24),
               _buildSectionHeader(context, 'Trending Events'),
               SizedBox(height: 16),
-
               Consumer<EventViewModel>(
                 builder: (context, viewModel, child) {
                   if (viewModel.eventsList.status == Status.LOADING) {
@@ -133,6 +170,7 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
+              SizedBox(height: 24),
               // Menampilkan event terbaru menggunakan EventCard
               _buildSectionHeader(context, 'Latest Event'),
               SizedBox(height: 16),
