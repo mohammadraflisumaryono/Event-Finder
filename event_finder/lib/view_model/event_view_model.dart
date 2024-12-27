@@ -100,11 +100,11 @@ class EventViewModel with ChangeNotifier {
     try {
       final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);
 
-      print('Events after deletion: ${eventListModel.events}');
+      // print('Events after deletion: ${eventListModel.events}');
 
-      print('Response: $eventListModel');
-      print('Event list model: ${eventListModel.events}');
-      print('Total events fetched: ${eventListModel.events!.length}');
+      // print('Response: $eventListModel');
+      // print('Event list model: ${eventListModel.events}');
+      // print('Total events fetched: ${eventListModel.events!.length}');
 
 
       // Mengelompokkan event berdasarkan status
@@ -133,7 +133,7 @@ class EventViewModel with ChangeNotifier {
       // Menambahkan notifyListeners untuk memberi tahu UI
       notifyListeners(); // Ini yang ditambahkan
     } catch (error) {
-      print('Error: $error');
+      // print('Error: $error');
       setEventList(ApiResponse.error(error.toString()));
 
       // Menambahkan notifyListeners untuk memberi tahu UI saat terjadi error
@@ -151,21 +151,16 @@ class EventViewModel with ChangeNotifier {
 
   // Fungsi untuk membuat event baru menggunakan API
   Future<void> createEventApi(dynamic data, BuildContext context) async {
-    print('dataaa $data');
+    // print('dataaa $data');
     setLoading(true);
 
     _myRepo.createEventApi(data).then((value) {
       setLoading(false);
       Utils.toastMessage('Event Created Successfully');
-      if (kDebugMode) {
-        print(value.toString());
-      }
     }).onError((error, stackTrace) {
       setLoading(false);
       Utils.toastMessage(error.toString());
-      if (kDebugMode) {
-        print(error.toString());
-      }
+
     });
   }
 
@@ -177,7 +172,6 @@ class EventViewModel with ChangeNotifier {
   }) async {
     setLoading(true);
 
-    print(eventData);
 
     try {
       // Menambahkan time_start dan time_end ke dalam objek time
@@ -192,7 +186,6 @@ class EventViewModel with ChangeNotifier {
         'time_end': null,
       };
 
-      print('view model data : $eventDataWithTime');
 
       // Mengirim data ke API dengan format yang benar
       final value = await _myRepo.createEventWithImageApi(
@@ -205,16 +198,11 @@ class EventViewModel with ChangeNotifier {
       Utils.toastMessage('Event Created Successfully');
       Navigator.pop(context, RoutesName.adminHome);
 
-      if (kDebugMode) {
-        print('Event created successfully: ${value.toString()}');
-      }
+    
     } catch (error) {
       setLoading(false);
       Utils.toastMessage(error.toString());
 
-      if (kDebugMode) {
-        print('Error creating event: ${error.toString()}');
-      }
     }
   }
 

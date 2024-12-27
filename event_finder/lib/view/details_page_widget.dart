@@ -10,7 +10,7 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Menerima data Event yang dikirim melalui Navigator.pushNamed
     final Event? event = ModalRoute.of(context)?.settings.arguments as Event?;
-    print(ModalRoute.of(context)?.settings.arguments);
+    // print(ModalRoute.of(context)?.settings.arguments);
 
     if (event == null) {
       return Scaffold(

@@ -56,7 +56,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 children: [
                   Image.asset(
                     'lib/res/assets/images/logogoova.png',
-                    height: 150, 
+                    height: 150,
                     width: 150,
                   ),
                   const SizedBox(height: 20),
@@ -137,11 +137,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           'password': passwordTextController.text.toString(),
                         };
 
-                      await authViewModel.loginApi(data, context);
-                      print('api hit');
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
+                        await authViewModel.loginApi(data, context);
+                        // print('api hit');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
