@@ -29,5 +29,6 @@ class RoutesName {
   // detailEventscreen route name
   static const String DetailPage = 'detail_page_widget';
 
+  static const String OnboardingScreen = 'on_boarding_screen';
   RoutesName(Type loginPageWidget);
  }

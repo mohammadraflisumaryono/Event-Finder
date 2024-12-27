@@ -101,9 +101,11 @@ class _EditEventDialogState extends State<EditEventDialog> {
   @override
   Widget build(BuildContext context) {
     final eventViewModel = Provider.of<EventViewModel>(context);
-    return AlertDialog(
+    return Scaffold(
+      appBar: AppBar(
       title: Text('Edit Event'),
-      content: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -206,16 +208,9 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   decoration: InputDecoration(labelText: 'Registration Link'),
                   onSaved: (value) => _registrationLink = value,
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+        SizedBox(height: 20),
         ElevatedButton(
-          onPressed: () async {
+        onPressed: () async {
             if (_formKey.currentState!.validate()) {
               if (_date == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -292,7 +287,11 @@ class _EditEventDialogState extends State<EditEventDialog> {
           },
           child: Text('Save'),
         ),
-      ],
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
