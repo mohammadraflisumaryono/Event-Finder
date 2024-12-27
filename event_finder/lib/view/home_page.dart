@@ -189,8 +189,14 @@ class _HomePageState extends State<HomePage> {
                     if (events != null && events.isNotEmpty) {
                       // Ambil 6 event terbaru
                       final latestEvents = events.take(6).toList();
-                      //print('Latest events: $latestEvents');
-
+                      for (var event in latestEvents) {
+                        print('Event Details:');
+                        event.toJson().forEach((key, value) {
+                          print('$key: $value');
+                        });
+                        print(
+                            ''); // Tambahkan baris kosong untuk pemisah antar event
+                      }
                       // Tampilkan daftar event
                       return ListView.builder(
                         shrinkWrap: true,

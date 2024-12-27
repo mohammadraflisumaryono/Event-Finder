@@ -328,7 +328,9 @@ class EventViewModel with ChangeNotifier {
   Future<void> fetchEventById(String id) async {
     setEventList(ApiResponse.loading());
     try {
+      print('Fetching event with ID: $id');
       final value = await _myRepo.getEventByIdApi(id);
+      print('Event fetched: $value');
       setEventList(ApiResponse.completed(value));
     } catch (error) {
       setEventList(ApiResponse.error(error.toString()));

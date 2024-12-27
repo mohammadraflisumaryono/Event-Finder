@@ -28,5 +28,11 @@ class RoutesName {
 
   // Onboardingscreen route name
   static const String onboardingScreen = 'on_boarding_screen';
+  // detailEventscreen route name
+  static const String DetailPage = 'detail_page_widget';
+
+  static const String EditEventDialog = 'edit_event_dialog';
+
+  static const String OnboardingScreen = 'on_boarding_screen';
   RoutesName(Type loginPageWidget);
  }
