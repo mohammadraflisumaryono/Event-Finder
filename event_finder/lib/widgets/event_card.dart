@@ -34,7 +34,9 @@ class EventCard extends StatelessWidget {
             ),
           ],
         ),
+        child: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Gambar dengan ukuran dinamis
@@ -59,12 +61,15 @@ class EventCard extends StatelessWidget {
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 4),
             // Lokasi event
             Text(
               event.location!,
               style: Theme.of(context).textTheme.bodySmall,
+              maxLines: 1,
             ),
             const SizedBox(height: 4),
             // Tanggal event
@@ -84,6 +89,7 @@ class EventCard extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.bold),
             )
           ],
+        ),
         ),
       ),
     );

@@ -170,23 +170,31 @@ class _HomePageState extends State<HomePage> {
                             ''); // Tambahkan baris kosong untuk pemisah antar event
                       }
                       // Tampilkan daftar event
-                      return GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // Jumlah kolom
-                          crossAxisSpacing: 16, // Jarak horizontal antar kartu
-                          mainAxisSpacing: 8, // Jarak vertikal antar baris
-                          childAspectRatio: 2.5, // Rasio ukuran kartu (lebar:tinggi)
-                        ),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(), // Agar grid tidak scroll sendiri jika di dalam ScrollView
-                        itemCount: latestEvents.length,
-                        itemBuilder: (context, index) {
-                          final event = latestEvents[index];
-                          return EventCard(
-                              event); // Gantikan dengan widget yang sesuai untuk menampilkan event
-                        },
-                      );
+                      return LayoutBuilder(
+  builder: (context, constraints) {
+    // Hitung lebar card berdasarkan ukuran layar
+    double width = constraints.maxWidth / 2 - 16; // 2 card per row, 16 jarak antar card
+    double aspectRatio = width / 250; // Sesuaikan rasio aspek card
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // 2 card per row
+        crossAxisSpacing: 16, // Jarak horizontal antar card
+        mainAxisSpacing: 16, // Jarak vertikal antar card
+        childAspectRatio: aspectRatio, // Rasio aspek card agar proporsional
+      ),
+      physics: const NeverScrollableScrollPhysics(), // Disable scroll jika di dalam ScrollView
+      shrinkWrap: true,
+      itemCount: latestEvents.length,
+      itemBuilder: (context, index) {
+        final event = latestEvents[index];
+        return EventCard(event); // Widget card
+      },
+    );
+  },
+);
+
                     } else {
                       return Center(child: Text('No latest events found.'));
                     }
@@ -207,6 +215,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+<<<<<<< Updated upstream
   Widget _buildCategoryChip(
       BuildContext context, String categoryName, int index) {
     final colors = [
@@ -253,6 +262,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+=======
+>>>>>>> Stashed changes
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     //print(context);
