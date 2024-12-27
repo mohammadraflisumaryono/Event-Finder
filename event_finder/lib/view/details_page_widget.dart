@@ -225,7 +225,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 Text(
                                   event.ticketPrice != null
-                                      ? "Rp ${event.ticketPrice!.toStringAsFixed(2)}"
+                                      ? "Rp ${event.ticketPrice!.toStringAsFixed(3)}"
                                       : "Free",
                                   style: GoogleFonts.outfit(
                                     fontSize: 18,
