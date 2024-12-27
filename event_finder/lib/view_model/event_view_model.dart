@@ -207,6 +207,10 @@ class EventViewModel with ChangeNotifier {
     required BuildContext context,
     required String eventId,
   }) async {
+    print('update event view model');
+    print('Updating event with ID: $eventId'); 
+    print('Event data: $eventData');
+
     setLoading(true);
 
     try {
