@@ -36,6 +36,9 @@ router.get('/events/organizer/:userId', verifyToken, eventController.eventByOrga
 // update status event by admin
 router.put('/events/status/:eventId', verifyToken, eventController.approveEvent);
 
+// update +1 views event
+router.put('/views/:eventId', eventController.updateEventViews);
+
 
 
 

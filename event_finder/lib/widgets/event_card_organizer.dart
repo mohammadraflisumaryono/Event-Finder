@@ -18,7 +18,7 @@ class EventCardOrganizer extends StatelessWidget {
   final VoidCallback? onEdit; // Memastikan properti 'event' ada
 
   // Constructor
-  EventCardOrganizer({required this.isOrganizer, required this.event, required this.userId, this.onEdit});
+  const EventCardOrganizer({super.key, required this.isOrganizer, required this.event, required this.userId, this.onEdit});
 
   @override
   Widget build(BuildContext context) {

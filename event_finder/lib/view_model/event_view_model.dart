@@ -106,7 +106,6 @@ class EventViewModel with ChangeNotifier {
       // print('Event list model: ${eventListModel.events}');
       // print('Total events fetched: ${eventListModel.events!.length}');
 
-
       // Mengelompokkan event berdasarkan status
       final Map<StatusEvent, List<Event>> categorizedEvents = {
         StatusEvent.approved: [],
@@ -157,7 +156,6 @@ class EventViewModel with ChangeNotifier {
   }) async {
     setLoading(true);
 
-
     try {
       // Menambahkan time_start dan time_end ke dalam objek time
       final eventDataWithTime = {
@@ -170,7 +168,6 @@ class EventViewModel with ChangeNotifier {
         'time_start': null,
         'time_end': null,
       };
-
 
       // Mengirim data ke API dengan format yang benar
       final value = await _myRepo.createEventWithImageApi(
@@ -196,7 +193,6 @@ class EventViewModel with ChangeNotifier {
     } catch (error) {
       setLoading(false);
       Utils.toastMessage(error.toString());
-
     }
   }
 
@@ -208,7 +204,7 @@ class EventViewModel with ChangeNotifier {
     required String eventId,
   }) async {
     print('update event view model');
-    print('Updating event with ID: $eventId'); 
+    print('Updating event with ID: $eventId');
     print('Event data: $eventData');
 
     setLoading(true);
@@ -326,6 +322,16 @@ class EventViewModel with ChangeNotifier {
       Utils.toastMessage(error.toString());
     } finally {
       setLoading(false); // Menyelesaikan loading
+    }
+  }
+
+  Future<void> fetchEventById(String id) async {
+    setEventList(ApiResponse.loading());
+    try {
+      final value = await _myRepo.getEventByIdApi(id);
+      setEventList(ApiResponse.completed(value));
+    } catch (error) {
+      setEventList(ApiResponse.error(error.toString()));
     }
   }
 }

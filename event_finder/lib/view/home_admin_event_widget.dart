@@ -13,7 +13,7 @@ import '../widgets/event_card_organizer.dart';
 class HomeAdminEventPage extends StatefulWidget {
   final bool isOrganizer;
 
-  HomeAdminEventPage({required this.isOrganizer});
+  const HomeAdminEventPage({super.key, required this.isOrganizer});
 
   @override
   _HomeAdminEventPageState createState() => _HomeAdminEventPageState();

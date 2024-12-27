@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class EditEventDialog extends StatefulWidget {
   final Map<String, dynamic>? initialData;
 
-  const EditEventDialog({Key? key, this.initialData}) : super(key: key);
+  const EditEventDialog({super.key, this.initialData});
 
   @override
   _EditEventDialogState createState() => _EditEventDialogState();
@@ -78,8 +78,9 @@ class _EditEventDialogState extends State<EditEventDialog> {
           ? _startTime ?? TimeOfDay.now()
           : _endTime ?? TimeOfDay.now(),
     );
-    if (picked != null)
+    if (picked != null) {
       setState(() => isStartTime ? _startTime = picked : _endTime = picked);
+    }
   }
 
   Future<void> _pickFile() async {
@@ -191,8 +192,9 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Please enter a ticket price';
+                    }
                     final parsed = double.tryParse(value);
                     if (parsed == null) return 'Please enter a valid number';
                     return null;
