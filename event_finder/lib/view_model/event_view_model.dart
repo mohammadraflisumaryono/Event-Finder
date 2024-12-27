@@ -95,7 +95,7 @@ class EventViewModel with ChangeNotifier {
 
   // Fungsi untuk mengambil dan mengelompokkan event berdasarkan status
   Future<void> fetchAndCategorizeEvents(String organizerId) async {
-    print('Fetching organizer events...');
+    // print('Fetching organizer events...');
     setEventList(ApiResponse.loading());
     try {
       final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);

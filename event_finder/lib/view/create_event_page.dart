@@ -269,6 +269,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       'registration_link': _registrationLink,
                     };
                     try {
+                   
                       // Gunakan method baru untuk upload dengan image
                       await eventViewModel.createEventWithImage(
                         eventData: eventData,
@@ -286,9 +287,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       );
 
                       // Setelah berhasil, arahkan ke halaman berikutnya
-                      Future.delayed(Duration(seconds: 3), () {
-                        Navigator.pushNamed(context, RoutesName.adminHome);
-                      });
+                      // Future.delayed(Duration(seconds: 3), () {
+                      //   Navigator.pushNamed(context, RoutesName.adminHome);
+                      // });
                     } catch (error) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

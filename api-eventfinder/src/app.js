@@ -16,4 +16,11 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/api', UserRoute);
 app.use('/api', EventRoute);
 
+app.use((err, req, res, next) => {
+    if (err.type === 'entity.too.large') {
+        return res.status(413).send('Payload terlalu besar!');
+    }
+    next(err);
+});
+
 module.exports = app;

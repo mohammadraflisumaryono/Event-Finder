@@ -88,9 +88,10 @@ class EventService {
                 throw new Error("You are not authorized to delete this event.");
             }
 
-            await Event.deleteOne({eventId});
+            await Event.deleteOne({ eventId });
+            // return deleted data
             console.log('Deleted event:', event);
-            return { message: 'Event successfully deleted' };
+            return event;
         } catch (error) {
             console.error('Error deleting event:', error.message);
             throw new Error(`Error deleting event: ${error.message}`);

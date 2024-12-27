@@ -20,11 +20,11 @@ class NetworkApiService extends BaseApiServices {
     }
     return token;
   }
-  
+
   @override
   Future getGetApiResponse(String url) async {
     dynamic responseJson;
-    print('url network: $url');
+    // print('url network: $url');
     try {
       String token = await _getToken();
 
@@ -44,7 +44,6 @@ class NetworkApiService extends BaseApiServices {
         }).timeout(const Duration(seconds: 10));
         responseJson = returnResponse(response);
       }
-      
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -54,10 +53,10 @@ class NetworkApiService extends BaseApiServices {
   @override
   Future getPostApiResponse(String url, dynamic data) async {
     dynamic responseJson;
-    print('url network: data: $data');
+    // print('url network: data: $data');
     try {
       // Menampilkan data yang akan dikirim ke server
-      print("Data yang dikirim ke server: ${jsonEncode(data)}");
+      // print("Data yang dikirim ke server: ${jsonEncode(data)}");
 
       String token = await _getToken();
 
@@ -88,11 +87,15 @@ class NetworkApiService extends BaseApiServices {
   @override
   Future postMultipartApiResponse(String url, Map<String, dynamic> data,
       List<int> imageBytes, String fileName) async {
+    print('url network: data: $data');
+
     dynamic responseJson;
     try {
       String token = await _getToken();
+      print('token: $token');
 
       var request = http.MultipartRequest('POST', Uri.parse(url));
+      print('request: $request');
 
       // Add headers
       request.headers.addAll({
@@ -116,10 +119,21 @@ class NetworkApiService extends BaseApiServices {
           await request.send().timeout(Duration(seconds: 30));
       var response = await http.Response.fromStream(streamedResponse);
 
+      print('response: $response');
+
+      print('response.body: ${response.body}');
+      print('request.files: ${request.files}');
+      print('request.fields: ${request.fields}');
+      print('request.headers: ${request.headers}');
+      print('request.url: ${request.url}');
+      print('request.method: ${request.method}');
+      print('request.contentLength: ${request.contentLength}');
+
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     } catch (e) {
+      print('Error: $e');
       throw FetchDataException('Error occurred: ${e.toString()}');
     }
     return responseJson;
