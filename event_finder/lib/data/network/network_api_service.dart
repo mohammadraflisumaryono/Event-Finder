@@ -22,31 +22,34 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getGetApiResponse(String url) async {
+  Future<dynamic> getGetApiResponse(String url) async {
     dynamic responseJson;
-    // print('url network: $url');
-    try {
-      String token = await _getToken();
 
-      if (token.isEmpty || token == '') {
-        final response = await http.get(Uri.parse(url), headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-        }).timeout(const Duration(seconds: 10));
-        responseJson = returnResponse(response);
-      } else {
-        final response = await http.get(Uri.parse(url), headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-          'Authorization': 'Bearer $token',
-        }).timeout(const Duration(seconds: 10));
-        responseJson = returnResponse(response);
-      }
+    try {
+      final token = await _getToken();
+
+      final headers = {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+      };
+
+      final response = await http
+          .get(Uri.parse(url), headers: headers)
+          .timeout(const Duration(seconds: 10));
+
+          print('Response status: ${response.body}'); // Debug log
+
+      // Menangani response
+      responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
+    } catch (e) {
+      // Penanganan kesalahan umum
+      throw FetchDataException('An error occurred: $e');
     }
+
     return responseJson;
   }
 

@@ -39,6 +39,9 @@ router.put('/events/status/:eventId', verifyToken, eventController.approveEvent)
 // update +1 views event
 router.put('/views/:eventId', eventController.updateEventViews);
 
+// pending event
+router.get('/admin/pending', verifyToken, eventController.getEventPending);
+
 
 
 

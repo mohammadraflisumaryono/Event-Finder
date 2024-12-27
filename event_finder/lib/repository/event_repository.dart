@@ -107,15 +107,25 @@ class EventRepository {
   }
 
   // Ambil data event berdasarkan ID
-  Future<dynamic> getEventByIdApi(String id) async {
+
+  Future<Event> getEventByIdApi(String id) async {
+    print('id: $id');
+    print(AppUrl.eventById(id));
+
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.eventById(id));
 
-      print('response: $response');
-      print(Event.fromJson(response));
-      return Event.fromJson(response);
+      // Assuming the response structure is like:
+      // { "status": "success", "data": { event data } }
+      if (response['status'] == 'success') {
+        return Event.fromJson(
+            response['data']); // Parsing the nested 'data' object
+      } else {
+        throw Exception("Failed to fetch event");
+      }
     } catch (e) {
+      print("Error fetching event by ID repo: $e");
       rethrow;
     }
   }

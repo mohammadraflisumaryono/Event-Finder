@@ -22,6 +22,17 @@ class EventViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loading = false;
+
+  bool get loading => _loading;
+
+  setLoading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
+
+  List<Event> events = [];
+
   setLatestEvent(ApiResponse<EventListModel> response) {
     latestEvent = response;
     notifyListeners();
@@ -131,14 +142,6 @@ class EventViewModel with ChangeNotifier {
       // Menambahkan notifyListeners untuk memberi tahu UI saat terjadi error
       notifyListeners(); // Ini yang ditambahkan
     }
-  }
-
-  bool _loading = false;
-  bool get loading => _loading;
-
-  setLoading(bool value) {
-    _loading = value;
-    notifyListeners();
   }
 
   Future<void> createEventWithImage({
@@ -324,33 +327,17 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> fetchEventById(String id) async {
-    setEventList(ApiResponse.loading());
+  // Fungsi untuk fetch event berdasarkan ID
+  Future<void> fetchEventById(String eventId) async {
+    print('Fetching event by ID: $eventId');
+    setLoading(true);
     try {
-      print('Fetching event with ID: $id');
-      final value = await _myRepo.getEventByIdApi(id);
-      print('Event fetched: $value');
-      setEventList(ApiResponse.completed(value));
-    } catch (error) {
-      print(error.toString());
-      setEventList(ApiResponse.error(error.toString()));
-    }
-  }
-
-  // Fungsi untuk mengambil event berdasarkan status "pending"
-  Future<void> fetchEventByStatus() async {
-    setEventList(ApiResponse.loading());
-    try {
-      // Mengambil data event dengan status "pending"
-      final eventList = await _myRepo.getEventByStatusApi();
-      print('Event List fetched: $eventList');
-
-      // Membungkus List<Event> dalam EventListModel
-      setEventList(ApiResponse.completed(EventListModel(events: eventList)));
-
-    } catch (error) {
-      print(error.toString());
-      setEventList(ApiResponse.error(error.toString()));
+      Event event = await _myRepo.getEventByIdApi(eventId);
+      setEventList(ApiResponse.completed(EventListModel(events: [event])));
+    } catch (e) {
+      print("Error fetching event by ID: $e");
+    } finally {
+      setLoading(false);
     }
   }
 

@@ -305,9 +305,6 @@ exports.eventByOrganizer = async (req, res) => {
 
 exports.approveEvent = async (req, res) => {
     try {
-        console.log('Approving event... User:', req.user);
-        console.log('Approving event... Event ID:', req.params.eventId);
-        console.log('Approving event... Status:', req.body.status);
         const eventId = req.params.eventId;
         const status = req.body.status;
 
@@ -361,6 +358,32 @@ exports.updateEventViews = async (req, res) => {
             status: 'error',
             data: null,
             message: `Failed to update event views: ${error.message}`
+        });
+    }
+}
+
+exports.getEventPending = async (req, res) => {
+    try {
+        // cek role
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({
+                status: 'error',
+                data: null,
+                message: 'Unauthorized to view pending events'
+            });
+        }
+        const events = await EventService.getPendingEvents();
+        res.status(200).json({
+            status: 'success',
+            data: events,
+            message: 'Events fetched successfully'
+        });
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).json({
+            status: 'error',
+            data: null,
+            message: `Error fetching events: ${error.message}`
         });
     }
 }

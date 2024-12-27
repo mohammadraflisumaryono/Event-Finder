@@ -1,30 +1,30 @@
 import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;
 
-  const EventCard(this.event, {super.key});
+  const EventCard(
+    this.event, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (event.id != null) {
-          Navigator.pushNamed(context, RoutesName.detailEvent,
-              arguments: event.id);
-        } else {
-          print('Event ID is null!');
-        }
+        // Navigasi ke halaman detail event
+        Navigator.pushNamed(context, RoutesName.detailEvent, arguments: event);
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.45,
-        constraints: const BoxConstraints(maxWidth: 200),
+        width: MediaQuery.of(context).size.width *
+            0.45, // Sesuaikan lebar agar responsif
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context)
+              .colorScheme
+              .surface, // Sesuaikan warna latar belakang
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -37,7 +37,7 @@ class EventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar
+            // Gambar dengan ukuran dinamis
             Container(
               width: double.infinity,
               height: 100,
@@ -52,39 +52,37 @@ class EventCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            // Judul
+            // Judul event
             Text(
-              event.title ?? 'No Title',
+              event.title!,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            // Lokasi
+            // Lokasi event
             Text(
-              event.location ?? 'Unknown Location',
+              event.location!,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 4),
-            // Tanggal
+            // Tanggal event
             Text(
-              event.date != null
-                  ? DateFormat('dd MMM yyyy').format(event.date!)
-                  : 'Unknown Date',
+              '${event.date!.day}/${event.date!.month}', // Format tanggal
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 8),
-            // Harga
+            // Harga event (jika ada)
             Text(
               event.ticketPrice != null
-                  ? 'Rp ${event.ticketPrice!.toStringAsFixed(2)}'
-                  : 'Free',
+                  ? 'Rp ${event.ticketPrice!.toStringAsFixed(2)}' // Format harga dengan 2 angka desimal
+                  : 'Free', // Tampilkan 'Free' jika harga null
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
-            ),
+            )
           ],
         ),
       ),

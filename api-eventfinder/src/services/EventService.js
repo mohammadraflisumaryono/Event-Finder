@@ -239,6 +239,21 @@ class EventService {
     }
 
 
+    // get events pending
+    static async getPendingEvents() {
+        try {
+            const events = await Event.find({ status: 'pending' })
+                .populate('userId', 'name email')
+                .sort({ createdAt: -1 });
+            console.log('Fetched pending events:', events);
+            return events;
+        } catch (error) {
+            console.error('Error fetching pending events:', error.message);
+            throw new Error(`Error fetching pending events: ${error.message}`);
+        }
+    }
+
+
 }
 
 module.exports = EventService;
