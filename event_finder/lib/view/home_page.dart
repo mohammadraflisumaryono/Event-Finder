@@ -198,8 +198,16 @@ class _HomePageState extends State<HomePage> {
                             ''); // Tambahkan baris kosong untuk pemisah antar event
                       }
                       // Tampilkan daftar event
-                      return ListView.builder(
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // Jumlah kolom
+                          crossAxisSpacing: 16, // Jarak horizontal antar kartu
+                          mainAxisSpacing: 8, // Jarak vertikal antar baris
+                          childAspectRatio: 2.5, // Rasio ukuran kartu (lebar:tinggi)
+                        ),
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(), // Agar grid tidak scroll sendiri jika di dalam ScrollView
                         itemCount: latestEvents.length,
                         itemBuilder: (context, index) {
                           final event = latestEvents[index];
