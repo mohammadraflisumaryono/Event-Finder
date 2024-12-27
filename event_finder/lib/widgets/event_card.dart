@@ -12,10 +12,25 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Event Card:');
+    print('  id: ${event.id}');
+    print('  title: ${event.title}');
+    print('  date: ${event.date}');
+    print('  time: ${event.time}');
+    print('  location: ${event.location}');
+    print('  description: ${event.description}');
+    print('  image: ${event.image}');
+    print('  category: ${event.category}');
+    print('  ticketPrice: ${event.ticketPrice}');
+    print('  registrationLink: ${event.registrationLink}');
+    print('  status: ${event.status}');
+    print('  views: ${event.views}');
+
     return GestureDetector(
       onTap: () {
         // Navigasi ke halaman detail event
-        Navigator.pushNamed(context, RoutesName.detailEvent, arguments: event);
+        Navigator.pushNamed(context, RoutesName.detailEvent,
+            arguments: event.id);
       },
       child: Container(
         width: MediaQuery.of(context).size.width *

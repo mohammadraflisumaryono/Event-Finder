@@ -115,7 +115,10 @@ class EventRepository {
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.eventById(id));
-      return EventListModel.fromJson(response);
+
+      print('response: $response');
+      print(Event.fromJson(response));
+      return Event.fromJson(response);
     } catch (e) {
       rethrow;
     }

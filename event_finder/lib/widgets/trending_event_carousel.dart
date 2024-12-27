@@ -104,11 +104,8 @@ class TrendingEventCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           // Navigasi ke DetailPage dengan passing data
-          Navigator.pushNamed(
-            context,
-            RoutesName.detailEvent, 
-            arguments: event, // Kirim data event sebagai argument
-          );
+          Navigator.pushNamed(context, RoutesName.detailEvent,
+              arguments: event.id);
         },
         child: Container(
           height: 200,
