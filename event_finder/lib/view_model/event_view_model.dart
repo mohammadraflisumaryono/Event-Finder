@@ -313,7 +313,8 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> deleteEventById({required String id, required String organizerId, required BuildContext context}) async {
+  Future<void> deleteEventById({
+    required String id, required String organizerId, required BuildContext context}) async {
     setLoading(true);
 
     try {
