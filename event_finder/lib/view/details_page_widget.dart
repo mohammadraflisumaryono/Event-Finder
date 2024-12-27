@@ -51,7 +51,7 @@ class DetailPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Event Info Card
             Card(

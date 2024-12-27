@@ -22,6 +22,7 @@ class EventRepository {
 
   // Membuat data event
   Future<dynamic> createEventApi(dynamic data) async {
+    print('data: $data');
     try {
       dynamic response =
           await _apiServices.getPostApiResponse(AppUrl.eventEndPoint, data);
@@ -48,6 +49,10 @@ class EventRepository {
     required List<int> imageBytes,
     required String fileName,
   }) async {
+    print('data: $eventData');
+    // print('imageBytes: $imageBytes');
+    print('fileName: $fileName');
+
     try {
       dynamic response = await _apiServices.postMultipartApiResponse(
         AppUrl.eventEndPoint,
@@ -55,6 +60,7 @@ class EventRepository {
         imageBytes,
         fileName,
       );
+      print('response $response');
       return response;
     } catch (e) {
       rethrow;
@@ -67,7 +73,6 @@ class EventRepository {
       dynamic response = await _apiServices
           .getGetApiResponse(AppUrl.eventByOrganizer(organizerId));
 
-      print(response);
       return EventListModel.fromJson(response);
     } catch (e) {
       rethrow;
