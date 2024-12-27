@@ -26,6 +26,8 @@ class RoutesName {
   // superAdminscreen route name
   static const String superAdmin = 'super_admin_screen';
 
+  // Onboardingscreen route name
+  static const String onboardingScreen = 'on_boarding_screen';
   // detailEventscreen route name
   static const String DetailPage = 'detail_page_widget';
 
