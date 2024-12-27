@@ -7,7 +7,9 @@ import '../view_model/event_view_model.dart';
 import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({super.key});
+  final String eventId; // Tambahkan parameter untuk eventId
+
+  const DetailPage({super.key, required this.eventId});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -18,14 +20,10 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
+    print("eventId: ${widget.eventId}");
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final String? eventId =
-          ModalRoute.of(context)?.settings.arguments as String?;
-      if (eventId != null) {
-        _eventViewModel.fetchEventById(eventId);
-      }
-    });
+    // Panggil fetchEventById() dengan eventId yang diterima
+    _eventViewModel.fetchEventById(widget.eventId);
   }
 
   Future<void> launchURL(String? url) async {
@@ -69,8 +67,8 @@ class _DetailPageState extends State<DetailPage> {
                 );
 
               case Status.COMPLETED:
-                final event = value.eventsList.data?.events
-                    ?.first; // Adjust based on your model structure
+                final event =
+                    value.eventsList.data?.events?.first; // Ambil event pertama
                 if (event == null) {
                   return const Center(
                     child: Text(

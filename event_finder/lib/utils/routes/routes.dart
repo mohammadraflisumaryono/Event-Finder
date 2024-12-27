@@ -19,7 +19,10 @@ class Routes {
       case RoutesName.home:
         return MaterialPageRoute(builder: (context) => HomePage());
       case RoutesName.detailEvent:
-        return MaterialPageRoute(builder: (context) => DetailPage());
+        final String eventId = settings.arguments as String;
+        print('eventid: ${settings.arguments}');
+        return MaterialPageRoute(
+            builder: (context) => DetailPage(eventId: eventId));
       case RoutesName.login:
         return MaterialPageRoute(builder: (context) => LoginPageWidget());
       case RoutesName.register:
