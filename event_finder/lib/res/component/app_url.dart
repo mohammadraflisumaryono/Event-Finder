@@ -14,6 +14,8 @@ class AppUrl {
 
   static var trendingEndPoint = baseUrl + 'trending';
 
+  static var eventStatusEndPoint = baseUrl + 'admin/pending';
+
   static String eventByCategory(String category) {
     return '${baseUrl}events/category/$category';
   }
@@ -25,4 +27,9 @@ class AppUrl {
   static String eventByOrganizer(String id) {
     return '${baseUrl}events/organizer/$id';
   }
+
+  static String updateStatusEvent(String id) {
+    return '${baseUrl}events/status/$id';
+  }
+
 }

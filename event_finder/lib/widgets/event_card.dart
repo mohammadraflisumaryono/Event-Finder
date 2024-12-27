@@ -44,7 +44,9 @@ class EventCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
-                  image: NetworkImage(event.image!),
+                  image: event.image != null
+                      ? NetworkImage(event.image!)
+                      : throw Exception('Image is required and cannot be null'),
                   fit: BoxFit.cover,
                 ),
               ),

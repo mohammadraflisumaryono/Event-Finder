@@ -4,24 +4,32 @@ import 'package:event_finder/widgets/event_card.dart';
 import 'package:provider/provider.dart';
 import '../data/response/status.dart';
 
-class EventListPage extends StatelessWidget {
+class EventListPage extends StatefulWidget {
   final String? category;
   final String searchQuery;
 
   const EventListPage({super.key, this.category, required this.searchQuery});
 
   @override
+  _EventListPageState createState() => _EventListPageState();
+}
+
+class _EventListPageState extends State<EventListPage> {
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          category != null ? '$category Events' : 'Search Results',
+          widget.category != null
+              ? '${widget.category} Events'
+              : 'Get Your Events!',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
         ),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.transparent,
       ),
       body: Consumer<EventViewModel>(
         builder: (context, viewModel, child) {

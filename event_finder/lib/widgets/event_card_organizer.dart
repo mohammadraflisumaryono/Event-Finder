@@ -1,7 +1,7 @@
 
 // ignore_for_file: prefer_const_constructors
 
-import 'package:event_finder/widgets/edit_event_dialog.dart';
+import 'package:event_finder/view/edit_event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/events_model.dart';
@@ -60,29 +60,29 @@ class EventCardOrganizer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => EditEventDialog(
-                          initialData: {
-                            'title': event.title,
-                            'date': event.date
-                                ?.toIso8601String(), // Konversi DateTime ke ISO String
-                            'time_start': event.time?.start
-                                ?.toIso8601String(), // Ambil waktu mulai
-                            'time_end': event.time?.end
-                                ?.toIso8601String(), // Ambil waktu selesai
-                            'location': event.location,
-                            'description': event.description,
-                            'category': event.category
-                                ?.value, // Ambil nilai string dari enum menggunakan extension
-                            'ticket_price': event.ticketPrice?.toString(),
-                            'registration_link': event.registrationLink,
-                            'event_id': event.id,
-                          },
+                   onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditEventPage(
+                            initialData: {
+                              'title': event.title,
+                              'date': event.date?.toIso8601String(),
+                              'time_start':
+                                  event.time?.start?.toIso8601String(),
+                              'time_end': event.time?.end?.toIso8601String(),
+                              'location': event.location,
+                              'description': event.description,
+                              'category': event.category?.value,
+                              'ticket_price': event.ticketPrice?.toString(),
+                              'registration_link': event.registrationLink,
+                              'event_id': event.id,
+                            },
+                          ),
                         ),
                       ).then((_) {
-                        if (onEdit != null) onEdit!(); // Trigger tindakan tambahan setelah edit
+                        if (onEdit != null)
+                          onEdit!(); // Trigger tindakan tambahan setelah edit
                       });
                     },
                     style: ElevatedButton.styleFrom(

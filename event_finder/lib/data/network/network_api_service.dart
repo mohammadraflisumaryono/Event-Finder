@@ -209,6 +209,38 @@ class NetworkApiService extends BaseApiServices {
     return responseJson;
   }
 
+  @override
+  Future getPutStatusEventApiResponse(String url, String id, String status) async {
+    dynamic responseJson;
+    try {
+      String token = await _getToken();
+      var request = http.MultipartRequest('PUT', Uri.parse(url));
+
+      // Add headers
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      });
+
+      // Add other fields
+      data.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Send request
+      var streamedResponse =
+          await request.send().timeout(Duration(seconds: 30));
+      var response = await http.Response.fromStream(streamedResponse);
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    } catch (e) {
+      throw FetchDataException('Error occurred: ${e.toString()}');
+    }
+    return responseJson;
+  }
+
   dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
