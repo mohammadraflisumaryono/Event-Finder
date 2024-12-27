@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     final colors = [
                       Color(0xFFBDE0FE), // Pastel Blue
                       Color(0xFFFFD6E0), // Pastel Pink
-                      Color(0xFFFFF5BA), // Pastel Yellow
+                      Color.fromARGB(255, 244, 235, 184), // Pastel Yellow
                       Color(0xFFC3FBD8), // Pastel Green
                       Color(0xFFD5AAFF), // Pastel Purple
                     ];
@@ -143,6 +143,12 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         backgroundColor: chipColor,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: chipColor), // Border sesuai warna chip
+                          borderRadius: BorderRadius.circular(
+                              12.0), // Opsional: Sesuaikan bentuk
+                        ),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
                       ),
