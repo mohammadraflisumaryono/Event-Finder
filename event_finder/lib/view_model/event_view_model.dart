@@ -326,6 +326,7 @@ class EventViewModel with ChangeNotifier {
   }
 
   Future<void> fetchEventById(String id) async {
+    print('Fetching event with ID: $id');
     setEventList(ApiResponse.loading());
     try {
       print('Fetching event with ID: $id');
@@ -333,6 +334,7 @@ class EventViewModel with ChangeNotifier {
       print('Event fetched: $value');
       setEventList(ApiResponse.completed(value));
     } catch (error) {
+      print('Error fetching event: $error');
       setEventList(ApiResponse.error(error.toString()));
     }
   }
