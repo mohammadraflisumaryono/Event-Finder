@@ -56,19 +56,28 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 children: [
                   Image.asset(
                     'lib/res/assets/images/logogoova.png',
-                    height: 150,
-                    width: 150,
+                    height: 120, 
+                    width: 120,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Text(
-                    "Log in to Goova",
+                    "Welcome Back!",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
                         ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Ready to Create Your Next Event?",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.primary
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
                   const SizedBox(height: 30),
                   TextField(
                     controller: emailTextController,
@@ -107,24 +116,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        // Add forgot password logic
-                      },
-                      child: Text(
-                        "Forgot Password?",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: 
+                        () async {
                       if (emailTextController.text.isEmpty) {
                         Utils.toastMessage('Please Enter Email');
                       } else if (passwordTextController.text.isEmpty) {
@@ -137,17 +132,21 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           'password': passwordTextController.text.toString(),
                         };
 
-                        await authViewModel.loginApi(data, context);
-                        // print('api hit');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      await authViewModel.loginApi(data, context);
+                      print('api hit');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary, // Background color
+                      foregroundColor: Colors.white, // Text color
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text("Login"),
+                    child: const Text("Log In"),
                   ),
                   const SizedBox(height: 20),
                   Center(

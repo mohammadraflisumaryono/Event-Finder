@@ -101,9 +101,11 @@ class _EditEventDialogState extends State<EditEventDialog> {
   @override
   Widget build(BuildContext context) {
     final eventViewModel = Provider.of<EventViewModel>(context);
-    return AlertDialog(
+    return Scaffold(
+      appBar: AppBar(
       title: Text('Edit Event'),
-      content: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -118,6 +120,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                       value!.isEmpty ? 'Please enter a title' : null,
                   onSaved: (value) => _title = value,
                 ),
+                SizedBox(height: 16),
                 ListTile(
                   title: Text(_date == null
                       ? 'Select Date'
@@ -125,6 +128,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   trailing: Icon(Icons.calendar_today),
                   onTap: () => _selectDate(context),
                 ),
+                SizedBox(height: 16),
                 ListTile(
                   title: Text(_startTime == null
                       ? 'Select Start Time'
@@ -132,6 +136,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   trailing: Icon(Icons.access_time),
                   onTap: () => _selectTime(context, true),
                 ),
+                SizedBox(height: 16),
                 ListTile(
                   title: Text(_endTime == null
                       ? 'Select End Time'
@@ -139,6 +144,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   trailing: Icon(Icons.access_time),
                   onTap: () => _selectTime(context, false),
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   initialValue: _location,
                   decoration: InputDecoration(labelText: 'Location'),
@@ -146,12 +152,14 @@ class _EditEventDialogState extends State<EditEventDialog> {
                       value!.isEmpty ? 'Please enter a location' : null,
                   onSaved: (value) => _location = value,
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   initialValue: _description,
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   onSaved: (value) => _description = value,
                 ),
+                SizedBox(height: 16),
                 ListTile(
                   title: Text(_imageFileName ?? 'No Image Selected'),
                   trailing: Row(
@@ -172,6 +180,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                     ],
                   ),
                 ),
+                SizedBox(height: 16),
                 DropdownButtonFormField<EventCategory>(
                   value: _category,
                   decoration: InputDecoration(labelText: 'Category'),
@@ -186,6 +195,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
                       value == null ? 'Please select a category' : null,
                   hint: Text('Select Category'),
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   initialValue: _ticketPrice?.toString(),
                   decoration: InputDecoration(labelText: 'Ticket Price'),
@@ -201,21 +211,15 @@ class _EditEventDialogState extends State<EditEventDialog> {
                   },
                   onSaved: (value) => _ticketPrice = double.tryParse(value!),
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   initialValue: _registrationLink,
                   decoration: InputDecoration(labelText: 'Registration Link'),
                   onSaved: (value) => _registrationLink = value,
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+        SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () async {
+        onPressed: () async {
             if (_formKey.currentState!.validate()) {
               if (_date == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -292,7 +296,11 @@ class _EditEventDialogState extends State<EditEventDialog> {
           },
           child: Text('Save'),
         ),
-      ],
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
