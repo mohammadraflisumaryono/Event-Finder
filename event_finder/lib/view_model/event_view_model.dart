@@ -100,7 +100,12 @@ class EventViewModel with ChangeNotifier {
     try {
       final eventListModel = await _myRepo.getEventByOrganizerApi(organizerId);
 
+      print('Events after deletion: ${eventListModel.events}');
+
       print('Response: $eventListModel');
+      print('Event list model: ${eventListModel.events}');
+      print('Total events fetched: ${eventListModel.events!.length}');
+
 
       // Mengelompokkan event berdasarkan status
       final Map<StatusEvent, List<Event>> categorizedEvents = {
@@ -125,9 +130,14 @@ class EventViewModel with ChangeNotifier {
       final allEvents = categorizedEvents.values.expand((x) => x).toList();
 
       setEventList(ApiResponse.completed(EventListModel(events: allEvents)));
+      // Menambahkan notifyListeners untuk memberi tahu UI
+      notifyListeners(); // Ini yang ditambahkan
     } catch (error) {
       print('Error: $error');
       setEventList(ApiResponse.error(error.toString()));
+
+      // Menambahkan notifyListeners untuk memberi tahu UI saat terjadi error
+      notifyListeners(); // Ini yang ditambahkan
     }
   }
 
@@ -297,6 +307,35 @@ class EventViewModel with ChangeNotifier {
           ApiResponse.completed(EventListModel(events: filteredEvents)));
     } catch (error) {
       setEventList(ApiResponse.error(error.toString()));
+    }
+  }
+
+  Future<void> deleteEventById({required String id, required String organizerId, required BuildContext context}) async {
+    setLoading(true);
+
+    try {
+      print('Attempting to delete event with ID: $id'); // Debug log
+
+      final response =
+          await _myRepo.deleteEventApi(id); // Panggil API delete event
+      print('Delete response: $response'); // Debug log
+
+      // Update state untuk menghapus event dari daftar lokal (eventsList)
+      eventsList.data!.events?.removeWhere((event) => event.id == id);
+      notifyListeners(); // Memberitahu UI untuk memperbarui
+
+      // Setelah penghapusan, ambil ulang data events
+      await fetchAndCategorizeEvents(organizerId);
+
+      // Jika event berhasil dihapus, tampilkan pesan sukses dan update UI
+      Utils.toastMessage('Event Deleted Successfully');
+
+      Navigator.pop(context); // Menutup dialog atau navigasi
+    } catch (error) {
+      setLoading(false); // Menandakan proses selesai meskipun gagal
+      Utils.toastMessage(error.toString());
+    } finally {
+      setLoading(false); // Menyelesaikan loading
     }
   }
 }

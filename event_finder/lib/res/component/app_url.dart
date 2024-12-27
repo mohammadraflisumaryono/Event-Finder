@@ -3,8 +3,8 @@
 class AppUrl {
   static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
   static var ImageUrl = 'https://event-finder-production.up.railway.app/uploads/images/';
-  // static var baseUrl = 'http://localhost:3002/api/';
-  // static var ImageUrl = 'http://localhost:3002/uploads/images/';
+  // static var baseUrl = 'http://localhost:3000/api/';
+  // static var ImageUrl = 'http://localhost:3000/uploads/images/';
 
   static var loginEndPoint = baseUrl + 'login';
 

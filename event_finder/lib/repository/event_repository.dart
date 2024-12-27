@@ -101,4 +101,14 @@ class EventRepository {
       rethrow;
     }
   }
+
+  // Delete data event
+  Future<dynamic> deleteEventApi(String id) async {
+    try {
+      dynamic response = await _apiServices.getDeleteApiResponse(AppUrl.eventById(id));
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
