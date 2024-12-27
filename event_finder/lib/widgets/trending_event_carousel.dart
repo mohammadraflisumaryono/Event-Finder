@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:event_finder/model/events_model.dart';
+import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -67,9 +68,9 @@ class _TrendingEventCarouselState extends State<TrendingEventCarousel> {
                 DateFormat('MMM dd, yyyy').format(event.date ?? DateTime.now()),
             price: event.ticketPrice != null
                 ? "Rp ${event.ticketPrice!.toStringAsFixed(0)}"
-                : "Free", // Menggunakan format harga
-            image: event.image ??
-                "https://via.placeholder.com/150", // Fallback jika tidak ada gambar
+                : "Free",
+            image: event.image ?? "https://via.placeholder.com/150",
+            event: event, // Kirim data event ke card
           );
         },
       ),
@@ -84,6 +85,7 @@ class TrendingEventCard extends StatelessWidget {
   final String date;
   final String price;
   final String image;
+  final Event event; // Tambahkan properti Event untuk navigasi
 
   const TrendingEventCard({
     Key? key,
@@ -92,70 +94,81 @@ class TrendingEventCard extends StatelessWidget {
     required this.date,
     required this.price,
     required this.image,
+    required this.event, // Tambahkan parameter Event
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Container(
-        height: 200,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            image: NetworkImage(image),
-            fit: BoxFit.cover,
+      child: InkWell(
+        onTap: () {
+          // Navigasi ke DetailPage dengan passing data
+          Navigator.pushNamed(
+            context,
+            RoutesName.detailEvent, 
+            arguments: event, // Kirim data event sebagai argument
+          );
+        },
+        child: Container(
+          height: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            image: DecorationImage(
+              image: NetworkImage(image),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.black.withOpacity(0.6),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      location,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      date,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      price,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ],
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        location,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.white),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        date,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.white),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        price,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
