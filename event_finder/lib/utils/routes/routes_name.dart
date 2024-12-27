@@ -25,4 +25,9 @@ class RoutesName {
 
   // superAdminscreen route name
   static const String superAdmin = 'super_admin_screen';
+
+  // detailEventscreen route name
+  static const String DetailPage = 'detail_page_widget';
+
+  RoutesName(Type loginPageWidget);
  }

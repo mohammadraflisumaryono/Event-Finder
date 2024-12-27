@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +32,13 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
   void _loadUserIdAndFetchEvents() async {
     String? fetchedUserId = await UserPreferences.getUserId();
     if (fetchedUserId != null) {
+     if (mounted) {
       setState(() {
         userId = fetchedUserId;
       });
-      // Setelah userId didapat, panggil fetchAndCategorizeEvents
-      await Provider.of<EventViewModel>(context, listen: false)
-          .fetchAndCategorizeEvents(userId);
+    }
+    await Provider.of<EventViewModel>(context, listen: false)
+        .fetchAndCategorizeEvents(userId);
     } else {
       print('User is not logged in');
     }
@@ -202,6 +203,7 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
           return EventCardOrganizer(
             isOrganizer: true, 
             event: events[index],
+            userId: userId,
           );
         },
       ),

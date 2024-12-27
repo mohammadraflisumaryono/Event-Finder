@@ -177,20 +177,27 @@ class NetworkApiService extends BaseApiServices {
     return responseJson;
   }
 
+  // In your ApiService class
   @override
   Future getDeleteApiResponse(String url) async {
     dynamic responseJson;
     try {
       String token = await _getToken();
 
-      // Mengirim permintaan DELETE dengan token untuk otentikasi
+      print('Delete URL: $url'); // Debug log
+      print('Token: $token'); // Debug log
+
       final response = await http.delete(
         Uri.parse(url),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
       ).timeout(const Duration(seconds: 10));
+
+      print('Response status: ${response.statusCode}'); // Debug log
+      print('Response body: ${response.body}'); // Debug log
 
       responseJson = returnResponse(response);
     } on SocketException {
