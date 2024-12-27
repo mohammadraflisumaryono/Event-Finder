@@ -1,45 +1,30 @@
 import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;
 
-  const EventCard(
-    this.event, {
-    super.key,
-  });
+  const EventCard(this.event, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    print('Event Card:');
-    print('  id: ${event.id}');
-    print('  title: ${event.title}');
-    print('  date: ${event.date}');
-    print('  time: ${event.time}');
-    print('  location: ${event.location}');
-    print('  description: ${event.description}');
-    print('  image: ${event.image}');
-    print('  category: ${event.category}');
-    print('  ticketPrice: ${event.ticketPrice}');
-    print('  registrationLink: ${event.registrationLink}');
-    print('  status: ${event.status}');
-    print('  views: ${event.views}');
-
     return GestureDetector(
       onTap: () {
-        // Navigasi ke halaman detail event
-        Navigator.pushNamed(context, RoutesName.detailEvent,
-            arguments: event.id);
+        if (event.id != null) {
+          Navigator.pushNamed(context, RoutesName.detailEvent,
+              arguments: event.id);
+        } else {
+          print('Event ID is null!');
+        }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width *
-            0.45, // Sesuaikan lebar agar responsif
+        width: MediaQuery.of(context).size.width * 0.45,
+        constraints: const BoxConstraints(maxWidth: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context)
-              .colorScheme
-              .surface, // Sesuaikan warna latar belakang
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -52,50 +37,55 @@ class EventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar dengan ukuran dinamis
+            // Gambar
             Container(
               width: double.infinity,
               height: 100,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
-                  image: NetworkImage(event.image!),
+                  image: event.image != null
+                      ? NetworkImage(event.image!)
+                      : const AssetImage('assets/placeholder.png')
+                          as ImageProvider,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             const SizedBox(height: 8),
-            // Judul event
+            // Judul
             Text(
-              event.title!,
+              event.title ?? 'No Title',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            // Lokasi event
+            // Lokasi
             Text(
-              event.location!,
+              event.location ?? 'Unknown Location',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 4),
-            // Tanggal event
+            // Tanggal
             Text(
-              '${event.date!.day}/${event.date!.month}', // Format tanggal
+              event.date != null
+                  ? DateFormat('dd MMM yyyy').format(event.date!)
+                  : 'Unknown Date',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 8),
-            // Harga event (jika ada)
+            // Harga
             Text(
               event.ticketPrice != null
-                  ? 'Rp ${event.ticketPrice!.toStringAsFixed(2)}' // Format harga dengan 2 angka desimal
-                  : 'Free', // Tampilkan 'Free' jika harga null
+                  ? 'Rp ${event.ticketPrice!.toStringAsFixed(2)}'
+                  : 'Free',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
-            )
+            ),
           ],
         ),
       ),
