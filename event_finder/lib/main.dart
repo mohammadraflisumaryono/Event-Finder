@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Event Finder',
         theme: AppTheme.lightTheme, // Menggunakan tema dari res/theme.dart
-        initialRoute: RoutesName.login, // Mulai dari halaman HomePage
+        initialRoute: RoutesName.home, // Mulai dari halaman HomePage
         onGenerateRoute: Routes.generateRoute,
       ),
     );

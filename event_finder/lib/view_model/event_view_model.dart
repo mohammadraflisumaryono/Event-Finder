@@ -218,8 +218,7 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
-  // update event with image by id
-  Future<void> updateEventWithImage({
+  Future<String> updateEventWithImage({
     required Map<String, dynamic> eventData,
     required List<int> imageBytes,
     required String fileName,
@@ -236,7 +235,6 @@ class EventViewModel with ChangeNotifier {
           'start': eventData['time_start'],
           'end': eventData['time_end'],
         }),
-        // Hapus properti time_start dan time_end yang sudah digabungkan
         'time_start': null,
         'time_end': null,
       };
@@ -256,6 +254,9 @@ class EventViewModel with ChangeNotifier {
       if (kDebugMode) {
         print('Event updated successfully: ${value.toString()}');
       }
+
+      // Return a success message or the updated data
+      return 'Event updated successfully';
     } catch (error) {
       setLoading(false);
       Utils.toastMessage(error.toString());
@@ -263,6 +264,8 @@ class EventViewModel with ChangeNotifier {
       if (kDebugMode) {
         print('Error updating event: ${error.toString()}');
       }
+
+      return 'Error updating event';
     }
   }
 

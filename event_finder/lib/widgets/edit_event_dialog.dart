@@ -1,8 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:event_finder/model/event_category.dart';
+import 'package:provider/provider.dart';
 
 class EditEventDialog extends StatefulWidget {
   final Map<String, dynamic>? initialData;
@@ -26,6 +30,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
   double? _ticketPrice;
   String? _registrationLink;
   String? _imageFileName;
+  String? _eventId;
 
   @override
   void initState() {
@@ -47,6 +52,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
           orElse: () => EventCategory.other);
       _ticketPrice = double.tryParse(data['ticket_price'] ?? '0');
       _registrationLink = data['registration_link'];
+      _eventId = data['event_id']; // Pastikan ID event ada di data
     }
   }
 
@@ -63,13 +69,17 @@ class _EditEventDialogState extends State<EditEventDialog> {
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final picked = await showTimePicker(
       context: context,
-      initialTime: isStartTime ? _startTime ?? TimeOfDay.now() : _endTime ?? TimeOfDay.now(),
+      initialTime: isStartTime
+          ? _startTime ?? TimeOfDay.now()
+          : _endTime ?? TimeOfDay.now(),
     );
-    if (picked != null) setState(() => isStartTime ? _startTime = picked : _endTime = picked);
+    if (picked != null)
+      setState(() => isStartTime ? _startTime = picked : _endTime = picked);
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image, withData: true);
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.image, withData: true);
     if (result != null && result.files.isNotEmpty) {
       setState(() {
         _image = result.files.single.bytes;
@@ -84,6 +94,7 @@ class _EditEventDialogState extends State<EditEventDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final eventViewModel = Provider.of<EventViewModel>(context);
     return AlertDialog(
       title: Text('Edit Event'),
       content: SingleChildScrollView(
@@ -214,12 +225,17 @@ class _EditEventDialogState extends State<EditEventDialog> {
                 );
                 return;
               }
+              // Save form data
               _formKey.currentState!.save();
-              Navigator.pop(context, {
+
+              // Persiapkan data untuk dikirim ke API
+              final eventData = {
                 'title': _title,
                 'date': _date!.toIso8601String(),
-                'time_start': convertTimeOfDayToDateTime(_date!, _startTime!).toIso8601String(),
-                'time_end': convertTimeOfDayToDateTime(_date!, _endTime!).toIso8601String(),
+                'time_start': convertTimeOfDayToDateTime(_date!, _startTime!)
+                    .toIso8601String(),
+                'time_end': convertTimeOfDayToDateTime(_date!, _endTime!)
+                    .toIso8601String(),
                 'location': _location,
                 'description': _description,
                 'category': _category!.value,
@@ -227,7 +243,29 @@ class _EditEventDialogState extends State<EditEventDialog> {
                 'registration_link': _registrationLink,
                 'image': _image,
                 'file_name': _imageFileName,
-              });
+              };
+
+              // Memanggil method untuk update event
+              try {
+                final response = await eventViewModel.updateEventWithImage(
+                  eventData: eventData,
+                  imageBytes: _image!, // Gunakan _image sebagai bytes
+                  fileName: _imageFileName ??
+                      '', // Default to an empty string if null
+                  eventId: _eventId!,
+                  context: context,
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(response)), // Use the returned message
+                );
+
+                Navigator.pop(context, response);
+              } catch (error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error updating event: $error')),
+                );
+              }
             }
           },
           child: Text('Save'),
