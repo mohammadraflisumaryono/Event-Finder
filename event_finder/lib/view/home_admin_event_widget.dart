@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../data/response/status.dart';
 import '../model/events_model.dart';
 import '../model/status_event.dart';
+import '../utils/utils.dart';
 import '../view_model/event_view_model.dart';
 import '../widgets/event_card_organizer.dart';
 
@@ -61,7 +62,7 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
           ),
         ),
         title: Text(
-          'Organizer Events Dashboard',
+          'Organizer Dashboard',
           style: TextStyle(
             color: Colors.purple,
             fontWeight: FontWeight.bold,
@@ -225,12 +226,8 @@ void _showLogoutDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(
-          'Are you sure you want to Log Out?',
-          style: TextStyle(
-            fontSize: 16, // Ukuran font menjadi 16
-          ),
-        ),
+        title: Text('Log Out'),
+        content: Text('Are you sure you want to log out?'),
         contentPadding:
             const EdgeInsets.all(16.0), // Menambahkan padding di sekitar teks
         actionsPadding: const EdgeInsets.symmetric(
@@ -246,8 +243,8 @@ void _showLogoutDialog(BuildContext context) {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                  RoutesName.login); // Arahkan ke login setelah logout
+              Navigator.of(context).pop(); 
+              _performLogout(context); // Panggil fungsi logou
             },
             child: const Text('Yes'),
           ),
@@ -255,4 +252,23 @@ void _showLogoutDialog(BuildContext context) {
       );
     },
   );
+}
+
+// Fungsi untuk melakukan logout
+void _performLogout(BuildContext context) async {
+  try {
+    // Hapus data dari SharedPreferences
+    await UserPreferences.clearUserData();
+
+    // Tampilkan pesan sukses
+    Utils.toastMessage('Logged out successfully');
+
+    // Navigasi ke halaman login
+    Navigator.pushNamedAndRemoveUntil(context, RoutesName.login, 
+    (route) => false, // Hapus semua halaman sebelumnya dari stack
+    );
+  } catch (e) {
+    Utils.toastMessage('Logout failed');
+    print('Error during logout: $e');
+  }
 }

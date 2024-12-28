@@ -9,6 +9,7 @@ import 'package:event_finder/model/event_category.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/routes/routes_name.dart';
+import '../utils/utils.dart';
 
 class EditEventPage extends StatefulWidget {
   final Map<String, dynamic>? initialData;
@@ -221,82 +222,113 @@ class _EditEventPageState extends State<EditEventPage> {
                 ),
         SizedBox(height: 16),
         ElevatedButton(
-        onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              if (_date == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Please select a date')),
-                );
-                return;
-              }
-              if (_startTime == null || _endTime == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text('Please select both start and end times')),
-                );
-                return;
-              }
-              if (convertTimeOfDayToDateTime(_date!, _startTime!)
-                  .isAfter(convertTimeOfDayToDateTime(_date!, _endTime!))) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Start time must be before end time')),
-                );
-                return;
-              }
-              // Save form data
-              _formKey.currentState!.save();
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (_date == null) {
+                        Utils.toastMessage('Please select a date');
+                        return;
+                      }
+                      if (_startTime == null || _endTime == null) {
+                        Utils.toastMessage('Please select both start and end times');
+                        return;
+                      }
+                      if (convertTimeOfDayToDateTime(_date!, _startTime!)
+                          .isAfter(
+                              convertTimeOfDayToDateTime(_date!, _endTime!))) {
+                        Utils.toastMessage(
+                            'Start time must be before end time');
+                        return;
+                      }
 
-              // Persiapkan data untuk dikirim ke API
-              final eventData = {
-                'title': _title,
-                'date': _date!.toIso8601String(),
-                'time_start': convertTimeOfDayToDateTime(_date!, _startTime!)
-                    .toIso8601String(),
-                'time_end': convertTimeOfDayToDateTime(_date!, _endTime!)
-                    .toIso8601String(),
-                'location': _location,
-                'description': _description,
-                'category': _category!.value,
-                'ticket_price': _ticketPrice.toString(),
-                'registration_link': _registrationLink,
-                'image': _image,
-                'file_name': _imageFileName,
-              };
-              // get event id
+                      // Menampilkan dialog loading
+                      showDialog(
+                        context: context,
+                        barrierDismissible:
+                            false, // Mencegah dialog ditutup selama proses
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  CircularProgressIndicator(),
+                                  SizedBox(width: 20),
+                                  Text('Updating Event...'), // Teks loading
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
 
-              // Memanggil method untuk update event
-              try {
-                if (widget.initialData != null) {
-                  final data = widget.initialData!;
-                  _eventId = data['event_id'];
-                }
+                      // Save form data
+                      _formKey.currentState!.save();
 
-                print('updating event..., $_imageFileName, $_eventId');
-                final response = await eventViewModel.updateEventWithImage(
-                  eventData: eventData,
-                  imageBytes: _image!, // Gunakan _image sebagai bytes
-                  fileName: _imageFileName ?? '', // Default to an empty string if null
-                  eventId: _eventId!,
-                  context: context,
-                );
+                      // Persiapkan data untuk dikirim ke API
+                      final eventData = {
+                        'title': _title,
+                        'date': _date!.toIso8601String(),
+                        'time_start':
+                            convertTimeOfDayToDateTime(_date!, _startTime!)
+                                .toIso8601String(),
+                        'time_end':
+                            convertTimeOfDayToDateTime(_date!, _endTime!)
+                                .toIso8601String(),
+                        'location': _location,
+                        'description': _description,
+                        'category': _category!.value,
+                        'ticket_price': _ticketPrice.toString(),
+                        'registration_link': _registrationLink,
+                        'image': _image,
+                        'file_name': _imageFileName,
+                      };
 
-                print('response: $response');
+                      // get event id
+                      try {
+                        if (widget.initialData != null) {
+                          final data = widget.initialData!;
+                          _eventId = data['event_id'];
+                        }
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(response)), // Use the returned message
-                );
+                        print('updating event..., $_imageFileName, $_eventId');
 
-                Navigator.pushNamed(context, RoutesName.adminHome);
-              } catch (error) {
-                print('error: $error');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error updating event: $error')),
-                );
-              }
-            }
-          },
-          child: Text('Save'),
-        ),
+                        // Memanggil method untuk update event
+                        final response =
+                            await eventViewModel.updateEventWithImage(
+                          eventData: eventData,
+                          imageBytes: _image!, // Gunakan _image sebagai bytes
+                          fileName: _imageFileName ??
+                              '', // Default to an empty string if null
+                          eventId: _eventId!,
+                          context: context,
+                        );
+
+                        // Menutup dialog loading
+                        Navigator.of(context).pop();
+
+                        // Navigasi langsung ke adminHome setelah sukses
+                        Navigator.pushNamed(context, RoutesName.adminHome);
+                      } catch (error) {
+                        // Menutup dialog loading jika terjadi error
+                        Navigator.of(context).pop();
+
+                        print(error.toString());
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    backgroundColor: Colors.purple,
+                  ),
+                  child: Text(
+                    'Update Event', // Tulisan pada button
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                )
               ],
             ),
           ),

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:event_finder/view/event_list_page.dart'; // Adjust the path according to your project structure
 
 import '../data/response/status.dart';
+import '../view_model/user_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,22 +46,27 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0), // Memberikan jarak horizontal
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, RoutesName.login);
+              onPressed: () async {
+                // Cek apakah pengguna sudah login
+                bool isLoggedIn = await UserPreferences.isLoggedIn();
+                if (isLoggedIn) {
+                  Navigator.pushNamed( context, RoutesName.adminHome);
+                } else {
+                  Navigator.pushNamed(context, RoutesName.login);
+                }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor, // Warna tombol
+                backgroundColor: Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // Bentuk tombol
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                padding: EdgeInsets.symmetric(
-                    horizontal: 18, vertical: 12), // Ukuran tombol
-                elevation: 5, // Efek bayangan tombol
+                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                elevation: 5,
               ),
               child: Text(
                 'Create Event',
                 style: TextStyle(
-                  color: Colors.white, // Warna teks tombol
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

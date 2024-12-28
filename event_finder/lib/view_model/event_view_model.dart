@@ -176,8 +176,6 @@ class EventViewModel with ChangeNotifier {
 
       setLoading(false);
       Utils.toastMessage('Event Created Successfully');
-      Navigator.pop(context, RoutesName.adminHome);
-
       notifyListeners(); // Memberitahu UI untuk memperbarui
 
       // Setelah penghapusan, ambil ulang data events
@@ -188,7 +186,7 @@ class EventViewModel with ChangeNotifier {
       }
     } catch (error) {
       setLoading(false);
-      Utils.toastMessage(error.toString());
+      print(error.toString());
     }
   }
 
@@ -240,7 +238,7 @@ class EventViewModel with ChangeNotifier {
       return 'Event updated successfully';
     } catch (error) {
       setLoading(false);
-      Utils.toastMessage(error.toString());
+      print(error.toString());
 
       if (kDebugMode) {
         print('Error updating event: ${error.toString()}');
@@ -325,7 +323,7 @@ class EventViewModel with ChangeNotifier {
       Navigator.pop(context); // Menutup dialog atau navigasi
     } catch (error) {
       setLoading(false); // Menandakan proses selesai meskipun gagal
-      Utils.toastMessage(error.toString());
+      print(error.toString());
     } finally {
       setLoading(false); // Menyelesaikan loading
     }

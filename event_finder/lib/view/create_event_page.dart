@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, library_private_types_in_public_api
 
+import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:event_finder/model/event_category.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/utils.dart';
 
 class CreateEventPage extends StatefulWidget {
   @override
@@ -238,9 +241,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ElevatedButton(
                 onPressed: () async {
                   if (_image == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Please select an image file")),
-                    );
+                    Utils.toastMessage('Please select an image file');
                     return;
                   }
 
@@ -267,9 +268,31 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           _ticketPrice.toString(), // Convert to string
                       'registration_link': _registrationLink,
                     };
+
+                    // Menampilkan dialog loading
+                    showDialog(
+                      context: context,
+                      barrierDismissible:
+                          false, // Mencegah dialog ditutup selama proses
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                CircularProgressIndicator(),
+                                SizedBox(width: 20),
+                                Text('Creating Event...'), // Teks loading
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+
                     try {
-                   
-                      // Gunakan method baru untuk upload dengan image
+                      // Gunakan method untuk upload event dengan image
                       await eventViewModel.createEventWithImage(
                         eventData: eventData,
                         imageBytes: _image!,
@@ -277,22 +300,58 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         context: context,
                       );
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'Your event is created and awaiting approval by Superadmin.'),
-                          duration: Duration(seconds: 3),
-                        ),
+                      // Menutup dialog loading
+                      Navigator.of(context).pop();
+
+                      // Tampilkan dialog sukses setelah event berhasil dibuat
+                      showDialog(
+                        context: context,
+                        barrierDismissible:
+                            false, // Mencegah dialog ditutup tanpa aksi
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                                "Create Success"),
+                            content: const Text(
+                                "Your event is created and awaiting approval by Superadmin."),
+                            contentPadding: const EdgeInsets.all(
+                                16.0), // Menambahkan padding di sekitar teks
+                            actionsPadding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical:
+                                    12.0), // Menambahkan jarak antara teks dan tombol
+                             actions: [
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () => Navigator.pushNamed(context, RoutesName.adminHome),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Colors.purple, // Warna ungu
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          8), // Radius sudut tombol
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Back',
+                                    style: TextStyle(
+                                      color: Colors.white, // Warna teks putih
+                                      fontSize: 16, // Ukuran font
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     } catch (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'Failed to create event: ${error.toString()}'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
+                      // Menutup dialog loading jika terjadi error
+                      Navigator.of(context).pop();
+                      print(error.toString());
                     }
+                  } else {
+                    Utils.toastMessage('Please fill all fields correctly');
                   }
                 },
                 style: ElevatedButton.styleFrom(

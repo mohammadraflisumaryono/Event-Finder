@@ -90,6 +90,16 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             Icons.email_outlined,
                             color: Theme.of(context).colorScheme.primary,
                           ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2),
+                              borderRadius: BorderRadius.circular(12)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.purple, width: 2),
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -102,6 +112,18 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           prefixIcon: Icon(
                             Icons.lock_outline,
                             color: Theme.of(context).colorScheme.primary,
+                          ),
+                          filled: true, 
+                          fillColor: Colors.white,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.white, width: 2),
+                                borderRadius: BorderRadius.circular(12) 
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.purple, width: 2),
+                                borderRadius: BorderRadius.circular(12) 
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -121,11 +143,40 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       const SizedBox(height: 30),
                       ElevatedButton(
                         onPressed: () async {
+                          // Menampilkan dialog loading saat proses login
+                          showDialog(
+                            context: context,
+                            barrierDismissible:
+                                false, // Membuat dialog tidak bisa ditutup saat loading
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: const [
+                                      CircularProgressIndicator(),
+                                      SizedBox(width: 20),
+                                      Text('Processing...'), // Teks loading
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+
+                          // Validasi form input
                           if (emailTextController.text.isEmpty) {
+                            Navigator.of(context)
+                                .pop(); // Menutup dialog loading
                             Utils.toastMessage('Please Enter Email');
                           } else if (passwordTextController.text.isEmpty) {
+                            Navigator.of(context)
+                                .pop(); // Menutup dialog loading
                             Utils.toastMessage('Please Enter Password');
                           } else if (passwordTextController.text.length < 6) {
+                            Navigator.of(context)
+                                .pop(); // Menutup dialog loading
                             Utils.toastMessage('Please Enter 6 Digit Password');
                           } else {
                             Map<String, dynamic> data = {
@@ -134,7 +185,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                   passwordTextController.text.toString(),
                             };
 
-                            await authViewModel.loginApi(data, context);
+                            // Panggil fungsi login API dan pastikan untuk menutup dialog dan navigasi setelahnya
+                            await authViewModel.loginApi(data, context,
+                                onSuccess: () {
+                              Navigator.of(context)
+                                  .pop(); // Menutup dialog loading
+                            });
+
                             print('api hit');
                           }
                         },

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/response/status.dart';
+import '../utils/utils.dart';
 import '../view_model/event_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -34,8 +35,7 @@ class _DetailPageState extends State<DetailPage> {
       await launch(uri.toString());
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Could not launch the registration link.")));
+        Utils.toastMessage('Could not launch the registration link.');
       }
     }
   }

@@ -33,15 +33,14 @@ class AuthViewModel with ChangeNotifier {
   final String _role = '';
   String get role => _role;
 
-  Future<void> loginApi(dynamic data, BuildContext context) async {
-    setLoading(true);
-
+  Future<void> loginApi(dynamic data, BuildContext context,
+      {required VoidCallback onSuccess}) async {
     try {
       // Panggil API login dan ambil response dari server
       final response = await _myRepo.loginApi(data);
 
       // Parsing respons
-      String userId = response['data']['id']; 
+      String userId = response['data']['id'];
       String? role = response['data']['role'];
       String? token = response['data']['token'];
 
@@ -55,24 +54,33 @@ class AuthViewModel with ChangeNotifier {
       await UserPreferences.saveUserData(userId, token, role);
       print('Data saved successfully');
 
+      // Tampilkan pesan sukses
       Utils.toastMessage('Login Successfully');
-      Navigator.pushReplacementNamed(context,
-          role == 'organizer' ? RoutesName.adminHome : RoutesName.superAdmin);
+
+      // Panggil onSuccess callback jika login berhasil
+      onSuccess();
+
+      // Navigasi berdasarkan role setelah proses login berhasil
+      if (role == 'organizer') {
+        Navigator.pushReplacementNamed(context, RoutesName.adminHome);
+      } else {
+        Navigator.pushReplacementNamed(context, RoutesName.superAdmin);
+      }
+
       if (kDebugMode) {
         print('Login Response: $response');
-      } else {
-        Utils.toastMessage('Invalid credentials');
       }
     } catch (error) {
-      
-      Utils.toastMessage('Login Failed: $error');
+      // Menampilkan pesan error
+      Utils.toastMessage('Login Failed');
       if (kDebugMode) {
         print('Login Error: $error');
       }
-    } finally {
-      setLoading(false);
+      // Menutup dialog loading jika terjadi error
+      Navigator.of(context).pop();
     }
   }
+
 
   Future<void> registerApi(dynamic data, BuildContext context) async {
     setRegisterLoading(true);
@@ -88,7 +96,7 @@ class AuthViewModel with ChangeNotifier {
         print('Register Response: $response');
       }
     } catch (error) {
-      Utils.toastMessage('Register Failed: $error');
+      Utils.toastMessage('Register Failed');
       if (kDebugMode) {
         print('Register Error: $error');
       }

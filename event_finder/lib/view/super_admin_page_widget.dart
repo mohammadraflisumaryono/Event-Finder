@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import '../data/response/status.dart';
 import '../model/events_model.dart';
 import '../utils/routes/routes_name.dart';
+import '../utils/utils.dart';
 import '../view_model/event_view_model.dart';
+import '../view_model/user_preferences.dart';
 
 class SuperAdminEventWidget extends StatefulWidget {
   const SuperAdminEventWidget({super.key});
@@ -34,6 +36,8 @@ class _SuperAdminEventWidgetState extends State<SuperAdminEventWidget> {
           style: TextStyle(color: Colors.purple),
         ),
         backgroundColor: Theme.of(context).colorScheme.surface,
+        automaticallyImplyLeading:
+            false, // Menonaktifkan tombol kembali otomatis
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -198,8 +202,43 @@ class EventCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () =>
-                        eventViewModel.updateEventStatus(event.id, 'approved'),
+                    onPressed: () async {
+                      // Menampilkan dialog loading sebelum memulai proses
+                      showDialog(
+                        context: context,
+                        barrierDismissible:
+                            false, // Dialog tidak bisa ditutup dengan cara lain
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  CircularProgressIndicator(),
+                                  SizedBox(width: 20),
+                                  Text('Processing...'), // Teks loading
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+
+                      try {
+                        // Memanggil fungsi update status event dengan status 'approved'
+                        await eventViewModel.updateEventStatus(event.id, 'approved');
+
+                        // Menutup dialog loading setelah proses selesai
+                        Navigator.of(context).pop();
+                        Utils.toastMessage('Event has been approved');
+                      } catch (error) {
+                        Navigator.of(context).pop();
+                        print(error.toString());
+
+                        Utils.toastMessage('Failed to approve event');
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
@@ -215,8 +254,43 @@ class EventCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
-                    onPressed: () =>
-                        eventViewModel.updateEventStatus(event.id, 'rejected'),
+                    onPressed: () async {
+                      // Menampilkan dialog loading sebelum memulai proses
+                      showDialog(
+                        context: context,
+                        barrierDismissible:
+                            false, // Dialog tidak bisa ditutup dengan cara lain
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  CircularProgressIndicator(),
+                                  SizedBox(width: 20),
+                                  Text('Processing...'), // Teks loading
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+
+                      try {
+                        // Memanggil fungsi update status event dengan status 'rejected'
+                        await eventViewModel.updateEventStatus(event.id, 'rejected');
+
+                        // Menutup dialog loading setelah proses selesai
+                        Navigator.of(context).pop();
+                        Utils.toastMessage('Event has been rejected');
+                      } catch (error) {
+                        // Menutup dialog loading jika ada error
+                        Navigator.of(context).pop();
+                        Utils.toastMessage('Failed to reject event');
+                        print(error.toString());
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
@@ -354,12 +428,8 @@ void _showLogoutDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(
-          'Are you sure you want to Log Out?',
-          style: TextStyle(
-            fontSize: 16, // Ukuran font menjadi 16
-          ),
-        ),
+        title: Text('Log Out'),
+        content: Text('Are you sure you want to log out?'),
         contentPadding:
             const EdgeInsets.all(16.0), // Menambahkan padding di sekitar teks
         actionsPadding: const EdgeInsets.symmetric(
@@ -386,3 +456,22 @@ void _showLogoutDialog(BuildContext context) {
   );
 }
 
+// Fungsi untuk melakukan logout
+void _performLogout(BuildContext context) async {
+  try {
+    // Hapus data dari SharedPreferences
+    await UserPreferences.clearUserData();
+
+    // Tampilkan pesan sukses
+    Utils.toastMessage('Logged out successfully');
+
+    // Navigasi ke halaman login
+    Navigator.pushNamedAndRemoveUntil(
+      context, RoutesName.login,
+      (route) => false, // Hapus semua halaman sebelumnya dari stack
+    );
+  } catch (e) {
+    Utils.toastMessage('Logout failed');
+    print('Error during logout: $e');
+  }
+}

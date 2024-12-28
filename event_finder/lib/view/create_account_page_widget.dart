@@ -98,6 +98,16 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                         Icons.person_outlined,
                         color: Theme.of(context).colorScheme.primary,
                       ),
+                      filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.purple, width: 2),
+                            borderRadius: BorderRadius.circular(12)),
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -110,6 +120,16 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                         Icons.email_outlined,
                         color: Theme.of(context).colorScheme.primary,
                       ),
+                      filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.purple, width: 2),
+                            borderRadius: BorderRadius.circular(12)),
                     ),
                     ),
                   const SizedBox(height: 15),
@@ -123,6 +143,16 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                         Icons.lock_outlined,
                         color: Theme.of(context).colorScheme.primary,
                       ),
+                      filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.purple, width: 2),
+                            borderRadius: BorderRadius.circular(12)),
                       suffixIcon: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -144,17 +174,43 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
                   ),
                   const SizedBox(height: 25),
                   ElevatedButton(
-                        onPressed: () async {
+                      onPressed: () async {
                         final authViewModel =
                             Provider.of<AuthViewModel>(context, listen: false);
 
+                        showDialog(
+                          context: context,
+                          barrierDismissible:
+                              false, // Membuat dialog tidak bisa ditutup saat loading
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: const [
+                                    CircularProgressIndicator(),
+                                    SizedBox(width: 20),
+                                    Text('Processing...'), // Teks loading
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+                        // Validasi form input
                         if (nameTextController.text.isEmpty) {
+                          Navigator.of(context).pop(); // Menutup dialog loading
                           Utils.toastMessage('Please Enter Name');
                         } else if (emailTextController.text.isEmpty) {
+                          Navigator.of(context).pop(); // Menutup dialog loading
                           Utils.toastMessage('Please Enter Email');
                         } else if (passwordTextController.text.isEmpty) {
+                          Navigator.of(context).pop(); // Menutup dialog loading
                           Utils.toastMessage('Please Enter Password');
                         } else if (passwordTextController.text.length < 6) {
+                          Navigator.of(context).pop(); // Menutup dialog loading
                           Utils.toastMessage('Please Enter 6 Digit Password');
                         } else {
                           // Membuat data yang akan dikirim ke API
@@ -166,22 +222,28 @@ class _CreateAccountPageWidgetState extends State<CreateAccountPageWidget> {
 
                           // Panggil fungsi register API
                           await authViewModel.registerApi(data, context);
+
+                          // Menutup dialog loading setelah proses selesai
+                          Navigator.of(context).pop(); // Menutup dialog
+
+                          // Pindah ke halaman admin event setelah registrasi selesai
+                          Navigator.pushNamed(
+                              context, RoutesName.login);
                           print('api hit');
                         }
                       },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context)
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context)
                             .colorScheme
                             .primary, // Background color
                         foregroundColor: Colors.white, // Text color
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
+                      child: const Text("Sign Up"),
                     ),
-                    child: const Text("Sign Up"),
-                    
-                  ),
                   const SizedBox(height: 15),
                   Center(
                     child: GestureDetector(
