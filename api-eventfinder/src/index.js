@@ -16,6 +16,10 @@ app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`);
 });
 
+app.get('/privacy-policy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'privacy-policy.html'));
+});
+
 
 app.use((err, req, res, next) => {
     res.status(400).json({
