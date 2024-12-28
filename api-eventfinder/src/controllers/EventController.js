@@ -163,10 +163,10 @@ exports.getEventById = async (req, res) => {
 exports.updateEvent = async (req, res) => {
     try {
         const eventId = req.params.eventId;
-        const userId = req.user._id;  
+        const userId = req.user._id; 
+ 
+        console.log('user id:', userId);
 
-        console.log('User ID:', userId, 'Event ID:', eventId, 'Body:', req.body);
-        
        
         const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
 
@@ -231,7 +231,9 @@ exports.updateEvent = async (req, res) => {
             registration_link
         };
 
-        const updatedEvent = await EventService.updateEvent(eventId, userId, eventData);
+        console.log('Event data:', eventData);
+
+        const updatedEvent = await EventService.updateEvent(eventId, eventData,userId);
         res.status(200).json({
             status: 'success',
             data: updatedEvent,

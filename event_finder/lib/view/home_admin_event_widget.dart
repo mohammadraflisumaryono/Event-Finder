@@ -32,13 +32,15 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
   void _loadUserIdAndFetchEvents() async {
     String? fetchedUserId = await UserPreferences.getUserId();
     if (fetchedUserId != null) {
-     if (mounted) {
-      setState(() {
-        userId = fetchedUserId;
-      });
-    }
-    await Provider.of<EventViewModel>(context, listen: false)
-        .fetchAndCategorizeEvents(userId);
+      if (mounted) {
+        setState(() {
+          userId = fetchedUserId;
+        });
+      }
+
+      print('userId: $userId');
+      await Provider.of<EventViewModel>(context, listen: false)
+          .fetchAndCategorizeEvents(userId);
     } else {
       print('User is not logged in');
     }
@@ -80,10 +82,11 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
                       .circle, // Membuat ikon menjadi berbentuk lingkaran
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0), // Memberikan ruang di sekitar ikon
+                  padding: const EdgeInsets.all(
+                      8.0), // Memberikan ruang di sekitar ikon
                   child: Image.asset(
-                    'lib/res/assets/images/logout.png', 
-                    width: 18, 
+                    'lib/res/assets/images/logout.png',
+                    width: 18,
                     height: 18,
                   ),
                 ),
@@ -182,36 +185,36 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
 
   // Widget untuk menampilkan event berdasarkan status
   Widget buildEventSection(String title, List<Event>? events) {
-  // Jika tidak ada event untuk status tersebut, tidak perlu menampilkannya
-  if (events == null || events.isEmpty) return SizedBox.shrink();
+    // Jika tidak ada event untuk status tersebut, tidak perlu menampilkannya
+    if (events == null || events.isEmpty) return SizedBox.shrink();
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
-      ),
-      SizedBox(height: 16),
-      // Menampilkan list event
-      ListView.builder(
-        shrinkWrap: true, // Gunakan shrinkWrap agar tidak mempengaruhi scroll
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: events.length,
-        itemBuilder: (context, index) {
-          return EventCardOrganizer(
-            isOrganizer: true, 
-            event: events[index],
-            userId: userId,
-          );
-        },
-      ),
-      SizedBox(height: 16),
-    ],
-  );
-}
+        SizedBox(height: 16),
+        // Menampilkan list event
+        ListView.builder(
+          shrinkWrap: true, // Gunakan shrinkWrap agar tidak mempengaruhi scroll
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: events.length,
+          itemBuilder: (context, index) {
+            return EventCardOrganizer(
+              isOrganizer: true,
+              event: events[index],
+              userId: userId,
+            );
+          },
+        ),
+        SizedBox(height: 16),
+      ],
+    );
+  }
 }
