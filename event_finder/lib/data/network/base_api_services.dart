@@ -11,4 +11,7 @@ abstract class BaseApiServices {
       List<int> imageBytes, String fileName);
 
   Future<dynamic> getDeleteApiResponse(String Url);
+
+  Future<dynamic> getPutStatusApiResponse(
+      String url, Map<String, dynamic> data);
 }

@@ -13,6 +13,8 @@ class EventRepository {
     try {
       dynamic response =
           await _apiServices.getGetApiResponse(AppUrl.getAllEventsEndPoint);
+      print('response: $response');
+      print('response: ${EventListModel.fromJson(response)}');
 
       return response = EventListModel.fromJson(response);
     } catch (e) {
@@ -49,7 +51,6 @@ class EventRepository {
     required List<int> imageBytes,
     required String fileName,
   }) async {
-
     try {
       dynamic response = await _apiServices.postMultipartApiResponse(
         AppUrl.eventEndPoint,
@@ -132,10 +133,11 @@ class EventRepository {
 
   // Ambil data event berdasarkan status
   Future<List<Event>> getEventByStatusApi() async {
+    print('getEventByStatusApi');
     try {
       // Kirim request API untuk mendapatkan event berdasarkan status
-      dynamic response = await _apiServices
-          .getGetApiResponse(AppUrl.eventStatusEndPoint);
+      dynamic response =
+          await _apiServices.getGetApiResponse(AppUrl.eventStatusEndPoint);
 
       // Print respons API untuk debug
       print('response: $response');
@@ -153,35 +155,34 @@ class EventRepository {
   // Fungsi untuk memperbarui status event
   Future<void> updateEventStatus(String eventId, String status) async {
     try {
-      dynamic response = await _apiServices.getPutApiResponse(
-        AppUrl.eventById(eventId),
-        eventData,
-        imageBytes,
-        fileName,
+      // Kirim request API untuk memperbarui status event
+      dynamic response = await _apiServices.getPutStatusApiResponse(
+        AppUrl.updateStatusEvent(eventId),
+        {'status': status},
       );
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-    final data = {'status': status};
-    await _apiServices.getPutApiResponse(AppUrl.updateStatusEvent(id), data);
-  }
-  Future<dynamic> updateEventWithImage({
-    required Map<String, dynamic> eventData,
-    required List<int> imageBytes,
-    required String fileName,
-    required String eventId,
-  }) async {
-    try {
-      dynamic response = await _apiServices.getPutApiResponse(
-        AppUrl.eventById(eventId),
-        eventData,
-        imageBytes,
-        fileName,
-      );
-      return response;
+
+      // Print respons API untuk debug
+      print('response: $response');
     } catch (e) {
       rethrow;
     }
   }
+  // Future<dynamic> updateEventWithImage({
+  //   required Map<String, dynamic> eventData,
+  //   required List<int> imageBytes,
+  //   required String fileName,
+  //   required String eventId,
+  // }) async {
+  //   try {
+  //     dynamic response = await _apiServices.getPutApiResponse(
+  //       AppUrl.eventById(eventId),
+  //       eventData,
+  //       imageBytes,
+  //       fileName,
+  //     );
+  //     return response;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 }

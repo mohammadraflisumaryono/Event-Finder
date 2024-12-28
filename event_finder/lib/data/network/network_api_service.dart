@@ -39,7 +39,7 @@ class NetworkApiService extends BaseApiServices {
           .get(Uri.parse(url), headers: headers)
           .timeout(const Duration(seconds: 10));
 
-          print('Response status: ${response.body}'); // Debug log
+      print('Response status: ${response.body}'); // Debug log
 
       // Menangani response
       responseJson = returnResponse(response);
@@ -210,32 +210,9 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getPutStatusEventApiResponse(String url, String id, String status) async {
+  Future getPutStatusApiResponse(String url, Map<String, dynamic> status) async {
     dynamic responseJson;
-    try {
-      String token = await _getToken();
-      var request = http.MultipartRequest('PUT', Uri.parse(url));
-
-      // Add headers
-      request.headers.addAll({
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      });
-
-      // Add other fields
-      data.forEach((key, value) {
-        request.fields[key] = value.toString();
-      });
-
-      // Send request
-      var streamedResponse =
-          await request.send().timeout(Duration(seconds: 30));
-      var response = await http.Response.fromStream(streamedResponse);
-
-      responseJson = returnResponse(response);
-    } on SocketException {
-      throw FetchDataException('No Internet Connection');
-    } catch (e) {
+    try {} catch (e) {
       throw FetchDataException('Error occurred: ${e.toString()}');
     }
     return responseJson;

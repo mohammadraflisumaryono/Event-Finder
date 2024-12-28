@@ -43,7 +43,7 @@ class EventViewModel with ChangeNotifier {
     setEventList(ApiResponse.loading());
     try {
       final value = await _myRepo.fetchEventsList();
-      setEventList(ApiResponse.completed(value));
+      setEventList(ApiResponse.completed(EventListModel(events: value.events)));
     } catch (error) {
       setEventList(ApiResponse.error(error.toString()));
     }
@@ -277,7 +277,8 @@ class EventViewModel with ChangeNotifier {
       if ((query == null || query.isEmpty) &&
           (category == null || category.isEmpty)) {
         final value = await _myRepo.fetchEventsList(); // Ambil semua event
-        setEventList(ApiResponse.completed(value));
+        setEventList(
+            ApiResponse.completed(EventListModel(events: value.events)));
       } else {
         final value = await _myRepo.fetchEventsList(); // Ambil semua event
         // Filter berdasarkan query dan/atau kategori
@@ -341,18 +342,15 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
-  // Fungsi untuk mengambil event berdasarkan status "pending"
   Future<void> fetchEventByStatus() async {
+    print('Fetching events by status');
     setEventList(ApiResponse.loading());
     try {
-      // Mengambil data event dengan status "pending"
-      final eventList = await _myRepo.getEventByStatusApi();
-      print('Event List fetched: $eventList');
-
-      // Membungkus List<Event> dalam EventListModel
-      setEventList(ApiResponse.completed(EventListModel(events: eventList)));
+      // ambil data dari repo karna data yang diambil dari repo sudah di filter
+      final value = await _myRepo.getEventByStatusApi();
+      print('Events by status: $value');
+      setEventList(ApiResponse.completed(EventListModel(events: value)));
     } catch (error) {
-      print(error.toString());
       setEventList(ApiResponse.error(error.toString()));
     }
   }

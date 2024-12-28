@@ -215,7 +215,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-<<<<<<< Updated upstream
   Widget _buildCategoryChip(
       BuildContext context, String categoryName, int index) {
     final colors = [
@@ -262,8 +261,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-=======
->>>>>>> Stashed changes
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     //print(context);
