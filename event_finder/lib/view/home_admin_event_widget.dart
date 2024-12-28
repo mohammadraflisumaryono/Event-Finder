@@ -71,7 +71,7 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, RoutesName.login);
+                _showLogoutDialog(context);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -214,4 +214,42 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
     ],
   );
 }
+}
+
+// Fungsi untuk menampilkan dialog konfirmasi logout
+void _showLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Are you sure you want to Log Out?',
+          style: TextStyle(
+            fontSize: 16, // Ukuran font menjadi 16
+          ),
+        ),
+        contentPadding:
+            const EdgeInsets.all(16.0), // Menambahkan padding di sekitar teks
+        actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 12.0), // Menambahkan jarak antara teks dan tombol
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(); // Menutup dialog jika user memilih "Cancel"
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                  RoutesName.login); // Arahkan ke login setelah logout
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      );
+    },
+  );
 }

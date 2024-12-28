@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../model/events_model.dart';
 import '../data/response/status.dart';
 import '../view_model/event_view_model.dart';
 import 'package:provider/provider.dart';
@@ -169,7 +169,8 @@ class _DetailPageState extends State<DetailPage> {
                                       color: Colors.purple, size: 20),
                                   const SizedBox(width: 8),
                                   Text(
-                                    "${event.time?.start ?? 'Start'} - ${event.time?.end ?? 'End'}",
+                                    "${event.time?.start?.hour.toString().padLeft(2, '0')}:${event.time?.start?.minute.toString().padLeft(2, '0')} - "
+                                    "${event.time?.end?.hour.toString().padLeft(2, '0')}:${event.time?.end?.minute.toString().padLeft(2, '0')}",
                                     style: GoogleFonts.outfit(fontSize: 14),
                                   ),
                                 ],
@@ -210,59 +211,64 @@ class _DetailPageState extends State<DetailPage> {
                       const SizedBox(height: 16),
 
                       // Price & Button Section
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                      Card(
+                        elevation: 4, // You can adjust the elevation as needed
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Start from",
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 14,
-                                    color: Colors.grey[600],
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surface, // Background color
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Start from",
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    event.ticketPrice != null
+                                        ? "Rp ${NumberFormat('#,###', 'id_ID').format(event.ticketPrice)}"
+                                        : "Free",
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              ElevatedButton(
+                                onPressed: () =>
+                                    launchURL(event.registrationLink),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                Text(
-                                  event.ticketPrice != null
-                                      ? "Rp ${event.ticketPrice!.toStringAsFixed(3)}"
-                                      : "Free",
+                                child: Text(
+                                  "Join Event",
                                   style: GoogleFonts.outfit(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
-                              ],
-                            ),
-                            ElevatedButton(
-                              onPressed: () =>
-                                  launchURL(event.registrationLink),
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12),
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
                               ),
-                              child: Text(
-                                "Join Event",
-                                style: GoogleFonts.outfit(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],

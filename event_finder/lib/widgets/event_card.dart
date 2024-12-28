@@ -1,6 +1,7 @@
 import 'package:event_finder/model/events_model.dart';
 import 'package:event_finder/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;
@@ -15,16 +16,14 @@ class EventCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigasi ke halaman detail event
-        Navigator.pushNamed(context, RoutesName.detailEvent, arguments: event);
+        Navigator.pushNamed(context, RoutesName.detailEvent,
+            arguments: event.id);
       },
       child: Container(
-        width: MediaQuery.of(context).size.width *
-            0.45, // Sesuaikan lebar agar responsif
+        width: MediaQuery.of(context).size.width * 0.45, // Responsif width
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context)
-              .colorScheme
-              .surface, // Sesuaikan warna latar belakang
+          color: Colors.white, // White background for the card
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -35,61 +34,64 @@ class EventCard extends StatelessWidget {
           ],
         ),
         child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Gambar dengan ukuran dinamis
-            Container(
-              width: double.infinity,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: event.image != null
-                      ? NetworkImage(event.image!)
-                      : throw Exception('Image is required and cannot be null'),
-                  fit: BoxFit.cover,
+          // Wrap with SingleChildScrollView
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Event image with dynamic size
+              Container(
+                width: double.infinity,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: event.image != null
+                        ? NetworkImage(event.image!)
+                        : throw Exception(
+                            'Image is required and cannot be null'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            // Judul event
-            Text(
-              event.title!,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-            // Lokasi event
-            Text(
-              event.location!,
-              style: Theme.of(context).textTheme.bodySmall,
-              maxLines: 1,
-            ),
-            const SizedBox(height: 4),
-            // Tanggal event
-            Text(
-              '${event.date!.day}/${event.date!.month}', // Format tanggal
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 8),
-            // Harga event (jika ada)
-            Text(
-              event.ticketPrice != null
-                  ? 'Rp ${event.ticketPrice!.toStringAsFixed(2)}' // Format harga dengan 2 angka desimal
-                  : 'Free', // Tampilkan 'Free' jika harga null
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
+              const SizedBox(height: 8),
+              // Event title
+              Text(
+                event.title!,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              // Event location
+              Text(
+                event.location!,
+                style: Theme.of(context).textTheme.bodySmall,
+                maxLines: 1,
+              ),
+              const SizedBox(height: 4),
+              // Event date
+              Text(
+                DateFormat('MMM dd, yyyy')
+                    .format(event.date ?? DateTime.now()), // Date formatting
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 8),
+              // Event ticket price (if any)
+              Text(
+                event.ticketPrice != null
+                    ? "Rp ${NumberFormat('#,###', 'id_ID').format(event.ticketPrice)}"
+                    : 'Free', // Display 'Free' if no price
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );

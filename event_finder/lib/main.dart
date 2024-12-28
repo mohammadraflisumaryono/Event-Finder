@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         title: 'Event Finder',
         theme: AppTheme.lightTheme, // Menggunakan tema dari res/theme.dart
         initialRoute:
-            RoutesName.onboardingScreen, // Mulai dari halaman HomePage
+            RoutesName.adminHome, // Mulai dari halaman HomePage
         onGenerateRoute: Routes.generateRoute,
       ),
     );

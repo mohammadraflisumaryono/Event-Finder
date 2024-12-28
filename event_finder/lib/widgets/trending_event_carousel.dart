@@ -67,7 +67,7 @@ class _TrendingEventCarouselState extends State<TrendingEventCarousel> {
             date:
                 DateFormat('MMM dd, yyyy').format(event.date ?? DateTime.now()),
             price: event.ticketPrice != null
-                ? "Rp ${event.ticketPrice!.toStringAsFixed(0)}"
+                ? "Rp ${NumberFormat('#,###', 'id_ID').format(event.ticketPrice)}"
                 : "Free",
             image: event.image ?? "https://via.placeholder.com/150",
             event: event, // Kirim data event ke card
