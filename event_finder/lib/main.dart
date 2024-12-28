@@ -13,7 +13,7 @@ main() {
   runApp(
     ScreenUtilInit(
       designSize: Size(360, 690),
-       builder: (context, child) => MyApp(),
+      builder: (context, child) => MyApp(),
     ),
   );
 }
@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Event Finder',
         theme: AppTheme.lightTheme, // Menggunakan tema dari res/theme.dart
-        initialRoute: RoutesName.login, // Mulai dari halaman HomePage
+        initialRoute:
+            RoutesName.onboardingScreen, // Mulai dari halaman HomePage
         onGenerateRoute: Routes.generateRoute,
       ),
     );
