@@ -210,9 +210,31 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getPutStatusApiResponse(String url, Map<String, dynamic> status) async {
+  Future<dynamic> getPutStatusApiResponse(
+      String url, Map<String, dynamic> status) async {
     dynamic responseJson;
-    try {} catch (e) {
+    try {
+      print('url network : $status');
+      // Mendapatkan token untuk otorisasi
+      String token = await _getToken();
+
+      // Melakukan request PUT dengan body berupa JSON
+      Response response = await put(
+        Uri.parse(url),
+        body: jsonEncode(status),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      print('Response status: ${response.statusCode}'); // Debug log
+
+      // Memproses respons dari API
+      responseJson = returnResponse(response);
+    } catch (e) {
+      // Menangani error
       throw FetchDataException('Error occurred: ${e.toString()}');
     }
     return responseJson;

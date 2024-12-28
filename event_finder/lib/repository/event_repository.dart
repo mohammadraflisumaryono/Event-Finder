@@ -133,7 +133,6 @@ class EventRepository {
 
   // Ambil data event berdasarkan status
   Future<List<Event>> getEventByStatusApi() async {
-    print('getEventByStatusApi');
     try {
       // Kirim request API untuk mendapatkan event berdasarkan status
       dynamic response =
@@ -142,12 +141,35 @@ class EventRepository {
       // Print respons API untuk debug
       print('response: $response');
 
-      // Proses data event yang diterima (misalnya dalam bentuk list)
-      List<Event> eventList =
-          List<Event>.from(response.map((event) => Event.fromJson(event)));
+      // Memeriksa apakah response adalah Map<String, dynamic> (JSON)
+      if (response is Map<String, dynamic>) {
+        // Memeriksa apakah status adalah success
+        if (response['status'] == 'success') {
+          // Memeriksa apakah data adalah List
+          if (response['data'] is List) {
+            // Ambil data dari response['data'] (list events)
+            List<dynamic> data = response['data'];
 
-      return eventList;
+            // Proses data event menjadi list objek Event
+            List<Event> eventList =
+                List<Event>.from(data.map((event) => Event.fromJson(event)));
+
+            return eventList;
+          } else {
+            // Jika response['data'] bukan list, lempar exception
+            throw Exception("Response 'data' is not a list");
+          }
+        } else {
+          // Jika status tidak success, lempar exception dengan pesan error
+          throw Exception('Failed to fetch events: ${response['message']}');
+        }
+      } else {
+        // Jika response bukan Map<String, dynamic>, lempar exception
+        throw Exception('Response is not a valid JSON object');
+      }
     } catch (e) {
+      // Menangani kesalahan dan melemparkan error untuk debugging
+      print('Error fetching events: $e');
       rethrow;
     }
   }

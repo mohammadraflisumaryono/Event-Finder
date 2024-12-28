@@ -133,21 +133,24 @@ class EventCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (event.status == "Pending")
-                  ElevatedButton.icon(
-                    onPressed: () => eventViewModel.approveEvent(event.id),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    icon: const Icon(Icons.check, size: 18),
-                    label: const Text('Approve'),
-                  ),
-                const SizedBox(width: 8),
+                // Menampilkan tombol "Approve" untuk semua event tanpa memeriksa status
                 ElevatedButton.icon(
-                  onPressed: () => eventViewModel.rejectEvent(event.id),
+                  onPressed: () =>
+                      eventViewModel.updateEventStatus(event.id, 'approved'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  icon: const Icon(Icons.check, size: 18),
+                  label: const Text('Approve'),
+                ),
+                const SizedBox(width: 8),
+                // Tombol "Reject" tetap ditampilkan
+                ElevatedButton.icon(
+                  onPressed: () =>
+                      eventViewModel.updateEventStatus(event.id, 'rejected'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(

@@ -355,6 +355,16 @@ class EventViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> updateEventStatus(String eventId, String status) async {
+    try {
+      print('Updating event status to: $status');
+      await _myRepo.updateEventStatus(eventId, status);
+      fetchEventByStatus();
+    } catch (e) {
+      print('Error updating event: $e');
+    }
+  }
+
   // Fungsi untuk mengubah status event menjadi "approved"
   Future<void> approveEvent(String eventId) async {
     try {
