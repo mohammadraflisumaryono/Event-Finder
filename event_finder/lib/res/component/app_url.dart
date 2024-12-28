@@ -2,7 +2,7 @@
 
 class AppUrl {
   // static var baseUrl = 'https://event-finder-production.up.railway.app/api/';
-  static var baseUrl = 'http://localhost:3000/api/';
+  static var baseUrl = 'http://localhost:3002/api/';
 
   static var loginEndPoint = baseUrl + 'login';
 
@@ -32,4 +32,7 @@ class AppUrl {
     return '${baseUrl}events/status/$id';
   }
 
+  static String updateEvent(String id) {
+    return '${baseUrl}update/$id';
+  }
 }

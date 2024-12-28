@@ -87,7 +87,7 @@ class EventRepository {
       // print requestData without image
       print('eventData: ${eventData.toString()}');
       dynamic response = await _apiServices.getPutApiResponse(
-        AppUrl.eventById(eventId),
+        AppUrl.updateEvent(eventId),
         eventData,
         imageBytes,
         fileName,

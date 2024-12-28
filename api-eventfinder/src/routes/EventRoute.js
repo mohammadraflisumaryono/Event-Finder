@@ -22,7 +22,7 @@ router.get('/search', eventController.searchEvent);  // Corrected route for sear
 
 
 // Update event
-router.put('/events/:eventId',upload.single('image'), verifyToken, eventController.updateEvent);
+router.put('/update/:eventId',upload.single('image'), verifyToken, eventController.updateEvent);
 
 // Delete event
 router.delete('/events/:eventId', verifyToken, eventController.deleteEvent);
