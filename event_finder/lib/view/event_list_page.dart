@@ -19,17 +19,23 @@ class _EventListPageState extends State<EventListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.purple),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
           widget.category != null
               ? '${widget.category} Events'
               : 'Get Your Events!',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Colors.purple,
               ),
         ),
         backgroundColor: Colors.transparent,
+        elevation: 0, // Agar AppBar terlihat rata dengan background
       ),
       body: Consumer<EventViewModel>(
         builder: (context, viewModel, child) {

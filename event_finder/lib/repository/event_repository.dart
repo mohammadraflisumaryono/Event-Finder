@@ -84,14 +84,18 @@ class EventRepository {
     required String eventId,
   }) async {
     try {
+      // print requestData without image
+      print('eventData: ${eventData.toString()}');
       dynamic response = await _apiServices.getPutApiResponse(
         AppUrl.eventById(eventId),
         eventData,
         imageBytes,
         fileName,
       );
+      print(eventId);
       return response;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -110,8 +114,8 @@ class EventRepository {
   // Ambil data event berdasarkan ID
 
   Future<Event> getEventByIdApi(String id) async {
-    print('id: $id');
-    print(AppUrl.eventById(id));
+    // print('id: $id');
+    // print(AppUrl.eventById(id));
 
     try {
       dynamic response =

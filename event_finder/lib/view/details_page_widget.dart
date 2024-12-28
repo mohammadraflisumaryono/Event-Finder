@@ -45,10 +45,16 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.purple),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Event Details"),
+        title: Text(
+          "Event Details",
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.purple,
+              ),
+        ),
       ),
       body: ChangeNotifierProvider<EventViewModel>(
         create: (BuildContext context) => _eventViewModel,

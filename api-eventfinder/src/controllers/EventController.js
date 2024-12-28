@@ -6,8 +6,6 @@ const path = require('path');
 
 exports.createEvent = async (req, res) => {
     try {
-        console.log('Creating event... User:', req.body);
-        // Mendapatkan data dari body
         const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
 
 
@@ -56,7 +54,7 @@ exports.createEvent = async (req, res) => {
         // Dapatkan userId dari req.user
         const userId = req.user._id;
 
-        console.log('User ID:', userId);
+        
 
         if (!userId) {
             return res.status(400).json({
@@ -165,16 +163,81 @@ exports.getEventById = async (req, res) => {
 exports.updateEvent = async (req, res) => {
     try {
         const eventId = req.params.eventId;
-        const data = req.body;
-        const userId = req.user._id;  // Mengambil userId dari req.user
+        const userId = req.user._id;  
 
-        const updatedEvent = await EventService.updateEvent(eventId, data, userId);
+        console.log('User ID:', userId, 'Event ID:', eventId, 'Body:', req.body);
+        
+       
+        const { title, date, time, location, description, category, ticket_price, registration_link } = req.body;
+
+        // Cek apakah time dalam bentuk string dan ubah menjadi object
+        let eventTime = {};
+        if (typeof time === 'string') {
+            try {
+                eventTime = JSON.parse(time);
+            } catch (error) {
+                return res.status(400).json({
+                    status: 'error',
+                    data: null,
+                    message: 'Invalid time format, should be a valid JSON string'
+                });
+            }
+        } else if (typeof time === 'object' && time !== null) {
+            eventTime = time;
+        } else {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Time should be a valid object or JSON string'
+            });
+        }
+
+        // Validasi waktu
+        if (!eventTime.start || !eventTime.end) {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Start time and end time are required'
+            });
+        }
+
+        const startDate = new Date(eventTime.start);
+        const endDate = new Date(eventTime.end);
+
+        if (isNaN(startDate) || isNaN(endDate)) {
+            return res.status(400).json({
+                status: 'error',
+                data: null,
+                message: 'Start time or end time is invalid'
+            });
+        }
+
+        // Menyimpan URL gambar dari Cloudinary
+        let imageUrl = null;
+        if (req.file) {
+            imageUrl = req.file.path; // Cloudinary memberikan URL lengkap di req.file.path
+        }
+
+        // Menyiapkan data event
+        const eventData = {
+            title,
+            date,
+            time: { start: startDate, end: endDate },
+            location,
+            description,
+            image: imageUrl, // Menyimpan URL Cloudinary
+            category,
+            ticket_price,
+            registration_link
+        };
+
+        const updatedEvent = await EventService.updateEvent(eventId, userId, eventData);
         res.status(200).json({
             status: 'success',
             data: updatedEvent,
             message: 'Event updated successfully'
         });
-    } catch (error) {
+    }catch (error) {
         console.error('Error updating event:', error);
         res.status(500).json({
             status: 'error',

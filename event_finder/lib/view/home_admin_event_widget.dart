@@ -112,7 +112,7 @@ class _HomeAdminEventPageState extends State<HomeAdminEventPage> {
               final categorizedEvents =
                   eventViewModel.eventsList.data?.events ?? [];
 
-              print(categorizedEvents);
+              // print(categorizedEvents);
 
               // Pastikan categorizedEvents memiliki data
               if (categorizedEvents.isEmpty) {

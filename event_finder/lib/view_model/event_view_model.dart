@@ -199,10 +199,6 @@ class EventViewModel with ChangeNotifier {
     required BuildContext context,
     required String eventId,
   }) async {
-    print('update event view model');
-    print('Updating event with ID: $eventId');
-    print('Event data: $eventData');
-
     setLoading(true);
 
     try {
@@ -217,6 +213,11 @@ class EventViewModel with ChangeNotifier {
         'time_end': null,
       };
 
+      final eventDataWithoutImage = Map<String, dynamic>.from(eventData);
+      eventDataWithoutImage.remove('image');
+
+      print('Updating event: $eventDataWithoutImage');
+
       // Mengirim data ke API dengan format yang benar
       final value = await _myRepo.updateEventWithImage(
         eventData: eventDataWithTime,
@@ -224,9 +225,11 @@ class EventViewModel with ChangeNotifier {
         fileName: fileName,
         eventId: eventId,
       );
+      notifyListeners(); // Memberitahu UI untuk memperbarui
 
       setLoading(false);
       Utils.toastMessage('Event Updated Successfully');
+
       Navigator.pop(context, RoutesName.adminHome);
 
       if (kDebugMode) {

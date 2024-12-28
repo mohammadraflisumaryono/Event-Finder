@@ -162,9 +162,9 @@ class _HomePageState extends State<HomePage> {
                       // Ambil 6 event terbaru
                       final latestEvents = events.take(6).toList();
                       for (var event in latestEvents) {
-                        print('Event Details:');
+                        // print('Event Details:');
                         event.toJson().forEach((key, value) {
-                          print('$key: $value');
+                          // print('$key: $value');
                         });
                         print(
                             ''); // Tambahkan baris kosong untuk pemisah antar event

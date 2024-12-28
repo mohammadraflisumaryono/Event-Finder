@@ -7,15 +7,15 @@ import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'res/theme.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 main() {
-  runApp(
-    ScreenUtilInit(
-      designSize: Size(360, 690),
-      builder: (context, child) => MyApp(),
-    ),
-  );
+  runApp(const MyApp());
+    // ScreenUtilInit(
+    //   designSize: Size(360, 690),
+    //   builder: (context, child) => MyApp(),
+    // ),
+
 }
 
 class MyApp extends StatelessWidget {

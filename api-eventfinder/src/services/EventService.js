@@ -51,8 +51,8 @@ class EventService {
 
     // Fungsi untuk mengupdate event
     static async updateEvent(eventId, data, userId) {
+        console.log(data);
         try {
-            // Pastikan userId yang mengupdate event adalah pemilik acara
             const event = await Event.findById(eventId);
             if (!event) {
                 throw new Error('Event not found');
@@ -62,11 +62,10 @@ class EventService {
                 throw new Error("You are not authorized to update this event.");
             }
 
-            // edit status event jaadi pending
-            data.status = 'pending';
+            Object.keys(data).forEach(key => {
+                event[key] = data[key];
+            });
 
-            // Mengupdate event
-            Object.assign(event, data);
             await event.save();
             console.log('Updated event:', event);
             return event;
@@ -245,7 +244,6 @@ class EventService {
             const events = await Event.find({ status: 'pending' })
                 .populate('userId', 'name email')
                 .sort({ createdAt: -1 });
-            console.log('Fetched pending events:', events);
             return events;
         } catch (error) {
             console.error('Error fetching pending events:', error.message);

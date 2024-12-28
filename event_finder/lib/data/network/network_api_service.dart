@@ -39,7 +39,7 @@ class NetworkApiService extends BaseApiServices {
           .get(Uri.parse(url), headers: headers)
           .timeout(const Duration(seconds: 10));
 
-      print('Response status: ${response.body}'); // Debug log
+      // print('Response status: ${response.body}'); // Debug log
 
       // Menangani response
       responseJson = returnResponse(response);
@@ -149,6 +149,7 @@ class NetworkApiService extends BaseApiServices {
     try {
       String token = await _getToken();
       var request = http.MultipartRequest('PUT', Uri.parse(url));
+      // print(request);
 
       // Add headers
       request.headers.addAll({
@@ -161,17 +162,28 @@ class NetworkApiService extends BaseApiServices {
             filename: fileName, contentType: MediaType('image', 'png')),
       );
 
+      
       // Add other fields
       data.forEach((key, value) {
         request.fields[key] = value.toString();
+        // print('Key: $key, Value: ${value.toString()}');
       });
+      // print('File name: $fileName');
+      // huuuuuuuuu huuuuu belom mandii huuu
 
       // Send request
       var streamedResponse =
           await request.send().timeout(Duration(seconds: 30));
+      print('Streamed Response: ${streamedResponse.statusCode}');
+      print('Headers: ${streamedResponse.headers}');
+      print('Reason Phrase: ${streamedResponse.reasonPhrase}');
+      print('huuuuuuuuu huuuuu belom mandii huuu');
+
       var response = await http.Response.fromStream(streamedResponse);
+      print('Response Body: ${response.body}');
 
       responseJson = returnResponse(response);
+      print (responseJson);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     } catch (e) {
