@@ -50,31 +50,65 @@ class EventService {
         }
     }
 
-    // Fungsi untuk mengupdate event
-    static async updateEvent(eventId, data, userId) {
-        console.log(data);
-        try {
-            const event = await Event.findById(eventId);
-            if (!event) {
-                throw new Error('Event not found');
-            }
+// Fungsi untuk mengupdate event
+static async updateEvent(eventId, data, userId) {
+    console.log('Data received for update:', data);
+    try {
+        const event = await Event.findById(eventId);
 
-            if (event.userId.toString() !== userId.toString()) {
-                throw new Error("You are not authorized to update this event.");
-            }
-
-            Object.keys(data).forEach(key => {
-                event[key] = data[key];
-            });
-
-            await event.save();
-            console.log('Updated event:', event);
-            return event;
-        } catch (error) {
-            console.error('Error updating event:', error.message);
-            throw new Error(`Error updating event: ${error.message}`);
+        if (!event) {
+            throw new Error('Event not found');
         }
+
+        // Validasi kepemilikan event
+        if (event.userId.toString() !== userId) {
+            throw new Error('Unauthorized');
+        }
+
+        // Filter field yang valid berdasarkan schema
+        const schemaPaths = Object.keys(Event.schema.paths);
+        const filteredData = {};
+
+        Object.keys(data).forEach((key) => {
+            // Validasi dan perbaiki format data
+            if (schemaPaths.includes(key) && key !== 'updatedAt' && key !== 'createdAt' && key !== 'userId') {
+                if (key === 'date' && typeof data[key] === 'string') {
+                    // Parse date to valid Date object
+                    filteredData[key] = new Date(data[key]);
+                } else if (key === 'ticket_price' && data[key] === undefined) {
+                    // Handle undefined ticket_price by setting it to null
+                    filteredData[key] = null;
+                } else {
+                    filteredData[key] = data[key];
+                }
+            } else {
+                console.warn(`Field "${key}" is invalid or not updatable and will be ignored.`);
+            }
+        });
+
+        console.log('Filtered data for update:', filteredData);
+
+        // Update dengan `findOneAndUpdate`
+        const updatedEvent = await Event.findOneAndUpdate(
+            { _id: eventId },
+            { $set: filteredData },
+            { new: true, runValidators: true } // Kembalikan dokumen terbaru dan validasi input
+        );
+
+        if (!updatedEvent) {
+            throw new Error('Failed to update event');
+        }
+
+        console.log('Updated event:', updatedEvent);
+        return updatedEvent;
+    } catch (error) {
+        console.error('Error updating event:', error.message);
+        throw new Error(`Failed to update event: ${error.message}`);
     }
+}
+
+
+
 
     // Fungsi untuk menghapus event
     static async deleteEvent(eventId, userId) {

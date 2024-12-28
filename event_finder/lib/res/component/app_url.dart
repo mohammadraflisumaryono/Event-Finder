@@ -32,4 +32,7 @@ class AppUrl {
     return '${baseUrl}events/status/$id';
   }
 
+  static String updateEvent(String id) {
+    return '${baseUrl}update/$id';
+  }
 }

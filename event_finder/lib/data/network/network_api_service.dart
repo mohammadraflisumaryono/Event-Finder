@@ -162,7 +162,6 @@ class NetworkApiService extends BaseApiServices {
             filename: fileName, contentType: MediaType('image', 'png')),
       );
 
-      
       // Add other fields
       data.forEach((key, value) {
         request.fields[key] = value.toString();
@@ -183,7 +182,7 @@ class NetworkApiService extends BaseApiServices {
       print('Response Body: ${response.body}');
 
       responseJson = returnResponse(response);
-      print (responseJson);
+      print(responseJson);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     } catch (e) {
