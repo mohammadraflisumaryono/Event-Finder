@@ -23,7 +23,8 @@ class EventService {
     // Fungsi untuk mendapatkan semua events
     static async getAllEvents() {
         try {
-            const events = await Event.find({ status: { $ne: 'expired' } })  // Menambahkan kondisi status != expired
+            // hanya ambil event yang statusnya sudah approved
+            const events = await Event.find({ status: 'approved' })
                 .populate('userId', 'name email')
                 .sort({ createdAt: -1 });
             console.log('Fetched all events:', events);
@@ -127,7 +128,7 @@ class EventService {
     static async getEventsByCategory(category) {
 
         try {
-            const events = await Event.find({ category: category, status: { $ne: 'expired' } })  // Hanya mengambil event yang statusnya bukan expired
+            const events = await Event.find({ category: category, status: 'approved' })  // Hanya mengambil event yang statusnya bukan expired
                 .populate('userId', 'name email');
             console.log('Fetched events by category:', events);
             return events;
@@ -191,7 +192,7 @@ class EventService {
     static async getTrendingEvents() {
         try {
             // Sort events by 'views' in descending order and limit to the top 3
-            const events = await Event.find({ status: { $ne: 'expired' } })  // Hanya mengambil event yang statusnya bukan expired
+            const events = await Event.find({ status: 'approved' })  // Hanya mengambil event yang statusnya bukan expired
                 .sort({ views: -1 })
                 .limit(3);
             // Log the fetched events (optional, for debugging)
