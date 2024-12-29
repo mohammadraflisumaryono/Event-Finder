@@ -70,7 +70,7 @@ class EventCard extends StatelessWidget {
               Text(
                 event.location!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 14, // Reduced font size
+                      fontSize: 12, // Reduced font size
                     ),
                 maxLines: 1, // Limit to one line
                 overflow: TextOverflow.ellipsis, // Truncate with ellipsis
@@ -81,12 +81,12 @@ class EventCard extends StatelessWidget {
                 DateFormat('MMM dd, yyyy')
                     .format(event.date ?? DateTime.now()), // Date formatting
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 14, // Reduced font size
+                      fontSize: 12, // Reduced font size
                     ),
                 maxLines: 1, // Limit to one line
                 overflow: TextOverflow.ellipsis, // Truncate with ellipsis
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               // Event ticket price (if any)
               Text(
                 event.ticketPrice != null
@@ -94,7 +94,7 @@ class EventCard extends StatelessWidget {
                     : 'Free', // Display 'Free' if no price
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16, // Reduced font size
+                      fontSize: 14, // Reduced font size
                     ),
                 maxLines: 1, // Limit to one line
                 overflow: TextOverflow.ellipsis, // Truncate with ellipsis

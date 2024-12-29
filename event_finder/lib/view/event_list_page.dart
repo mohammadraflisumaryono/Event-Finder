@@ -49,8 +49,8 @@ class _EventListPageState extends State<EventListPage> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // Dua kartu per baris
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
                   childAspectRatio: 0.75, // Sesuaikan rasio kartu
                 ),
                 itemCount: events.length,

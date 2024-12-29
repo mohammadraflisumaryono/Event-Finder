@@ -7,15 +7,9 @@ import 'package:event_finder/view_model/event_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'res/theme.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-main() {
+void main() {
   runApp(const MyApp());
-    // ScreenUtilInit(
-    //   designSize: Size(360, 690),
-    //   builder: (context, child) => MyApp(),
-    // ),
-
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +28,7 @@ class MyApp extends StatelessWidget {
         initialRoute:
             RoutesName.onboardingScreen, // Mulai dari halaman HomePage
         onGenerateRoute: Routes.generateRoute,
+        debugShowCheckedModeBanner: false, // Menghilangkan DEBUG banner
       ),
     );
   }
