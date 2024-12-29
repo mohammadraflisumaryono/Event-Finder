@@ -130,243 +130,231 @@ class _CreateEventPageState extends State<CreateEventPage> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Event Title',
-                ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter a title' : null,
-                onSaved: (value) => _title = value,
-              ),
-              SizedBox(height: 16),
-              ListTile(
-                title: Text(_date == null
-                    ? 'Select Date'
-                    : DateFormat('yyyy-MM-dd').format(_date!)),
-                trailing: Icon(Icons.calendar_today),
-                onTap: () => _selectDate(context),
-              ),
-              SizedBox(height: 16),
-              ListTile(
-                title: Text(_startTime == null
-                    ? 'Select Start Time'
-                    : _startTime!.format(context)),
-                trailing: Icon(Icons.access_time),
-                onTap: () => _selectTime(context, true),
-              ),
-              ListTile(
-                title: Text(_endTime == null
-                    ? 'Select End Time'
-                    : _endTime!.format(context)),
-                trailing: Icon(Icons.access_time),
-                onTap: () => _selectTime(context, false),
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Location'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter a location' : null,
-                onSaved: (value) => _location = value,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
-                maxLines: 3,
-                onSaved: (value) => _description = value,
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Event Image :",
-                style: TextStyle(fontSize: 16),
-              ),
-              Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      _image == null ? 'No Image Selected' : 'Image Selected',
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.file_upload),
-                      onPressed: _pickFile,
-                    ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Event Title',
                   ),
-                ],
-              ),
-              SizedBox(height: 16),
-              DropdownButtonFormField<EventCategory>(
-                decoration: InputDecoration(labelText: 'Category'),
-                items: EventCategory.values
-                    .map((category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category.value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _category = value;
-                  });
-                },
-                validator: (value) =>
-                    value == null ? 'Please select a category' : null,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Ticket Price'),
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter
-                      .digitsOnly, // Membatasi hanya angka
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a ticket price';
-                  }
-                  // Menambahkan validasi jika input tidak bisa diparsing menjadi angka
-                  final parsedValue = double.tryParse(value);
-                  if (parsedValue == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _ticketPrice = double.tryParse(value!),
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Registration Link'),
-                onSaved: (value) => _registrationLink = value,
-              ),
-              SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_image == null) {
-                    Utils.toastMessage('Please select an image file');
-                    return;
-                  }
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter a title' : null,
+                  onSaved: (value) => _title = value,
+                ),
+                SizedBox(height: 16),
+                ListTile(
+                  title: Text(_date == null
+                      ? 'Select Date'
+                      : DateFormat('yyyy-MM-dd').format(_date!)),
+                  trailing: Icon(Icons.calendar_today),
+                  onTap: () => _selectDate(context),
+                ),
+                SizedBox(height: 16),
+                ListTile(
+                  title: Text(_startTime == null
+                      ? 'Select Start Time'
+                      : _startTime!.format(context)),
+                  trailing: Icon(Icons.access_time),
+                  onTap: () => _selectTime(context, true),
+                ),
+                ListTile(
+                  title: Text(_endTime == null
+                      ? 'Select End Time'
+                      : _endTime!.format(context)),
+                  trailing: Icon(Icons.access_time),
+                  onTap: () => _selectTime(context, false),
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Location'),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter a location' : null,
+                  onSaved: (value) => _location = value,
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Description'),
+                  maxLines: 3,
+                  onSaved: (value) => _description = value,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "Event Image :",
+                  style: TextStyle(fontSize: 16),
+                ),
+                Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        _image == null ? 'No Image Selected' : 'Image Selected',
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.file_upload),
+                        onPressed: _pickFile,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                DropdownButtonFormField<EventCategory>(
+                  decoration: InputDecoration(labelText: 'Category'),
+                  items: EventCategory.values
+                      .map((category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.value),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _category = value;
+                    });
+                  },
+                  validator: (value) =>
+                      value == null ? 'Please select a category' : null,
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Ticket Price'),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a ticket price';
+                    }
+                    final parsedValue = double.tryParse(value);
+                    if (parsedValue == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _ticketPrice = double.tryParse(value!),
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Registration Link'),
+                  onSaved: (value) => _registrationLink = value,
+                ),
+                SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_image == null) {
+                      Utils.toastMessage('Please select an image file');
+                      return;
+                    }
 
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
 
-                    var eventViewModel =
-                        Provider.of<EventViewModel>(context, listen: false);
+                      var eventViewModel =
+                          Provider.of<EventViewModel>(context, listen: false);
 
-                    DateTime startDateTime =
-                        convertTimeOfDayToDateTime(_date!, _startTime!);
-                    DateTime endDateTime =
-                        convertTimeOfDayToDateTime(_date!, _endTime!);
+                      DateTime startDateTime =
+                          convertTimeOfDayToDateTime(_date!, _startTime!);
+                      DateTime endDateTime =
+                          convertTimeOfDayToDateTime(_date!, _endTime!);
 
-                    Map<String, dynamic> eventData = {
-                      'title': _title,
-                      'date': _date!.toIso8601String(),
-                      'time_start': startDateTime.toIso8601String(),
-                      'time_end': endDateTime.toIso8601String(),
-                      'location': _location,
-                      'description': _description,
-                      'category': _category!.value,
-                      'ticket_price':
-                          _ticketPrice.toString(), // Convert to string
-                      'registration_link': _registrationLink,
-                    };
+                      Map<String, dynamic> eventData = {
+                        'title': _title,
+                        'date': _date!.toIso8601String(),
+                        'time_start': startDateTime.toIso8601String(),
+                        'time_end': endDateTime.toIso8601String(),
+                        'location': _location,
+                        'description': _description,
+                        'category': _category!.value,
+                        'ticket_price': _ticketPrice.toString(),
+                        'registration_link': _registrationLink,
+                      };
 
-                    // Menampilkan dialog loading
-                    showDialog(
-                      context: context,
-                      barrierDismissible:
-                          false, // Mencegah dialog ditutup selama proses
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                CircularProgressIndicator(),
-                                SizedBox(width: 20),
-                                Text('Creating Event...'), // Teks loading
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-
-                    try {
-                      // Gunakan method untuk upload event dengan image
-                      await eventViewModel.createEventWithImage(
-                        eventData: eventData,
-                        imageBytes: _image!,
-                        fileName: _imageFileName ?? 'image.jpg',
-                        context: context,
-                      );
-
-                      // Menutup dialog loading
-                      Navigator.of(context).pop();
-
-                      // Tampilkan dialog sukses setelah event berhasil dibuat
                       showDialog(
                         context: context,
-                        barrierDismissible:
-                            false, // Mencegah dialog ditutup tanpa aksi
+                        barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text(
-                                "Create Success"),
-                            content: const Text(
-                                "Your event is created and awaiting approval by Superadmin."),
-                            contentPadding: const EdgeInsets.all(
-                                16.0), // Menambahkan padding di sekitar teks
-                            actionsPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical:
-                                    12.0), // Menambahkan jarak antara teks dan tombol
-                             actions: [
-                              Center(
-                                child: ElevatedButton(
-                                  onPressed: () => Navigator.pushNamed(context, RoutesName.adminHome),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.purple, // Warna ungu
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          8), // Radius sudut tombol
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Back',
-                                    style: TextStyle(
-                                      color: Colors.white, // Warna teks putih
-                                      fontSize: 16, // Ukuran font
-                                    ),
-                                  ),
-                                ),
+                          return Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  CircularProgressIndicator(),
+                                  SizedBox(width: 20),
+                                  Text('Creating Event...'),
+                                ],
                               ),
-                            ],
+                            ),
                           );
                         },
                       );
-                    } catch (error) {
-                      // Menutup dialog loading jika terjadi error
-                      Navigator.of(context).pop();
-                      print(error.toString());
+
+                      try {
+                        await eventViewModel.createEventWithImage(
+                          eventData: eventData,
+                          imageBytes: _image!,
+                          fileName: _imageFileName ?? 'image.jpg',
+                          context: context,
+                        );
+
+                        Navigator.of(context).pop();
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Create Success"),
+                              content: const Text(
+                                  "Your event is created and awaiting approval by Superadmin."),
+                              contentPadding: const EdgeInsets.all(16.0),
+                              actionsPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 12.0),
+                              actions: [
+                                Center(
+                                  child: ElevatedButton(
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, RoutesName.adminHome),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.purple,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Back',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } catch (error) {
+                        Navigator.of(context).pop();
+                        print(error.toString());
+                      }
+                    } else {
+                      Utils.toastMessage('Please fill all fields correctly');
                     }
-                  } else {
-                    Utils.toastMessage('Please fill all fields correctly');
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    backgroundColor: Colors.purple,
                   ),
-                  backgroundColor: Colors.purple,
+                  child: Text(
+                    'Create Event',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-                child: Text(
-                  'Create Event', // Tulisan pada button
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -14,23 +14,23 @@ class OnboardingScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        color: Color(0xFFDAC4D0), // Background color #DAC4D0
+        color:
+            Theme.of(context).colorScheme.surface, // Background color #DAC4D0
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned.fill(
-              child: Center(
-                child: Image.asset(
-                  'lib/res/assets/images/purple.jpg',
-                  width: 200, // Menentukan lebar gambar
-                  height: 200, // Menentukan tinggi gambar
-                  fit: BoxFit.contain, // Menjaga rasio gambar
-                ),
+            Center(
+              child: Image.asset(
+                'lib/res/assets/images/logogoova.png',
+                width: 200, // Menentukan lebar gambar
+                height: 200, // Menentukan tinggi gambar
+                fit: BoxFit.contain, // Menjaga rasio gambar
               ),
             ),
-            const SizedBox(height: 38),
+            const SizedBox(
+                height: 38), // Tidak lagi relevan jika tidak terkait posisi
             Positioned(
-              bottom: 100,
+              bottom: 150,
               child: Column(
                 children: [
                   Text(
@@ -38,7 +38,8 @@ class OnboardingScreen extends StatelessWidget {
                     style: GoogleFonts.outfit(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // White text color for better contrast
+                      color:
+                          Colors.purple, // White text color for better contrast
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -47,7 +48,7 @@ class OnboardingScreen extends StatelessWidget {
                     style: GoogleFonts.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
-                      color: Colors.white, // White color for slogan text
+                      color: Colors.purple, // White color for slogan text
                     ),
                   ),
                 ],
