@@ -58,26 +58,33 @@ class EventCard extends StatelessWidget {
               // Event title
               Text(
                 event.title!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16, // Reduced font size
+                    ),
+                maxLines: 1, // Limit to one line
+                overflow: TextOverflow.ellipsis, // Truncate with ellipsis
               ),
               const SizedBox(height: 4),
               // Event location
               Text(
                 event.location!,
-                style: Theme.of(context).textTheme.bodySmall,
-                maxLines: 1,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 14, // Reduced font size
+                    ),
+                maxLines: 1, // Limit to one line
+                overflow: TextOverflow.ellipsis, // Truncate with ellipsis
               ),
               const SizedBox(height: 4),
               // Event date
               Text(
                 DateFormat('MMM dd, yyyy')
                     .format(event.date ?? DateTime.now()), // Date formatting
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 14, // Reduced font size
+                    ),
+                maxLines: 1, // Limit to one line
+                overflow: TextOverflow.ellipsis, // Truncate with ellipsis
               ),
               const SizedBox(height: 8),
               // Event ticket price (if any)
@@ -85,10 +92,12 @@ class EventCard extends StatelessWidget {
                 event.ticketPrice != null
                     ? "Rp ${NumberFormat('#,###', 'id_ID').format(event.ticketPrice)}"
                     : 'Free', // Display 'Free' if no price
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16, // Reduced font size
+                    ),
+                maxLines: 1, // Limit to one line
+                overflow: TextOverflow.ellipsis, // Truncate with ellipsis
               ),
             ],
           ),

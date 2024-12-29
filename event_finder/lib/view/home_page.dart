@@ -49,8 +49,20 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 // Cek apakah pengguna sudah login
                 bool isLoggedIn = await UserPreferences.isLoggedIn();
+
                 if (isLoggedIn) {
-                  Navigator.pushNamed( context, RoutesName.adminHome);
+                  // Ambil role pengguna
+                  String? role = await UserPreferences.getRole();
+
+                  // Arahkan berdasarkan role
+                  if (role == 'organizer') {
+                    Navigator.pushNamed(context, RoutesName.adminHome);
+                  } else if (role == 'admin') {
+                    Navigator.pushNamed(context, RoutesName.superAdmin);
+                  } else {
+                    // Jika role tidak sesuai
+                    Navigator.pushNamed(context, RoutesName.login);
+                  }
                 } else {
                   Navigator.pushNamed(context, RoutesName.login);
                 }

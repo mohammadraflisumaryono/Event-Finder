@@ -85,7 +85,7 @@ class TrendingEventCard extends StatelessWidget {
   final String date;
   final String price;
   final String image;
-  final Event event; // Tambahkan properti Event untuk navigasi
+  final Event event;
 
   const TrendingEventCard({
     super.key,
@@ -94,7 +94,7 @@ class TrendingEventCard extends StatelessWidget {
     required this.date,
     required this.price,
     required this.image,
-    required this.event, // Tambahkan parameter Event
+    required this.event,
   });
 
   @override
@@ -135,6 +135,9 @@ class TrendingEventCard extends StatelessWidget {
                         title,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.white, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow
+                            .ellipsis, // Truncate text with ellipsis
+                        maxLines: 1, // Only one line
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -143,6 +146,9 @@ class TrendingEventCard extends StatelessWidget {
                             .textTheme
                             .bodyMedium
                             ?.copyWith(color: Colors.white),
+                        overflow: TextOverflow
+                            .ellipsis, // Truncate text with ellipsis
+                        maxLines: 1, // Only one line
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -151,6 +157,9 @@ class TrendingEventCard extends StatelessWidget {
                             .textTheme
                             .bodyMedium
                             ?.copyWith(color: Colors.white),
+                        overflow: TextOverflow
+                            .ellipsis, // Truncate text with ellipsis
+                        maxLines: 1, // Only one line
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -159,6 +168,9 @@ class TrendingEventCard extends StatelessWidget {
                             .textTheme
                             .bodyMedium
                             ?.copyWith(color: Colors.white),
+                        overflow: TextOverflow
+                            .ellipsis, // Truncate text with ellipsis
+                        maxLines: 1, // Only one line
                       ),
                     ],
                   ),
