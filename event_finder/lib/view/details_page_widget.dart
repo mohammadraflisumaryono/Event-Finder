@@ -103,6 +103,8 @@ class _DetailPageState extends State<DetailPage> {
                             Positioned(
                               bottom: 16,
                               left: 16,
+                              right:
+                                  16, // Tambahkan untuk menghindari teks melewati batas
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 8, horizontal: 16),
@@ -110,13 +112,21 @@ class _DetailPageState extends State<DetailPage> {
                                   color: Colors.black.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Text(
-                                  event.title ?? "Event Title",
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      event.title ?? "Event Title",
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                      softWrap: true, // Izinkan teks membungkus
+                                      overflow: TextOverflow
+                                          .visible, // Tampilkan teks penuh
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

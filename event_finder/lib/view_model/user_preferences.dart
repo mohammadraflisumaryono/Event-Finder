@@ -42,10 +42,15 @@ class UserPreferences {
     return prefs.getString(roleKey);
   }
 
-  // Check if the user is logged in
+  // Check if the user is logged in by checking userId, token, and role
   static Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(userIdKey) && prefs.containsKey(tokenKey);
+    String? userId = prefs.getString(userIdKey);
+    String? token = prefs.getString(tokenKey);
+    String? role = prefs.getString(roleKey);
+
+    // Return true if all three values are present
+    return userId != null && token != null && role != null;
   }
 
   // Clear the stored data (e.g., when logging out)
