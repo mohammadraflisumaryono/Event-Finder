@@ -22,23 +22,29 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     print("eventId: ${widget.eventId}");
+  
     super.initState();
     // Panggil fetchEventById() dengan eventId yang diterima
     _eventViewModel.fetchEventById(widget.eventId);
   }
 
   Future<void> launchURL(String? url) async {
-    if (url == null) return;
+    if (url == null || url.isEmpty) {
+      Utils.toastMessage('Invalid URL');
+      return;
+    }
 
+    print("URL: $url");
     final Uri uri = Uri.parse(url);
-    if (await canLaunch(uri.toString())) {
-      await launch(uri.toString());
+    if (await canLaunchUrl(uri)) {
+      print("Launching URL: $uri");
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      if (mounted) {
-        Utils.toastMessage('Could not launch the registration link.');
-      }
+      print("Failed to launch URL: $uri");
+      Utils.toastMessage('Could not launch the registration link.');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
