@@ -87,13 +87,21 @@ class _EditEventPageState extends State<EditEventPage> {
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform
-        .pickFiles(type: FileType.image, withData: true);
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      withData: true,
+    );
+
     if (result != null && result.files.isNotEmpty) {
       setState(() {
         _image = result.files.single.bytes;
         _imageFileName = result.files.single.name;
       });
+
+      // Untuk debug atau proses tambahan
+      print("File selected: $_imageFileName");
+    } else {
+      print("No file selected");
     }
   }
 
@@ -238,6 +246,9 @@ class _EditEventPageState extends State<EditEventPage> {
                         Utils.toastMessage(
                             'Start time must be before end time');
                         return;
+                      }
+                      if (_image == null) {
+                        Utils.toastMessage('Please select the image');
                       }
 
                       // Menampilkan dialog loading

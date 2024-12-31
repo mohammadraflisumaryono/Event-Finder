@@ -78,18 +78,15 @@ class _CreateEventPageState extends State<CreateEventPage> {
     );
 
     if (result != null && result.files.isNotEmpty) {
-      final bytes = result.files.single.bytes;
+      setState(() {
+        _image = result.files.single.bytes;
+        _imageFileName = result.files.single.name;
+      });
 
-      if (bytes != null) {
-        setState(() {
-          _image = bytes;
-          _imageFileName = result.files.single.name; // Simpan nama file
-        });
-      } else {
-        print('File bytes are null');
-      }
+      // Untuk debug atau proses tambahan
+      print("File selected: $_imageFileName");
     } else {
-      print('No file selected');
+      print("No file selected");
     }
   }
 
@@ -186,12 +183,23 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 Column(
                   children: [
                     ListTile(
-                      title: Text(
-                        _image == null ? 'No Image Selected' : 'Image Selected',
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.file_upload),
-                        onPressed: _pickFile,
+                      title: Text(_imageFileName ?? 'No Image Selected'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.file_upload),
+                            onPressed: _pickFile,
+                          ),
+                          if (_image != null)
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () => setState(() {
+                                _image = null;
+                                _imageFileName = null;
+                              }),
+                            ),
+                        ],
                       ),
                     ),
                   ],
